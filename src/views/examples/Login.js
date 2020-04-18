@@ -16,6 +16,7 @@
 
 */
 import React from "react";
+import { connect } from 'react-redux';
 
 // reactstrap components
 import {
@@ -32,8 +33,20 @@ import {
   Row,
   Col
 } from "reactstrap";
+import {AuthenticationReducer} from "../../redux/reducers/authentication/reducer";
+import {setSignInStatus} from "../../redux/reducers/authentication/action";
+
 
 class Login extends React.Component {
+  componentDidMount() {
+    console.log(this.props.loggedIn)
+  }
+
+  login = () => {
+    this.props.setLogin(true);
+    setTimeout(()=>{console.log(this.props.loggedIn)},5000);
+  };
+
   render() {
     return (
       <>
@@ -113,7 +126,7 @@ class Login extends React.Component {
                   </label>
                 </div>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="button">
+                  <Button className="my-4" color="primary" type="button" onClick={this.login}>
                     Sign in
                   </Button>
                 </div>
@@ -146,4 +159,18 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+
+const mapStateToProps = (state) => ({
+  loggedIn: state.AuthenticationReducer.signedIn,
+});
+
+const bindAction = (dispatch) => ({
+  setLogin: (status) => dispatch(setSignInStatus(status)),
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(Login);
+
+
