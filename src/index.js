@@ -25,6 +25,7 @@ import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 
+import requiresAuth from './components/RequiresAuth';
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
 
@@ -33,7 +34,7 @@ ReactDOM.render(
     <PersistGate persistor={persistor}>
     <BrowserRouter>
       <Switch>
-        <Route path="/admin" render={props => <AdminLayout {...props} />} />
+        <Route path="/admin" component={requiresAuth(AdminLayout)} />
         <Route path="/auth" render={props => <AuthLayout {...props} />} />
         <Redirect from="/" to="/admin/index" />
       </Switch>

@@ -8,10 +8,15 @@ const authReducerDefaultState = {
 
 export function AuthenticationReducer(state = authReducerDefaultState, action) {
   switch (action.type) {
+    // case SET_SIGNIN_STATUS:
+    //   return {
+    //     ...state,
+    //     signedIn: action.payload
+    //   };
     case SET_SIGNIN_STATUS:
       return {
         ...state,
-        signedIn: action.payload
+        signedIn: !state.signedIn
       };
     default:
       return state;

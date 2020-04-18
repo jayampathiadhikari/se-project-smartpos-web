@@ -1,23 +1,8 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import { connect } from 'react-redux';
-
+import {
+  withRouter
+} from "react-router-dom";
 // reactstrap components
 import {
   Button,
@@ -33,13 +18,12 @@ import {
   Row,
   Col
 } from "reactstrap";
-import {AuthenticationReducer} from "../../redux/reducers/authentication/reducer";
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
 
 
 class Login extends React.Component {
   componentDidMount() {
-    console.log(this.props.loggedIn)
+    console.log(this.props.loggedIn);
   }
 
   login = () => {
@@ -171,6 +155,6 @@ const bindAction = (dispatch) => ({
 export default connect(
   mapStateToProps,
   bindAction
-)(Login);
+)(withRouter(Login));
 
 
