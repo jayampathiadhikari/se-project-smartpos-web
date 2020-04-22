@@ -16,6 +16,9 @@
 
 */
 import React from "react";
+import axios from 'axios';
+//const axios = require('axios');
+
 
 // reactstrap components
 import {
@@ -34,14 +37,71 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 
 class Profile extends React.Component {
+
+  constructor(props) {
+        super(props);
+        this.state = {
+            profile: [],
+            first_name:'',
+            employee_id:'',
+
+            //amount: ''
+        }
+    }
+
+    componentDidMount() {
+        console.log("rezult")
+        axios.get(`http://localhost:5000/employee/profile`).then((result) => {
+            console.log("result data", result.data.first_name)
+            this.setState({
+                profile: result.data
+
+            })
+        })
+    }
+
+    // getValues() {
+    //     let arr = [];
+    //     arr = Object.keys(this.props.myArr).map(key =>
+    //         <div key={this.props.data[key]} className="row">
+    //             <div className="col-xs-6">{key}</div>
+    //             <div className="col-xs-6">{this.props.myArr[key]}
+    //             </div>
+    //         </div>
+    //
+    //     )
+    //     return arr;
+    // }
+
+    // onSubmitLogin = (e) => {
+    //     console.log('this.state', this.state)
+    //
+    //
+    //     axios.post(`http://localhost:5000/employee/profile`, this.state).then((res) => {
+    //         console.log(res)
+    //         alert(res.data.message)
+    //
+    //     })
+    // }
+    //
+
+
   render() {
+    //console.log('f',profile.data);
+    var {profile} =this.state
+    console.log('sec',profile);
+    console.log('secnd',profile[0]);
+    //const profobj=profile[0];
+    //console.log('sec',${profile[0].employee_id});
     return (
+
       <>
         <UserHeader />
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
             <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+
               <Card className="card-profile shadow">
                 <Row className="justify-content-center">
                   <Col className="order-lg-2" lg="3">
@@ -78,21 +138,21 @@ class Profile extends React.Component {
                     </Button>
                   </div>
                 </CardHeader>
+                {profile && (profile).map((profileObj) => {
+
+                                        return (<div>
+
                 <CardBody className="pt-0 pt-md-4">
                   <Row>
                     <div className="col">
                       <div className="card-profile-stats d-flex justify-content-center mt-md-5">
                         <div>
-                          <span className="heading">22</span>
-                          <span className="description">Friends</span>
+                          <span className="heading">{profileObj.employee_id}</span>
+                          <span className="description">Agents</span>
                         </div>
                         <div>
                           <span className="heading">10</span>
-                          <span className="description">Photos</span>
-                        </div>
-                        <div>
-                          <span className="heading">89</span>
-                          <span className="description">Comments</span>
+                          <span className="description">Sales Persons</span>
                         </div>
                       </div>
                     </div>
@@ -125,8 +185,11 @@ class Profile extends React.Component {
                     </a>
                   </div>
                 </CardBody>
+                </div>
+)})}
               </Card>
             </Col>
+
             <Col className="order-xl-1" xl="8">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
@@ -325,6 +388,7 @@ class Profile extends React.Component {
           </Row>
         </Container>
       </>
+
     );
   }
 }

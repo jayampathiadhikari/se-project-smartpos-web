@@ -16,6 +16,8 @@
 
 */
 import React from "react";
+
+import axios from 'axios';
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
@@ -36,7 +38,35 @@ import {
 } from "reactstrap";
 
 class AdminNavbar extends React.Component {
+
+  constructor(props) {
+        super(props);
+        this.state = {
+            profile: [],
+            first_name:'',
+            employee_id:'',
+            count:''
+
+            //amount: ''
+        }
+    }
+
+    componentDidMount() {
+
+        axios.get(`http://localhost:5000/employee/profile`).then((result) => {
+
+            this.setState({
+                profile: result.data
+
+            })
+        })
+
+
+    }
   render() {
+
+    var {profile} =this.state
+
     return (
       <>
         <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -59,6 +89,8 @@ class AdminNavbar extends React.Component {
                 </InputGroup>
               </FormGroup>
             </Form>
+
+
             <Nav className="align-items-center d-none d-md-flex" navbar>
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
@@ -66,21 +98,26 @@ class AdminNavbar extends React.Component {
                     <span className="avatar avatar-sm rounded-circle">
                       <img
                         alt="..."
-                        src={require("assets/img/theme/team-4-800x800.jpg")}
+                        src={require("assets/img/theme/team-1-800x800.jpg")}
                       />
                     </span>
+                    {profile && (profile).map((profileObj) => {
+
+                                            return (<div>
                     <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold">
-                        Jessica Jones
+                        {profileObj.first_name} {profileObj.last_name}
                       </span>
                     </Media>
+</div>
+                      )})}
                   </Media>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-arrow" right>
                   <DropdownItem className="noti-title" header tag="div">
                     <h6 className="text-overflow m-0">Welcome!</h6>
                   </DropdownItem>
-                  <DropdownItem to="/admin/user-profile" tag={Link}>
+                  <DropdownItem to="/admin/agent-profile" tag={Link}>
                     <i className="ni ni-single-02" />
                     <span>My profile</span>
                   </DropdownItem>
@@ -104,8 +141,11 @@ class AdminNavbar extends React.Component {
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>
+
           </Container>
         </Navbar>
+
+
       </>
     );
   }

@@ -16,14 +16,14 @@
 
 */
 import Index from "views/Index.js";
-import Profile from "views/examples/Profile.js";
-import Maps from "views/examples/Maps.js";
+import OwnerProfile from "views/examples/Profile.js";
+import AgentProfile from "views/agent/Profile.js";
+//import Maps from "views/examples/Maps.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
-import Icons from "views/examples/Icons.js";
-import Mapbox from "./views/examples/Mapbox3";
-
+//import Icons from "views/examples/Icons.js";
+import Edit from "views/examples/Edit.js";
 
 var routes = [
   {
@@ -33,27 +33,36 @@ var routes = [
     component: Index,
     layout: "/admin"
   },
+  // {
+  //   path: "/icons",
+  //   name: "Icons",
+  //   icon: "ni ni-planet text-blue",
+  //   component: Icons,
+  //   layout: "/admin"
+  // },
+  // {
+  //   path: "/maps",
+  //   name: "Maps",
+  //   icon: "ni ni-pin-3 text-orange",
+  //   component: Maps,
+  //   layout: "/admin"
+  // },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
-    layout: "/admin"
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "ni ni-pin-3 text-orange",
-    component: Mapbox,
-    layout: "/admin"
-  },
-  {
-    path: "/user-profile",
-    name: "User Profile",
+    path: "/agent-profile",
+    name: "Agent Profile",
     icon: "ni ni-single-02 text-yellow",
-    component: Profile,
+    component: AgentProfile,
     layout: "/admin"
   },
+
+  {
+    path: "/owner-profile",
+    name: "Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: OwnerProfile,
+    layout: "/admin"
+  },
+
   {
     path: "/tables",
     name: "Tables",
@@ -74,6 +83,13 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: Register,
     layout: "/auth"
+  },
+  {
+    path: "/edit",
+    name: "Edit",
+    icon: "ni ni-circle-08 text-pink",
+    component: Edit,
+    layout: "/admin"
   }
 ];
 export default routes;

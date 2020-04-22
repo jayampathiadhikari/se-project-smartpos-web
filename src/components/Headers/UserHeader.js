@@ -16,12 +16,51 @@
 
 */
 import React from "react";
+import axios from 'axios';
 
 // reactstrap components
-import { Button, Container, Row, Col } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 
 class UserHeader extends React.Component {
+
+  constructor(props) {
+        super(props);
+        this.state = {
+            profile: [],
+            first_name:'',
+            employee_id:'',
+
+            //amount: ''
+        }
+    }
+
+  componentDidMount() {
+      console.log("rezult")
+      axios.get(`http://localhost:5000/employee/profile`).then((result) => {
+          console.log("result data", result.data.first_name)
+          this.setState({
+              profile: result.data
+
+          })
+      })
+  }
+
+  // onSubmitEdit = (e) => {
+  //     console.log('this.state', this.state)
+  //
+  //
+  //     axios.post(`http://localhost:5000/employee/profile`).then((res) => {
+  //         console.log(res)
+  //
+  //         //alert(res.data.message)
+  //
+  //     })
+  // }
+
   render() {
+
+    var {profile} =this.state
+
     return (
       <>
         <div
@@ -37,24 +76,24 @@ class UserHeader extends React.Component {
           {/* Mask */}
           <span className="mask bg-gradient-default opacity-8" />
           {/* Header container */}
+
+          {profile && (profile).map((profileObj) => {
+
+                                  return (<div>
           <Container className="d-flex align-items-center" fluid>
             <Row>
               <Col lg="7" md="10">
-                <h1 className="display-2 text-white">Hello Jesse</h1>
+                <h1 className="display-2 text-white">Hello {profileObj.first_name}</h1>
                 <p className="text-white mt-0 mb-5">
                   This is your profile page. You can see the progress you've
                   made with your work and manage your projects or assigned tasks
                 </p>
-                <Button
-                  color="info"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  Edit profile
-                </Button>
+
               </Col>
             </Row>
           </Container>
+          </div>
+)})}
         </div>
       </>
     );
