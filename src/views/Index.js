@@ -75,6 +75,8 @@ class Index extends React.Component {
         <Container className="mt--7" fluid>
           <Row>
             <Col className="mb-5 mb-xl-0" xl="8">
+
+
               <Card className="bg-gradient-default shadow">
                 <CardHeader className="bg-transparent">
                   <Row className="align-items-center">
@@ -128,6 +130,8 @@ class Index extends React.Component {
               </Card>
             </Col>
             <Col xl="4">
+
+
               <Card className="shadow">
                 <CardHeader className="bg-transparent">
                   <Row className="align-items-center">
@@ -151,8 +155,11 @@ class Index extends React.Component {
               </Card>
             </Col>
           </Row>
-          <Row className="mt-5">
+
+        {/*  <Row className="mt-5">
             <Col className="mb-5 mb-xl-0" xl="8">
+
+            //page visits
               <Card className="shadow">
                 <CardHeader className="border-0">
                   <Row className="align-items-center">
@@ -229,7 +236,9 @@ class Index extends React.Component {
                   </tbody>
                 </Table>
               </Card>
-            </Col>
+            </Col>*/}
+
+          {/*  social traffic
             <Col xl="4">
               <Card className="shadow">
                 <CardHeader className="border-0">
@@ -249,6 +258,8 @@ class Index extends React.Component {
                     </div>
                   </Row>
                 </CardHeader>
+
+
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                     <tr>
@@ -338,7 +349,7 @@ class Index extends React.Component {
                 </Table>
               </Card>
             </Col>
-          </Row>
+          </Row>*/}
         </Container>
       </>
     );

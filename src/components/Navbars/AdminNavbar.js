@@ -16,7 +16,6 @@
 
 */
 import React from "react";
-
 import axios from 'axios';
 import { Link } from "react-router-dom";
 // reactstrap components
@@ -46,27 +45,18 @@ class AdminNavbar extends React.Component {
             first_name:'',
             employee_id:'',
             count:''
-
-            //amount: ''
         }
     }
 
     componentDidMount() {
-
-        axios.get(`http://localhost:5000/employee/profile`).then((result) => {
-
+        axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
             this.setState({
                 profile: result.data
-
             })
         })
-
-
     }
   render() {
-
-    var {profile} =this.state
-
+    var {profile} =this.state;
     return (
       <>
         <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -89,7 +79,6 @@ class AdminNavbar extends React.Component {
                 </InputGroup>
               </FormGroup>
             </Form>
-
 
             <Nav className="align-items-center d-none d-md-flex" navbar>
               <UncontrolledDropdown nav>

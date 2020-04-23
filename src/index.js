@@ -32,16 +32,15 @@ import AuthLayout from "layouts/Auth.js";
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-    <BrowserRouter>
-      <Switch>
-        <Route path="/admin" component={requiresAuth(AdminLayout)} />
-        <Route path="/auth" render={props => <AuthLayout {...props} />} />
-        <Redirect from="/" to="/admin/index" />
-      </Switch>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/admin" component={requiresAuth(AdminLayout)} />
+          <Route path="/auth" render={props => <AuthLayout {...props} />} />
+          <Redirect from="/" to="/admin/index" />
+        </Switch>
+      </BrowserRouter>
     </PersistGate>
   </Provider>
   ,
-
   document.getElementById("root")
 );

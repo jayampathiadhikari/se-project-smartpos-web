@@ -57,30 +57,22 @@ class Icons extends React.Component {
 
     componentDidMount() {
 
-        axios.get(`http://localhost:5000/employee/profile`).then((result) => {
-
+        axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
             this.setState({
                 profile: result.data
-
             })
         })
 
-        axios.get(`http://localhost:5000/employee/auth`).then((result) => {
-
+        axios.get(`https://se-smartpos-backend.herokuapp.com/employee/auth`).then((result) => {
             this.setState({
                 auth: result.data
-
             })
         })
-
-
     }
 
     onSubmitEdit = (e) => {
         console.log('this.state', this.state)
-
-
-        axios.post(`http://localhost:5000/deposit`, this.state).then((res) => {
+        axios.post(`https://se-smartpos-backend.herokuapp.com/deposit`, this.state).then((res) => {
             console.log(res)
             alert(res.data.message)
 
@@ -90,7 +82,6 @@ class Icons extends React.Component {
 
   render() {
     var {profile,auth} =this.state
-
     console.log('auth',auth);
     return (
       <>
@@ -117,9 +108,6 @@ class Icons extends React.Component {
                 {profile && (profile).map((profileObj) => {
 
                                         return (<div>
-
-
-
 
 
                 <div className="pl-lg-4">
