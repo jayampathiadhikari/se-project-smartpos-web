@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 // reactstrap components
 import {
+  Alert,
   Button,
   Card,
   CardHeader,
@@ -26,38 +27,48 @@ class Login extends React.Component {
     email:'',
     password:'',
     remember: true,
+    visible:false
   };
   componentDidMount() {
     console.log(this.props.loggedIn);
   }
 
   login = () => {
-    this.checkForAuthentication()
+    this.checkForAuthentication(this.state.email,this.state.password)
   };
 
   onChange = (e) => {
-    const target = e.target
-    const value = target.name === 'remember' ? target.checked : target.value
+    const target = e.target;
+    const value = target.name === 'remember' ? target.checked : target.value;
     console.log(value);
     this.setState({
       [target.name]:value
     })
   };
 
-  checkForAuthentication = () => {
+  checkForAuthentication = (email,password) => {
     console.log('inside')
-    if(true){
+    if(email==='jayampathiadhikari@gmail.com' && password==='Windows8#'){
       this.props.setLogin(true);
       setTimeout(()=>{this.props.history.push('/admin/dashboard');},500);
+    }else{
+      this.showAlert()
     }
   };
-  goToDashboard = () => {
-    this.props.history.push('/admin/dashboard');
-  };
+  showAlert = ()=>{
+    this.setState({visible:true},()=>{
+      window.setTimeout(()=>{
+        this.setState({visible:false})
+      },2000)
+    });
+  }
 
   render() {
     return (
       <>
+        <Alert color="warning" isOpen={this.state.visible} style={{position:'absolute',left:'43%',top:500,zIndex:999}}>
+          Wrong Email or Password !
+        </Alert>
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0 ">
             <CardHeader className="bg-transparent card-header">
@@ -92,7 +103,7 @@ class Login extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" name={"password"} type="password" autoComplete="new-password" onChange={this.onChange}/>
+                    <Input placeholder="Password" name={"password"} type="password" autoComplete="new-password" onChange={this.onChange} />
                   </InputGroup>
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">

@@ -130,8 +130,6 @@ class Index extends React.Component {
               </Card>
             </Col>
             <Col xl="4">
-
-
               <Card className="shadow">
                 <CardHeader className="bg-transparent">
                   <Row className="align-items-center">
