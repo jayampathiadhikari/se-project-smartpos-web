@@ -36,7 +36,7 @@ class UserHeader extends React.Component {
 
   componentDidMount() {
       console.log("rezult")
-      axios.get(`http://localhost:5000/employee/profile`).then((result) => {
+      axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
           console.log("result data", result.data.first_name)
           this.setState({
               profile: result.data
@@ -45,22 +45,10 @@ class UserHeader extends React.Component {
       })
   }
 
-  // onSubmitEdit = (e) => {
-  //     console.log('this.state', this.state)
-  //
-  //
-  //     axios.post(`http://localhost:5000/employee/profile`).then((res) => {
-  //         console.log(res)
-  //
-  //         //alert(res.data.message)
-  //
-  //     })
-  // }
+
 
   render() {
-
     var {profile} =this.state
-
     return (
       <>
         <div

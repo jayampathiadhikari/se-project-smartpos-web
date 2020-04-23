@@ -51,7 +51,7 @@ class Profile extends React.Component {
 
     componentDidMount() {
         console.log("rezult")
-        axios.get(`http://localhost:5000/employee/profile`).then((result) => {
+        axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
             console.log("result data", result.data.first_name)
             this.setState({
                 profile: result.data
@@ -60,41 +60,11 @@ class Profile extends React.Component {
         })
     }
 
-    // getValues() {
-    //     let arr = [];
-    //     arr = Object.keys(this.props.myArr).map(key =>
-    //         <div key={this.props.data[key]} className="row">
-    //             <div className="col-xs-6">{key}</div>
-    //             <div className="col-xs-6">{this.props.myArr[key]}
-    //             </div>
-    //         </div>
-    //
-    //     )
-    //     return arr;
-    // }
-
-    // onSubmitLogin = (e) => {
-    //     console.log('this.state', this.state)
-    //
-    //
-    //     axios.post(`http://localhost:5000/employee/profile`, this.state).then((res) => {
-    //         console.log(res)
-    //         alert(res.data.message)
-    //
-    //     })
-    // }
-    //
-
-
   render() {
-    //console.log('f',profile.data);
     var {profile} =this.state
     console.log('sec',profile);
     console.log('secnd',profile[0]);
-    //const profobj=profile[0];
-    //console.log('sec',${profile[0].employee_id});
     return (
-
       <>
         <UserHeader />
         {/* Page content */}
