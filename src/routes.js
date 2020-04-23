@@ -10,7 +10,7 @@ import Mapbox from "./views/examples/Mapbox3";
 //import Icons from "views/examples/Icons.js";
 import Edit from "views/examples/Edit.js";
 
-var routes = [
+export var sideBarRoutes = [
   {
     path: "/index",
     name: "Dashboard",
@@ -26,26 +26,34 @@ var routes = [
     layout: "/admin"
   },
   {
+    path: "/tables",
+    name: "Tables",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Tables,
+    layout: "/admin"
+  },
+
+  {
+    path: "/edit",
+    name: "Edit",
+    icon: "ni ni-circle-08 text-pink",
+    component: Edit,
+    layout: "/admin"
+  }
+];
+var hiddenRoutes = [
+  {
     path: "/agent-profile",
     name: "Agent Profile",
     icon: "ni ni-single-02 text-yellow",
     component: AgentProfile,
     layout: "/admin"
   },
-
   {
     path: "/owner-profile",
     name: "Profile",
     icon: "ni ni-single-02 text-yellow",
     component: OwnerProfile,
-    layout: "/admin"
-  },
-
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
     layout: "/admin"
   },
   {
@@ -62,12 +70,6 @@ var routes = [
     component: Register,
     layout: "/auth"
   },
-  {
-    path: "/edit",
-    name: "Edit",
-    icon: "ni ni-circle-08 text-pink",
-    component: Edit,
-    layout: "/admin"
-  }
-];
-export default routes;
+]
+
+export default [...sideBarRoutes,...hiddenRoutes];

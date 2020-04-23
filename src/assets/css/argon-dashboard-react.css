@@ -3118,6 +3118,12 @@ input[type="button"].btn-block {
   flex-basis: 100%;
   flex-grow: 1;
   align-items: center; }
+.card-header{
+  padding-left: 100px;
+  padding-right: 100px;
+  justify-content: center;
+  align-items: center;
+}
 
 .navbar-toggler {
   padding: 0.25rem 0.75rem;
