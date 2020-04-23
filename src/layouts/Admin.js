@@ -24,7 +24,8 @@ import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
-import routes from "routes.js";
+import routes, {sideBarRoutes} from "routes.js";
+
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
@@ -48,6 +49,7 @@ class Admin extends React.Component {
     });
   };
   getBrandText = path => {
+    console.log('PATH',path)
     for (let i = 0; i < routes.length; i++) {
       if (
         this.props.location.pathname.indexOf(
@@ -64,7 +66,7 @@ class Admin extends React.Component {
       <>
         <Sidebar
           {...this.props}
-          routes={routes}
+          routes={sideBarRoutes}
           // logo={{
           //   innerLink: "/admin/index",
           //   imgSrc: require("assets/img/brand/argon-react.png"),

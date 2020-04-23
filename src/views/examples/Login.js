@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 // reactstrap components
 import {
+  Alert,
   Button,
   Card,
   CardHeader,
@@ -22,58 +23,67 @@ import {setSignInStatus} from "../../redux/reducers/authentication/action";
 
 
 class Login extends React.Component {
+  state = {
+    email:'',
+    password:'',
+    remember: true,
+    visible:false
+  };
   componentDidMount() {
     console.log(this.props.loggedIn);
   }
 
   login = () => {
-    this.props.setLogin(true);
-    setTimeout(()=>{console.log(this.props.loggedIn)},5000);
+    this.checkForAuthentication(this.state.email,this.state.password)
   };
+
+  onChange = (e) => {
+    const target = e.target;
+    const value = target.name === 'remember' ? target.checked : target.value;
+    console.log(value);
+    this.setState({
+      [target.name]:value
+    })
+  };
+
+  checkForAuthentication = (email,password) => {
+    console.log('inside')
+    if(email==='jayampathiadhikari@gmail.com' && password==='Windows8#'){
+      this.props.setLogin(true);
+      setTimeout(()=>{this.props.history.push('/admin/dashboard');},500);
+    }else{
+      this.showAlert()
+    }
+  };
+  showAlert = ()=>{
+    this.setState({visible:true},()=>{
+      window.setTimeout(()=>{
+        this.setState({visible:false})
+      },2000)
+    });
+  }
 
   render() {
     return (
       <>
+        <Alert color="warning" isOpen={this.state.visible} style={{position:'absolute',left:'43%',top:500,zIndex:999}}>
+          Wrong Email or Password !
+        </Alert>
         <Col lg="5" md="7">
-          <Card className="bg-secondary shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
-              <div className="text-muted text-center mt-2 mb-3">
-                <small>Sign in with</small>
+          <Card className="bg-secondary shadow border-0 ">
+            <CardHeader className="bg-transparent card-header">
+              <div>
+                <img
+                  alt="..."
+                  src={require("assets/img/brand/logo-pos-600.png")}
+                  style={{width:'60%',height:'10%',margin: '0 auto',display:'block'}}
+                />
               </div>
-              <div className="btn-wrapper text-center">
-                <Button
-                  className="btn-neutral btn-icon"
-                  color="default"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  <span className="btn-inner--icon">
-                    <img
-                      alt="..."
-                      src={require("assets/img/icons/common/github.svg")}
-                    />
-                  </span>
-                  <span className="btn-inner--text">Github</span>
-                </Button>
-                <Button
-                  className="btn-neutral btn-icon"
-                  color="default"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  <span className="btn-inner--icon">
-                    <img
-                      alt="..."
-                      src={require("assets/img/icons/common/google.svg")}
-                    />
-                  </span>
-                  <span className="btn-inner--text">Google</span>
-                </Button>
-              </div>
+
             </CardHeader>
-            <CardBody className="px-lg-5 py-lg-5">
+            <CardBody className="px-lg-5">
               <div className="text-center text-muted mb-4">
-                <small>Or sign in with credentials</small>
+                <small>sign in with credentials</small>
               </div>
               <Form role="form">
                 <FormGroup className="mb-3">
@@ -83,7 +93,7 @@ class Login extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" autoComplete="new-email"/>
+                    <Input placeholder="Email" name="email" type="email" autoComplete="new-email" onChange={this.onChange}/>
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -93,14 +103,16 @@ class Login extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" autoComplete="new-password"/>
+                    <Input placeholder="Password" name={"password"} type="password" autoComplete="new-password" onChange={this.onChange} />
                   </InputGroup>
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">
                   <input
                     className="custom-control-input"
+                    name={"remember"}
                     id=" customCheckLogin"
                     type="checkbox"
+                    onChange={this.onChange}
                   />
                   <label
                     className="custom-control-label"
@@ -110,7 +122,7 @@ class Login extends React.Component {
                   </label>
                 </div>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="button" onClick={this.login}>
+                  <Button className="my-4" color="primary" onClick={this.login}>
                     Sign in
                   </Button>
                 </div>

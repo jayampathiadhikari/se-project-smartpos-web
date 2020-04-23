@@ -66,7 +66,7 @@ class AllShapes extends React.Component {
           routeIndex: this.state.routeIndex + 1,
         });
       }
-    }, 3000);
+    }, 1000);
   }
 
    componentWillUnmount() {
@@ -93,8 +93,8 @@ class AllShapes extends React.Component {
           // tslint:disable-next-line:jsx-no-lambda
           onStyleLoad={this.onStyleLoad}
           containerStyle={{
-            height: '70vh',
-            width: '70vw',
+            height: '90vh',
+            width: '100%',
           }}
           center={this.state.center}
           zoom={this.state.zoom}

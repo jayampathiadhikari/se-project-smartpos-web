@@ -51,6 +51,8 @@ import {
   Row,
   Col
 } from "reactstrap";
+import {setSignInStatus} from "../../redux/reducers/authentication/action";
+import {connect} from "react-redux";
 
 var ps;
 
@@ -62,6 +64,7 @@ class Sidebar extends React.Component {
     super(props);
     this.activeRoute.bind(this);
   }
+
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
     return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -184,10 +187,12 @@ class Sidebar extends React.Component {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                <div onClick={()=>{console.log('asdsad')}}>
+                <DropdownItem>
                   <i className="ni ni-user-run" />
-                  <span>Logout</span>
+                    <span>Logout</span>
                 </DropdownItem>
+                </div>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
@@ -264,14 +269,7 @@ class Sidebar extends React.Component {
                 </NavLink>
               </NavItem>
             </Nav>
-            <Nav className="mb-md-3" navbar>
-              <NavItem className="active-pro active">
-                <NavLink href="https://www.creative-tim.com/product/argon-dashboard-pro-react?ref=adr-admin-sidebar">
-                  <i className="ni ni-spaceship" />
-                  Upgrade to PRO
-                </NavLink>
-              </NavItem>
-            </Nav>
+           
           </Collapse>
         </Container>
       </Navbar>
@@ -300,4 +298,17 @@ Sidebar.propTypes = {
   })
 };
 
-export default Sidebar;
+
+const mapStateToProps = () => ({
+
+});
+
+const bindAction = (dispatch) => ({
+  setLogin: (status) => dispatch(setSignInStatus(status)),
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(Sidebar);
+
