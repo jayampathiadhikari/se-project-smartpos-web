@@ -49,7 +49,8 @@ import {
   Table,
   Container,
   Row,
-  Col
+  Col,
+  NavbarToggler
 } from "reactstrap";
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
@@ -242,6 +243,7 @@ class Sidebar extends React.Component {
                 </InputGroupAddon>
               </InputGroup>
             </Form>
+            <h6 className="navbar-heading text-muted">Navigation</h6>
             {/* Navigation */}
             <Nav navbar>{this.createLinks(routes)}</Nav>
             {/* Divider */}
