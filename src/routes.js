@@ -10,6 +10,7 @@ import Mapbox from "./views/examples/Mapbox3";
 //import Icons from "views/examples/Icons.js";
 import Edit from "views/examples/Edit.js";
 
+
 export var sideBarRoutes = [
   {
     path: "/index",

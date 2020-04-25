@@ -23,11 +23,6 @@ import { PropTypes } from "prop-types";
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
@@ -45,15 +40,13 @@ import {
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col,
-  NavbarToggler
 } from "reactstrap";
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
+import TrackingOptions from "./TrackingOptions";
 
 var ps;
 
@@ -82,8 +75,27 @@ class Sidebar extends React.Component {
       collapseOpen: false
     });
   };
+  renderTrackingOptions = () => {
+    if(this.props.location.pathname === '/admin/maps'){
+      return(
+        <div>
+          <h6 className="navbar-heading text-muted">Tracking Options</h6>
+          {/* Navigation */}
+          <TrackingOptions/>
+        </div>
+      )
+    }else{
+      return (null)
+    }
+  }
   // creates the links that appear in the left menu / Sidebar
   createLinks = routes => {
+    if(this.props.location.pathname === '/admin/maps'){
+      var routes = routes.filter((route)=>{
+        return (route.name === 'Maps' ||route.name === 'Dashboard' )
+      });
+
+    }
     return routes.map((prop, key) => {
       return (
         <NavItem key={key}>
@@ -249,29 +261,7 @@ class Sidebar extends React.Component {
             {/* Divider */}
             <hr className="my-3" />
             {/* Heading */}
-            <h6 className="navbar-heading text-muted">Documentation</h6>
-            {/* Navigation */}
-            <Nav className="mb-md-3" navbar>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/overview?ref=adr-admin-sidebar">
-                  <i className="ni ni-spaceship" />
-                  Getting started
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/colors?ref=adr-admin-sidebar">
-                  <i className="ni ni-palette" />
-                  Foundation
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/alerts?ref=adr-admin-sidebar">
-                  <i className="ni ni-ui-04" />
-                  Components
-                </NavLink>
-              </NavItem>
-            </Nav>
-           
+            {this.renderTrackingOptions()}
           </Collapse>
         </Container>
       </Navbar>
