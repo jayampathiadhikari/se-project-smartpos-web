@@ -2,6 +2,9 @@ import React from 'react';
 import {
   Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText,Button
 } from 'reactstrap'
+import {setSignInStatus} from "../../redux/reducers/authentication/action";
+import {connect} from "react-redux";
+import {setSimulation} from "../../redux/reducers/ui/action";
 
 
 class TrackingOptions extends React.Component{
@@ -92,7 +95,7 @@ class TrackingOptions extends React.Component{
           {this.renderAgent()}
           {this.renderSalesperson()}
           <div className="text-center">
-            <Button className="my-4" color="primary" type={"submit"} disabled={!this.state.track}>
+            <Button className="my-4" color="primary" type={"submit"} disabled={!this.state.track} onClick={()=>{this.props.setSimulation(true)}}>
               Track
             </Button>
           </div>
@@ -103,4 +106,17 @@ class TrackingOptions extends React.Component{
   }
 }
 
-export default TrackingOptions;
+
+const mapStateToProps = (state) => ({
+  loggedIn: state.AuthenticationReducer.signedIn,
+});
+
+const bindAction = (dispatch) => ({
+  setLogin: (status) => dispatch(setSignInStatus(status)),
+  setSimulation: (status) => dispatch(setSimulation(status)),
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(TrackingOptions);

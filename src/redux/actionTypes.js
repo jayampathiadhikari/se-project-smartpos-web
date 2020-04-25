@@ -1,1 +1,2 @@
 export const SET_SIGNIN_STATUS = 'SET_SIGNIN_STATUS';
+export const SET_SIMULATION = 'SET_SIMULATION';
