@@ -9,7 +9,8 @@ import Tables from "views/examples/Tables.js";
 import Mapbox from "./views/examples/Mapbox3";
 //import Icons from "views/examples/Icons.js";
 import Edit from "views/examples/Edit.js";
-
+import AddUser from "./views/examples/AddUser";
+import ResetPassword from "./views/examples/ResetPassword";
 
 export var sideBarRoutes = [
   {
@@ -33,14 +34,14 @@ export var sideBarRoutes = [
     component: Tables,
     layout: "/admin"
   },
-
   {
-    path: "/edit",
-    name: "Edit",
+    path: "/adduser",
+    name: "Add Employee",
     icon: "ni ni-circle-08 text-pink",
-    component: Edit,
+    component: AddUser,
     layout: "/admin"
   }
+
 ];
 var hiddenRoutes = [
   {
@@ -71,6 +72,21 @@ var hiddenRoutes = [
     component: Register,
     layout: "/auth"
   },
+  {
+    path: "/edit",
+    name: "Edit",
+    icon: "ni ni-circle-08 text-pink",
+    component: Edit,
+    layout: "/admin"
+  },
+  {
+    path: "/reset-password",
+    name: "Reset Password",
+    icon: "ni ni-circle-08 text-pink",
+    component: ResetPassword,
+    layout: "/auth"
+  },
+
 ]
 
 export default [...sideBarRoutes,...hiddenRoutes];

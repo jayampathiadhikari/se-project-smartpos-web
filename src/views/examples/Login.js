@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {
   withRouter
 } from "react-router-dom";
+import User from "../../models/User";
 // reactstrap components
 import {
   Alert,
@@ -19,6 +20,7 @@ import {
   Row,
   Col
 } from "reactstrap";
+import {createUserWithEmail} from "../../Utils";
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
 
 
@@ -29,9 +31,6 @@ class Login extends React.Component {
     remember: true,
     visible:false
   };
-  componentDidMount() {
-    console.log(this.props.loggedIn);
-  }
 
   login = () => {
     this.checkForAuthentication(this.state.email,this.state.password)
