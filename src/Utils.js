@@ -19,13 +19,12 @@ export const createUserWithEmail2 = async (email,password,json) => {
 
 export const createUserWithEmail = async (data) => {
   try{
-    const addClient = FIREBASE.functions().httpsCallable('addClient');
-    return addClient(data).then(result => result.data)
+    const addClient = FIREBASE.functions().httpsCallable('addUser');
+    return addClient(data).then(result => {console.log(result.data,'CREATE USER WITH EMAIL')})
       .catch(error => ({
         status: 'FAILED',
         error: error.message
       }));
-    
   }catch (e) {
     console.log(e,'ERROR');
     console.log(e.response,'ERROR RESPONSE');
