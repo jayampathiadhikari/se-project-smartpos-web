@@ -43,6 +43,7 @@ export var sideBarRoutes = [
   }
 
 ];
+
 var hiddenRoutes = [
   {
     path: "/agent-profile",
@@ -56,7 +57,7 @@ var hiddenRoutes = [
     name: "Profile",
     icon: "ni ni-single-02 text-yellow",
     component: OwnerProfile,
-    layout: "/admin"
+    layout: "/executive"
   },
   {
     path: "/login",
@@ -84,9 +85,108 @@ var hiddenRoutes = [
     name: "Reset Password",
     icon: "ni ni-circle-08 text-pink",
     component: ResetPassword,
+    layout: "/executive"
+  },
+//
+  {
+    path: "/agent-profile",
+    name: "Agent Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: AgentProfile,
+    layout: "/executive"
+  },
+  {
+    path: "/owner-profile",
+    name: "Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: OwnerProfile,
+    layout: "/executive"
+  },
+  {
+    path: "/login",
+    name: "Login",
+    icon: "ni ni-key-25 text-info",
+    component: Login,
     layout: "/auth"
   },
+  {
+    path: "/register",
+    name: "Register",
+    icon: "ni ni-circle-08 text-pink",
+    component: Register,
+    layout: "/executive"
+  },
+  {
+    path: "/edit",
+    name: "Edit",
+    icon: "ni ni-circle-08 text-pink",
+    component: Edit,
+    layout: "/executive"
+  },
 
-]
+];
 
-export default [...sideBarRoutes,...hiddenRoutes];
+export const executiveSidebar = [
+  {
+    path: "/index",
+    name: "Dashboard",
+    icon: "ni ni-tv-2 text-primary",
+    component: Index,
+    layout: "/executive"
+  },
+  {
+    path: "/maps",
+    name: "Maps",
+    icon: "ni ni-pin-3 text-orange",
+    component: Mapbox,
+    layout: "/executive"
+  },
+  {
+    path: "/tables",
+    name: "Tables",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Tables,
+    layout: "/executive"
+  },
+  {
+    path: "/adduser",
+    name: "Add Employee",
+    icon: "ni ni-circle-08 text-pink",
+    component: AddUser,
+    layout: "/executive"
+  }
+];
+export const agentSidebar = [
+  {
+    path: "/index",
+    name: "Dashboard",
+    icon: "ni ni-tv-2 text-primary",
+    component: Index,
+    layout: "/agent"
+  },
+  {
+    path: "/maps",
+    name: "Maps",
+    icon: "ni ni-pin-3 text-orange",
+    component: Mapbox,
+    layout: "/agent"
+  },
+  {
+    path: "/tables",
+    name: "Tables",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Tables,
+    layout: "/agent"
+  },
+  {
+    path: "/adduser",
+    name: "Add Employee",
+    icon: "ni ni-circle-08 text-pink",
+    component: AddUser,
+    layout: "/agent"
+  }
+];
+
+
+
+export default [...sideBarRoutes,...hiddenRoutes,...executiveSidebar, ...agentSidebar];

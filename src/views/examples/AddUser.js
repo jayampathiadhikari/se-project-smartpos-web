@@ -10,7 +10,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 import React from "react";
-
+import FIREBASE from "../../firebase";
 // reactstrap components
 import {
   Button,
@@ -29,6 +29,7 @@ import UserHeader from "components/Headers/UserHeader.js";
 import {createUserWithEmail} from "../../Utils";
 
 class AddUser extends React.Component {
+
   onSubmit = async(e) => {
     e.preventDefault();
     const userData = {};
