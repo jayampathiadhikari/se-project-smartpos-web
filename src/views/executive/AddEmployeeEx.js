@@ -22,13 +22,30 @@ import {
   Input,
   Container,
   Row,
-  Col
+  Col,
+  DropdownItem,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import {createUserWithEmail} from "../../Utils";
+import CustomDropdown from "../../components/Dropdown";
 
-class AddUser extends React.Component {
+
+
+const data = [
+'Kegalle',
+  'Colombo',
+  'Adsdadfd',
+  "asdasd"
+];
+class AddEmployeeEx extends React.Component {
+  state = {
+    region:null,
+    agent:true
+  };
 
   onSubmit = async(e) => {
     e.preventDefault();
@@ -37,9 +54,28 @@ class AddUser extends React.Component {
       const attri = e.target[i].id;
       userData[attri] = e.target[i].value
     }
+    console.log(userData);
+    userData['region'] = this.state.region;
     userData['type'] = 'salesperson';
-    const res = await createUserWithEmail(userData);
-    console.log(res);
+    // const res = await createUserWithEmail(userData);
+    //console.log(res);
+  };
+
+  onSelectRegion = (region) => {
+    this.setState({
+      region: region,
+    })
+  };
+
+  onSelectAgent = (agent) => {
+    this.setState({
+      agent: agent,
+    })
+  };
+  onChange = () => {
+    this.setState({
+      agent:!this.state.agent
+    })
   };
 
   render() {
@@ -64,6 +100,47 @@ class AddUser extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <Form onSubmit={this.onSubmit}>
+                    <h6 className="heading-small text-muted mb-4">
+                      Employee Type
+                    </h6>
+                    <div className="pl-lg-4">
+                      <Row>
+                        <Col lg="3">
+                          <FormGroup>
+                            <div className="custom-control custom-control-alternative custom-radio mb-3">
+                              <input
+                                className="custom-control-input"
+                                id="customRadio1"
+                                name="custom-radio-1"
+                                type="radio"
+                                defaultChecked
+                                onChange={this.onChange}
+                              />
+                              <label className="custom-control-label" htmlFor="customRadio1">
+                                Agent
+                              </label>
+                            </div>
+                          </FormGroup>
+                        </Col>
+                        <Col lg="3">
+                          <FormGroup>
+                            <div className="custom-control custom-control-alternative custom-radio mb-3">
+                              <input
+                                className="custom-control-input"
+                                id="customRadio2"
+                                name="custom-radio-1"
+                                type="radio"
+                                onChange={this.onChange}
+                              />
+                              <label className="custom-control-label" htmlFor="customRadio2">
+                                Salesperson
+                              </label>
+                            </div>
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </div>
+                    <hr className="my-4" />
                     <h6 className="heading-small text-muted mb-4">
                       User information
                     </h6>
@@ -183,8 +260,40 @@ class AddUser extends React.Component {
                         </Col>
                       </Row>
                     </div>
-                    <hr className="my-4" />
 
+                    <hr className="my-4" />
+                    <h6 className="heading-small text-muted mb-4">
+                      Other
+                    </h6>
+                    <div className="pl-lg-4">
+                      <Row>
+                        <Col md="3">
+                          <FormGroup>
+                            <div
+                              className="form-control-label"
+                              htmlFor="region"
+                              style={{marginBottom:'10px'}}
+                            >Region</div>
+                            <CustomDropdown data={data} id="region" onSelect={this.onSelectRegion}/>
+                          </FormGroup>
+                        </Col>
+                        {
+                          !this.state.agent ?
+                            (
+                              <Col md="3">
+                                <FormGroup>
+                                  <div
+                                    className="form-control-label"
+                                    htmlFor="region"
+                                    style={{marginBottom:'10px'}}
+                                  >Agent</div>
+                                  <CustomDropdown data={data} id="agent" onSelect={this.onSelectAgent}/>
+                                </FormGroup>
+                              </Col>
+                            ) : null
+                        }
+                      </Row>
+                    </div>
                     <hr className="my-4" />
                     {/* Description */}
                     <Row>
@@ -195,7 +304,6 @@ class AddUser extends React.Component {
                         </Button>
                       </Col>
                     </Row>
-
                   </Form>
                 </CardBody>
               </Card>
@@ -207,4 +315,4 @@ class AddUser extends React.Component {
   }
 }
 
-export default AddUser;
+export default AddEmployeeEx;

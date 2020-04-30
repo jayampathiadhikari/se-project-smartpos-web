@@ -26,6 +26,7 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes, {executiveSidebar} from "routes.js";
+import ExecutiveSidebar from "../components/Sidebar/ExecutiveSidebar";
 
 
 class Executive extends React.Component {
@@ -65,7 +66,7 @@ class Executive extends React.Component {
   render() {
     return (
       <>
-        <Sidebar
+        <ExecutiveSidebar
           {...this.props}
           routes={executiveSidebar}
           // logo={{

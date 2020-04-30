@@ -27,6 +27,7 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
 import {agentSidebar} from "../routes";
+import AgentSidebar from "../components/Sidebar/AgentSidebar";
 
 
 class Agent extends React.Component {
@@ -66,7 +67,7 @@ class Agent extends React.Component {
   render() {
     return (
       <>
-        <Sidebar
+        <AgentSidebar
           {...this.props}
           routes={agentSidebar}
           // logo={{

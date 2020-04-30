@@ -11,6 +11,7 @@ import Mapbox from "./views/examples/Mapbox3";
 import Edit from "views/examples/Edit.js";
 import AddUser from "./views/examples/AddUser";
 import ResetPassword from "./views/examples/ResetPassword";
+import AddEmployeeEx from "./views/executive/AddEmployeeEx";
 
 export var sideBarRoutes = [
   {
@@ -149,10 +150,10 @@ export const executiveSidebar = [
     layout: "/executive"
   },
   {
-    path: "/adduser",
+    path: "/addemployee",
     name: "Add Employee",
     icon: "ni ni-circle-08 text-pink",
-    component: AddUser,
+    component: AddEmployeeEx,
     layout: "/executive"
   }
 ];
