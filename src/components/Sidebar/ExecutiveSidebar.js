@@ -50,7 +50,7 @@ import TrackingOptions from "./TrackingOptions";
 
 var ps;
 
-class AgentSidebar extends React.Component {
+class ExecutiveSidebar extends React.Component {
   state = {
     collapseOpen: false
   };
@@ -76,7 +76,7 @@ class AgentSidebar extends React.Component {
     });
   };
   renderTrackingOptions = () => {
-    if(this.props.location.pathname === '/agent/maps'){
+    if(this.props.location.pathname === '/executive/maps'){
       return(
         <div>
           <h6 className="navbar-heading text-muted">Tracking Options</h6>
@@ -87,14 +87,13 @@ class AgentSidebar extends React.Component {
     }else{
       return (null)
     }
-  }
+  };
   // creates the links that appear in the left menu / Sidebar
   createLinks = routes => {
-    if(this.props.location.pathname === '/agent/maps'){
+    if(this.props.location.pathname === '/executive/maps'){
       var routes = routes.filter((route)=>{
         return (route.name === 'Maps' ||route.name === 'Dashboard' )
       });
-
     }
     return routes.map((prop, key) => {
       return (
@@ -269,11 +268,11 @@ class AgentSidebar extends React.Component {
   }
 }
 
-AgentSidebar.defaultProps = {
+ExecutiveSidebar.defaultProps = {
   routes: [{}]
 };
 
-AgentSidebar.propTypes = {
+ExecutiveSidebar.propTypes = {
   // links that will be displayed inside the component
   routes: PropTypes.arrayOf(PropTypes.object),
   logo: PropTypes.shape({
@@ -302,5 +301,5 @@ const bindAction = (dispatch) => ({
 export default connect(
   mapStateToProps,
   bindAction
-)(AgentSidebar);
+)(ExecutiveSidebar);
 

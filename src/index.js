@@ -25,18 +25,24 @@ import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 
-import requiresAuth from './components/RequiresAuth';
-import AdminLayout from "layouts/Admin.js";
+// import requiresAuth from './components/RequiresAuth';
+import requiresAuthExecutive from './components/RequiresAuthExecutive';
+import requiresAuthAgent from './components/RequiresAuthAgent'
+// import AdminLayout from "layouts/Admin.js";
+import AgentLayout from "layouts/Agent"
 import AuthLayout from "layouts/Auth.js";
+import ExecutiveLayout from "layouts/Executive";
 
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <BrowserRouter>
         <Switch>
-          <Route path="/admin" component={requiresAuth(AdminLayout)} />
+          {/*<Route path="/admin" component={requiresAuth(AdminLayout)} />*/}
+          <Route path="/executive" component={requiresAuthExecutive(ExecutiveLayout)} />
+          <Route path="/agent" component={requiresAuthAgent(AgentLayout)} />
           <Route path="/auth" render={props => <AuthLayout {...props} />} />
-          <Redirect from="/" to="/admin/index" />
+          <Redirect from="/" to="/auth/login" />
         </Switch>
       </BrowserRouter>
     </PersistGate>

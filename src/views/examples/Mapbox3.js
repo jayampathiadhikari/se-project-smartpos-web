@@ -2,6 +2,9 @@ import React from 'react';
 import ReactMapboxGl, { Layer, Feature, ScaleControl, ZoomControl, RotationControl } from 'react-mapbox-gl';
 
 import {MAPBOX_TOKEN} from "../../config";
+import {setSignInStatus} from "../../redux/reducers/authentication/action";
+import {setSimulation} from "../../redux/reducers/ui/action";
+import {connect} from "react-redux";
 
 // tslint:disable-next-line:no-var-requires
 const mapData = require('../demos/allShapesStyle');
@@ -47,29 +50,35 @@ class AllShapes extends React.Component {
   };
   mounted = false;
 
-  UNSAFE_componentWillMount() {
+  componentDidMount() {
     this.mounted = true;
-    this.timeoutHandle = setTimeout(() => {
-      if (this.mounted) {
-        this.setState({
-          center: mappedRoute[0],
-          zoom: [10],
-          circleRadius: 10
-        });
-      }
-    }, 2000);
-
-    this.intervalHandle = setInterval(() => {
-      if (this.mounted) {
-        this.setState({
-          route: [...this.state.route , mappedRoute[this.state.routeIndex]],
-          routeIndex: this.state.routeIndex + 1,
-        });
-      }
-    }, 1000);
   }
 
-   componentWillUnmount() {
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if((prevProps.simulation != this.props.simulation) && this.props.simulation){
+      console.log("state changed");
+      this.timeoutHandle = setTimeout(() => {
+        if (this.mounted) {
+          this.setState({
+            center: mappedRoute[0],
+            zoom: [10],
+            circleRadius: 10
+          });
+        }
+      }, 2000);
+
+      this.intervalHandle = setInterval(() => {
+        if (this.mounted) {
+          this.setState({
+            route: [...this.state.route , mappedRoute[this.state.routeIndex]],
+            routeIndex: this.state.routeIndex + 1,
+          });
+        }
+      }, 1000);
+    }
+  }
+
+  componentWillUnmount() {
     clearTimeout(this.timeoutHandle);
     clearInterval(this.intervalHandle);
   }
@@ -105,14 +114,25 @@ class AllShapes extends React.Component {
           <RotationControl style={{ top: 80 }} />
 
           {/* Line example */}
-          <Layer type="line" layout={lineLayout} paint={linePaint}>
-            <Feature coordinates={this.state.route} />
-          </Layer>
+          {this.props.simulation ?
+            <div>
+              <Layer type="line" layout={lineLayout} paint={linePaint}>
+                <Feature coordinates={this.state.route} />
+              </Layer>
+              <Layer type="circle" paint={this.getCirclePaint()}>
+                <Feature coordinates={mappedRoute[this.state.routeIndex]} />
+              </Layer>
+            </div>
+            : null}
 
           {/* Circle example */}
-          <Layer type="circle" paint={this.getCirclePaint()}>
-            <Feature coordinates={mappedRoute[this.state.routeIndex]} />
-          </Layer>
+          {/*{this.props.simulation ?*/}
+          {/*  <Layer type="circle" paint={this.getCirclePaint()}>*/}
+          {/*    <Feature coordinates={mappedRoute[this.state.routeIndex]} />*/}
+          {/*  </Layer>*/}
+          {/*  : null}*/}
+
+
         </Map>
       </div>
 
@@ -120,4 +140,15 @@ class AllShapes extends React.Component {
   }
 }
 
-export default AllShapes;
+const mapStateToProps = (state) => ({
+  simulation: state.uiReducer.simulation,
+});
+
+const bindAction = (dispatch) => ({
+  setSimulation: (status) => dispatch(setSimulation(status)),
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(AllShapes);

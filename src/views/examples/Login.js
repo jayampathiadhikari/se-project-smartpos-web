@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import {
   withRouter
 } from "react-router-dom";
+import {checkAuthentication } from '../../Utils'
+
 // reactstrap components
 import {
   Alert,
@@ -19,7 +21,8 @@ import {
   Row,
   Col
 } from "reactstrap";
-import {setSignInStatus} from "../../redux/reducers/authentication/action";
+
+import {setAgentLogin, setExecutiveLogin, setSignInStatus} from "../../redux/reducers/authentication/action";
 
 
 class Login extends React.Component {
@@ -29,12 +32,24 @@ class Login extends React.Component {
     remember: true,
     visible:false
   };
-  componentDidMount() {
-    console.log(this.props.loggedIn);
-  }
 
-  login = () => {
-    this.checkForAuthentication(this.state.email,this.state.password)
+  login = async() => {
+    const res = await checkAuthentication(this.state.email,this.state.password);
+    console.log(res);
+    if(res.success){
+      if(res.type === 'exec'){
+        this.props.setIsExecutive(true);
+        setTimeout(()=>{this.props.history.push('/executive/dashboard')},100);
+      }else if(res.type === 'agent'){
+        console.log('AGENT');
+        this.props.setIsAgent(true);
+        setTimeout(()=>{this.props.history.push('/agent/index');},100);
+      }
+      console.log(res.type);
+    }else{
+      this.showAlert()
+    }
+    // this.checkForAuthentication(this.state.email,this.state.password)
   };
 
   onChange = (e) => {
@@ -47,7 +62,8 @@ class Login extends React.Component {
   };
 
   checkForAuthentication = (email,password) => {
-    console.log('inside')
+
+    console.log('inside');
     if(email==='jayampathiadhikari@gmail.com' && password==='Windows8#'){
       this.props.setLogin(true);
       setTimeout(()=>{this.props.history.push('/admin/dashboard');},500);
@@ -55,13 +71,14 @@ class Login extends React.Component {
       this.showAlert()
     }
   };
+
   showAlert = ()=>{
     this.setState({visible:true},()=>{
       window.setTimeout(()=>{
         this.setState({visible:false})
       },2000)
     });
-  }
+  };
 
   render() {
     return (
@@ -162,6 +179,8 @@ const mapStateToProps = (state) => ({
 
 const bindAction = (dispatch) => ({
   setLogin: (status) => dispatch(setSignInStatus(status)),
+  setIsExecutive: (status) => dispatch(setExecutiveLogin(status)),
+  setIsAgent: (status) => dispatch(setAgentLogin(status)),
 });
 
 export default connect(

@@ -6,10 +6,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 
 import { AuthenticationReducer } from './reducers/authentication/reducer';
-
+import { uiReducer } from './reducers/ui/reducer'
 
 export const appReducer = combineReducers({
   AuthenticationReducer,
+  uiReducer
 });
 
 const persistConfig = {
