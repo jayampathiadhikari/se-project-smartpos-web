@@ -17,7 +17,7 @@ class CustomDropdown extends React.Component{
   handleCountrySelection(selectedCountry) {
     console.log(selectedCountry);
     this.setState({
-      selected: selectedCountry
+      selected: selectedCountry.name
     });
     this.props.onSelect(selectedCountry);
     // this.props.onSetCountry(selectedCountry);
@@ -30,7 +30,7 @@ class CustomDropdown extends React.Component{
           key={index.toString()}
           onClick={() => {this.handleCountrySelection(country)}}
         >
-          {country}
+          {country.name}
         </DropdownItem>
       );
     });

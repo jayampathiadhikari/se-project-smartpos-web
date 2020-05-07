@@ -32,49 +32,64 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import {createUserWithEmail} from "../../Utils";
 import CustomDropdown from "../../components/Dropdown";
-
+import {getCurrentExecData} from "../../Utils";
 
 
 const data = [
-'Kegalle',
-  'Colombo',
-  'Adsdadfd',
-  "asdasd"
+  {name:'Kegalle',id:'1'},
+  {name:'Colombo',id:'2'},
+  {name:'abcd',id:'3'},
+  {name:'abcd',id:'4'},
+];
+const agentData = [
+  {name:'abcd',id:'1'},
+  {name:'abcd',id:'2'},
+  {name:'abcd',id:'3'},
+  {name:'abcd',id:'4'},
 ];
 class AddEmployeeEx extends React.Component {
   state = {
     region:null,
-    agent:true
+    agent:null,
+    agentSelected: true
   };
 
   onSubmit = async(e) => {
     e.preventDefault();
     const userData = {};
-    for(let i=0; i<6;i++){
+    for(let i=0; i<8;i++){
       const attri = e.target[i].id;
       userData[attri] = e.target[i].value
     }
-    console.log(userData);
     userData['region'] = this.state.region;
-    userData['type'] = 'salesperson';
+    if(this.state.agentSelected){
+      userData['type'] = 'agent';
+      userData['supervisorUid'] = FIREBASE.auth().currentUser.uid;
+    }else{
+      userData['type'] = 'salesperson';
+      userData['supervisorUid'] = this.state.agent;
+    }
+    console.log(userData);
+    const res = await createUserWithEmail(userData);
+    console.log(res);
     // const res = await createUserWithEmail(userData);
     //console.log(res);
   };
 
   onSelectRegion = (region) => {
     this.setState({
-      region: region,
+      region: region.name,
     })
   };
 
   onSelectAgent = (agent) => {
     this.setState({
-      agent: agent,
+      agent: agent.id,
     })
   };
   onChange = () => {
     this.setState({
-      agent:!this.state.agent
+      agentSelected:!this.state.agentSelected
     })
   };
 
@@ -278,16 +293,16 @@ class AddEmployeeEx extends React.Component {
                           </FormGroup>
                         </Col>
                         {
-                          !this.state.agent ?
+                          !this.state.agentSelected ?
                             (
                               <Col md="3">
                                 <FormGroup>
                                   <div
                                     className="form-control-label"
-                                    htmlFor="region"
+                                    htmlFor="agent"
                                     style={{marginBottom:'10px'}}
                                   >Agent</div>
-                                  <CustomDropdown data={data} id="agent" onSelect={this.onSelectAgent}/>
+                                  <CustomDropdown data={agentData} id="agent" onSelect={this.onSelectAgent}/>
                                 </FormGroup>
                               </Col>
                             ) : null
