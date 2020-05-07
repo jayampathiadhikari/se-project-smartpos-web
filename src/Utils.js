@@ -32,10 +32,10 @@ export const createUserWithEmail = async (data) => {
           await FIREBASE.auth().sendPasswordResetEmail(data.email);
           return {success:true}
         }catch (e) {
-          return {success:false, message: e}
+          return {success:false, error: e}
         }
       }else{
-        return {success:false, message: result.data.message}
+        return {success:false, error: result.data.message}
       }
     })
       .catch(error => ({
@@ -47,6 +47,18 @@ export const createUserWithEmail = async (data) => {
     console.log(e.response,'ERROR RESPONSE');
     return {success:false, error:e}
   }
+};
+
+export const getAgentsByRegion = async(region) => {
+  const queryRef = FIREBASE.firestore().collection("users")
+    .where("region", "==", region);
+  const querySnap = await queryRef.get();
+  const agents = [];
+  querySnap.docs.forEach(doc => {
+    const data = doc.data()
+    agents.push({name:data.firstName, id: data.uid})
+  });
+  return agents;
 };
 
 export const getCurrentAgentData = async () => {

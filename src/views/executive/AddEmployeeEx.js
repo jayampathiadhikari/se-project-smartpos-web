@@ -23,16 +23,17 @@ import {
   Container,
   Row,
   Col,
+  Spinner,
   DropdownItem,
   Dropdown,
   DropdownToggle,
-  DropdownMenu
+  DropdownMenu, Alert
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import {createUserWithEmail} from "../../Utils";
 import CustomDropdown from "../../components/Dropdown";
-import {getCurrentExecData} from "../../Utils";
+import {getCurrentExecData,getAgentsByRegion} from "../../Utils";
 
 
 const data = [
@@ -51,10 +52,20 @@ class AddEmployeeEx extends React.Component {
   state = {
     region:null,
     agent:null,
-    agentSelected: true
+    agentSelected: true,
+    agents: [],
+    alert:'info',
+    visible: false,
+    processing:true,
+    disabled: false,
+    msg:null
   };
 
   onSubmit = async(e) => {
+    this.setState({
+      visible:true,
+      disabled:true
+    });
     e.preventDefault();
     const userData = {};
     for(let i=0; i<8;i++){
@@ -71,15 +82,36 @@ class AddEmployeeEx extends React.Component {
     }
     console.log(userData);
     const res = await createUserWithEmail(userData);
+    if(res.success){
+      this.setState({
+        alert:'success',
+        processing:false,
+        msg: 'SUCCESS !'
+      })
+    }else{
+      this.setState({
+        alert:'danger',
+        processing:false,
+        msg: 'FAILED ! \n'.concat(res.error)
+      })
+    }
+    window.setTimeout(()=>{
+      this.setState({
+        alert:'info',
+        visible: false,
+        disabled: false
+      })
+    },1500);
     console.log(res);
-    // const res = await createUserWithEmail(userData);
-    //console.log(res);
+
   };
 
-  onSelectRegion = (region) => {
+  onSelectRegion = async (region) => {
+    const agents = await getAgentsByRegion(region.name)
     this.setState({
       region: region.name,
-    })
+      agents:agents
+    });
   };
 
   onSelectAgent = (agent) => {
@@ -93,9 +125,17 @@ class AddEmployeeEx extends React.Component {
     })
   };
 
+  showAlert = () => {
+
+  }
+
   render() {
     return (
       <>
+        <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'43%',top:'43%',zIndex:999}}>
+          {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+
+        </Alert>
         <UserHeader />
         {/* Page content */}
         <Container className="mt--7" fluid>
@@ -302,7 +342,7 @@ class AddEmployeeEx extends React.Component {
                                     htmlFor="agent"
                                     style={{marginBottom:'10px'}}
                                   >Agent</div>
-                                  <CustomDropdown data={agentData} id="agent" onSelect={this.onSelectAgent}/>
+                                  <CustomDropdown data={this.state.agents} id="agent" onSelect={this.onSelectAgent}/>
                                 </FormGroup>
                               </Col>
                             ) : null
@@ -314,7 +354,7 @@ class AddEmployeeEx extends React.Component {
                     <Row>
                       <Col md="10"/>
                       <Col md="2">
-                        <Button className="my-4" color="primary" type="submit">
+                        <Button className="my-4" color="primary" type="submit" disabled={this.state.disabled}>
                           Add User
                         </Button>
                       </Col>
