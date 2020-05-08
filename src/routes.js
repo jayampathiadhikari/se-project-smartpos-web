@@ -11,7 +11,12 @@ import Mapbox from "./views/examples/Mapbox3";
 import Edit from "views/examples/Edit.js";
 import AddUser from "./views/examples/AddUser";
 import ResetPassword from "./views/examples/ResetPassword";
+//agent
+import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
+
+//executive
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
+
 
 export var sideBarRoutes = [
   {
@@ -183,7 +188,7 @@ export const agentSidebar = [
     path: "/adduser",
     name: "Add Employee",
     icon: "ni ni-circle-08 text-pink",
-    component: AddUser,
+    component: AddEmployeeAgent,
     layout: "/agent"
   }
 ];

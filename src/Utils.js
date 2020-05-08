@@ -66,7 +66,7 @@ export const getCurrentAgentData = async () => {
   const userQueryRef = FIREBASE.firestore().collection('users')
     .where('email', '==', currentUser.email);
   const userQuerySnapshot = await userQueryRef.get();
-  const region = userQuerySnapshot.docs[0].region;
+  const region = userQuerySnapshot.docs[0].data().region;
   const uid = currentUser.uid;
   return {uid, region}
 };

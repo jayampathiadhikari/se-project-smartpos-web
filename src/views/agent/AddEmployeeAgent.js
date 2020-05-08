@@ -31,7 +31,7 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import {createUserWithEmail} from "../../Utils";
+import {createUserWithEmail, getCurrentAgentData} from "../../Utils";
 import CustomDropdown from "../../components/Dropdown";
 import {getCurrentExecData,getAgentsByRegion} from "../../Utils";
 
@@ -48,12 +48,8 @@ const agentData = [
   {name:'abcd',id:'3'},
   {name:'abcd',id:'4'},
 ];
-class AddEmployeeEx extends React.Component {
+class AddEmployeeAgent extends React.Component {
   state = {
-    region:null,
-    agent:null,
-    agentSelected: true,
-    agents: [],
     alert:'info',
     visible: false,
     processing:true,
@@ -62,24 +58,25 @@ class AddEmployeeEx extends React.Component {
   };
 
   onSubmit = async(e) => {
+    e.preventDefault();
     this.setState({
       visible:true,
       disabled:true
     });
-    e.preventDefault();
+
     const userData = {};
-    for(let i=0; i<8;i++){
-      const attri = e.target[i].id;
-      userData[attri] = e.target[i].value
+    for(let i=0; i<6;i++){
+      if(e.target != null){
+        const attri = e.target[i].id;
+        userData[attri] = e.target[i].value
+      }else{
+        break
+      }
     }
-    userData['region'] = this.state.region;
-    if(this.state.agentSelected){
-      userData['type'] = 'agent';
-      userData['supervisorUid'] = FIREBASE.auth().currentUser.uid;
-    }else{
-      userData['type'] = 'salesperson';
-      userData['supervisorUid'] = this.state.agent;
-    }
+    const {uid,region} = await getCurrentAgentData();
+    userData['region'] = region;
+    userData['type'] = 'salesperson';
+    userData['supervisorUid'] = uid;
     console.log(userData);
     const res = await createUserWithEmail(userData);
     if(res.success){
@@ -92,7 +89,7 @@ class AddEmployeeEx extends React.Component {
       this.setState({
         alert:'danger',
         processing:false,
-        msg: 'FAILED ! \n'.concat(res.error)
+        msg: 'FAILED ! '.concat(res.error)
       })
     }
     window.setTimeout(()=>{
@@ -103,31 +100,7 @@ class AddEmployeeEx extends React.Component {
       })
     },1500);
     console.log(res);
-
   };
-
-  onSelectRegion = async (region) => {
-    const agents = await getAgentsByRegion(region.name);
-    this.setState({
-      region: region.name,
-      agents:agents
-    });
-  };
-
-  onSelectAgent = (agent) => {
-    this.setState({
-      agent: agent.id,
-    })
-  };
-  onChange = () => {
-    this.setState({
-      agentSelected:!this.state.agentSelected
-    })
-  };
-
-  showAlert = () => {
-
-  }
 
   render() {
     return (
@@ -155,47 +128,6 @@ class AddEmployeeEx extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <Form onSubmit={this.onSubmit}>
-                    <h6 className="heading-small text-muted mb-4">
-                      Employee Type
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col lg="3">
-                          <FormGroup>
-                            <div className="custom-control custom-control-alternative custom-radio mb-3">
-                              <input
-                                className="custom-control-input"
-                                id="customRadio1"
-                                name="custom-radio-1"
-                                type="radio"
-                                defaultChecked
-                                onChange={this.onChange}
-                              />
-                              <label className="custom-control-label" htmlFor="customRadio1">
-                                Agent
-                              </label>
-                            </div>
-                          </FormGroup>
-                        </Col>
-                        <Col lg="3">
-                          <FormGroup>
-                            <div className="custom-control custom-control-alternative custom-radio mb-3">
-                              <input
-                                className="custom-control-input"
-                                id="customRadio2"
-                                name="custom-radio-1"
-                                type="radio"
-                                onChange={this.onChange}
-                              />
-                              <label className="custom-control-label" htmlFor="customRadio2">
-                                Salesperson
-                              </label>
-                            </div>
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </div>
-                    <hr className="my-4" />
                     <h6 className="heading-small text-muted mb-4">
                       User information
                     </h6>
@@ -315,40 +247,6 @@ class AddEmployeeEx extends React.Component {
                         </Col>
                       </Row>
                     </div>
-
-                    <hr className="my-4" />
-                    <h6 className="heading-small text-muted mb-4">
-                      Other
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col md="3">
-                          <FormGroup>
-                            <div
-                              className="form-control-label"
-                              htmlFor="region"
-                              style={{marginBottom:'10px'}}
-                            >Region</div>
-                            <CustomDropdown data={data} id="region" onSelect={this.onSelectRegion}/>
-                          </FormGroup>
-                        </Col>
-                        {
-                          !this.state.agentSelected ?
-                            (
-                              <Col md="3">
-                                <FormGroup>
-                                  <div
-                                    className="form-control-label"
-                                    htmlFor="agent"
-                                    style={{marginBottom:'10px'}}
-                                  >Agent</div>
-                                  <CustomDropdown data={this.state.agents} id="agent" onSelect={this.onSelectAgent}/>
-                                </FormGroup>
-                              </Col>
-                            ) : null
-                        }
-                      </Row>
-                    </div>
                     <hr className="my-4" />
                     {/* Description */}
                     <Row>
@@ -370,4 +268,4 @@ class AddEmployeeEx extends React.Component {
   }
 }
 
-export default AddEmployeeEx;
+export default AddEmployeeAgent;
