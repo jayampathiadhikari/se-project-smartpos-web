@@ -5,16 +5,18 @@ import {MAPBOX_TOKEN} from "../../config";
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
 import {setSimulation} from "../../redux/reducers/ui/action";
 import {connect} from "react-redux";
-
+import {jsonObject} from "../demos/routeData";
+import FIREBASE from "../../firebase";
 // tslint:disable-next-line:no-var-requires
 const mapData = require('../demos/allShapesStyle');
 // tslint:disable-next-line:no-var-requires
 const route = require('../demos/route');
 
-const mappedRoute = route.points.map(
-  point => [point.lng, point.lat]
-);
+// const mappedRoute = route.points.map(
+//   point => [point.lng, point.lat]
+// );
 
+const mappedRoute = jsonObject.coordinates;
 const Map = ReactMapboxGl({
   accessToken: MAPBOX_TOKEN
 });
@@ -46,41 +48,70 @@ class AllShapes extends React.Component {
     zoom: [8],
     circleRadius: 30,
     routeIndex: 0,
-    route:[]
+    route:[],
+    routeData:[]
   };
   mounted = false;
 
   componentDidMount() {
+    console.log(mappedRoute);
     this.mounted = true;
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if((prevProps.simulation != this.props.simulation) && this.props.simulation){
-      console.log("state changed");
-      this.timeoutHandle = setTimeout(() => {
-        if (this.mounted) {
-          this.setState({
-            center: mappedRoute[0],
-            zoom: [10],
-            circleRadius: 10
-          });
-        }
-      }, 2000);
-
-      this.intervalHandle = setInterval(() => {
-        if (this.mounted) {
-          this.setState({
-            route: [...this.state.route , mappedRoute[this.state.routeIndex]],
-            routeIndex: this.state.routeIndex + 1,
-          });
-        }
-      }, 1000);
+      console.log("state changed",this.props.trackUserId);
+      this.watchFirestore();
+      // this.timeoutHandle = setTimeout(() => {
+      //   if (this.mounted) {
+      //     this.setState({
+      //       center: mappedRoute[0],
+      //       zoom: [10],
+      //       circleRadius: 10
+      //     });
+      //   }
+      // }, 2000);
+      //
+      // this.intervalHandle = setInterval(() => {
+      //   if (this.mounted) {
+      //     this.setState({
+      //       route: [...this.state.route , mappedRoute[this.state.routeIndex]],
+      //       routeIndex: this.state.routeIndex + 1,
+      //     });
+      //   }
+      // }, 1000);
     }
   }
+
+  watchFirestore() {
+    const date = new Date();
+    const dateString = date.toISOString().split('T')[0];
+    const uid = this.props.trackUserId;
+    const collectionPath = `userTravel/${uid}/${dateString}`;
+    this.unsubscribe = FIREBASE.firestore().collection(collectionPath).orderBy("time", "asc")
+      .onSnapshot({
+        error: (e) => console.error(e),
+        next: (querySnapshot) => {
+          const routeData = this.state.routeData;
+          querySnapshot.docChanges().forEach(change => {
+            if(change.type === 'added'){
+              const coord = change.doc.data().location;
+              routeData.push([coord.longitude,coord.latitude]);
+              console.log("data: ", change.doc.data())
+            }
+          });
+          this.setState({
+            routeData: routeData
+          });
+          console.log(querySnapshot.size,'FIREBASE QUERY',routeData)
+        },
+      });
+  };
 
   componentWillUnmount() {
     clearTimeout(this.timeoutHandle);
     clearInterval(this.intervalHandle);
+    this.unsubscribe();
   }
 
    getCirclePaint = () => ({
@@ -142,6 +173,7 @@ class AllShapes extends React.Component {
 
 const mapStateToProps = (state) => ({
   simulation: state.uiReducer.simulation,
+  trackUserId: state.uiReducer.trackingUser
 });
 
 const bindAction = (dispatch) => ({
