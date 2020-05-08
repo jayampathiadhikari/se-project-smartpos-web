@@ -5,14 +5,23 @@ import {
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
 import {setSimulation} from "../../redux/reducers/ui/action";
+import {regions} from "../../constants";
+import CustomDropdown from "../Dropdown";
+import {getAgentsByRegion,getSalespersonByAgent} from "../../Utils";
 
+const types =[
+  {name:'salesperson',id:1}
+];
 
 class TrackingOptions extends React.Component{
   state = {
     region:false,
     agent:false,
     salesperson: false,
-    track:false
+    track:false,
+    agents:false,
+    agentsData:[],
+    salespersonData:[]
   };
 
   onChange = (e) => {
@@ -76,24 +85,57 @@ class TrackingOptions extends React.Component{
       </FormGroup>
     )
   }
+  onSelectType = (type) => {
+    if (type.id = 1){
+      this.setState({
+        region:true
+      })
+    }
+  };
+  onSelectRegion = async (region) => {
+    const agents = await getAgentsByRegion(region.name);
+    this.setState({
+      agents:true,
+      agentsData:agents
+    });
+  };
+
+  onSelectAgent = async (agent) => {
+    const salesperson = await getSalespersonByAgent(agent.id);
+    this.setState({
+      salesperson:true,
+      salespersonData:salesperson
+    });
+  };
+
+  onSelectSalesperson = async(sp) => {
+    console.log(sp.id)
+    this.setState({
+      salespersonID: sp.id,
+      track:true
+    })
+  };
 
   render(){
     return(
       <div style={{padding:'5px',borderWidth:'0.5px'}}>
         <Form role="form" onSubmit={this.onSubmit}>
           <FormGroup>
-            <span className="navbar-heading text-muted">Type</span>
-            <InputGroup className="input-group-alternative">
-              <Input type="select" name="region" onChange={this.onChange}>
-                <option></option>
-                <option>Salesperson</option>
-                <option>Vehicle</option>
-              </Input>
-            </InputGroup>
+            <div className="navbar-heading text-muted">Type</div>
+            <CustomDropdown data={types} id="type" initial="type" onSelect={this.onSelectType} disabled={false}/>
           </FormGroup>
-          {this.renderRegion()}
-          {this.renderAgent()}
-          {this.renderSalesperson()}
+          <FormGroup>
+            <div className="navbar-heading text-muted">Region</div>
+            <CustomDropdown data={regions} id="region" initial="region" onSelect={this.onSelectRegion} disabled={!this.state.region}/>
+          </FormGroup>
+          <FormGroup>
+            <div className="navbar-heading text-muted">Agent</div>
+            <CustomDropdown data={this.state.agentsData} id="agent" initial="agent" onSelect={this.onSelectAgent} disabled={!this.state.agents}/>
+          </FormGroup>
+          <FormGroup>
+            <div className="navbar-heading text-muted">Salesperson</div>
+            <CustomDropdown data={this.state.salespersonData} id="salesperson" initial="salesperson" onSelect={this.onSelectSalesperson} disabled={!this.state.salesperson}/>
+          </FormGroup>
           <div className="text-center">
             <Button className="my-4" color="primary" type={"submit"} disabled={!this.state.track} onClick={()=>{this.props.setSimulation(true)}}>
               Track

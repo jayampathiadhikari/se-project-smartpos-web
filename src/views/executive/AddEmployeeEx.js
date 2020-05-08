@@ -125,10 +125,6 @@ class AddEmployeeEx extends React.Component {
     })
   };
 
-  showAlert = () => {
-
-  }
-
   render() {
     return (
       <>
@@ -329,7 +325,7 @@ class AddEmployeeEx extends React.Component {
                               htmlFor="region"
                               style={{marginBottom:'10px'}}
                             >Region</div>
-                            <CustomDropdown data={data} id="region" onSelect={this.onSelectRegion}/>
+                            <CustomDropdown data={data} id="region" initial={"region"} onSelect={this.onSelectRegion}/>
                           </FormGroup>
                         </Col>
                         {
@@ -342,7 +338,7 @@ class AddEmployeeEx extends React.Component {
                                     htmlFor="agent"
                                     style={{marginBottom:'10px'}}
                                   >Agent</div>
-                                  <CustomDropdown data={this.state.agents} id="agent" onSelect={this.onSelectAgent}/>
+                                  <CustomDropdown data={this.state.agents} id="agent" initial={"agent"} onSelect={this.onSelectAgent}/>
                                 </FormGroup>
                               </Col>
                             ) : null

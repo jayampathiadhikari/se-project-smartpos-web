@@ -51,7 +51,7 @@ export const createUserWithEmail = async (data) => {
 
 export const getAgentsByRegion = async(region) => {
   const queryRef = FIREBASE.firestore().collection("users")
-    .where("region", "==", region);
+    .where("region", "==", region).where("type","==","agent")
   const querySnap = await queryRef.get();
   const agents = [];
   querySnap.docs.forEach(doc => {
@@ -59,6 +59,18 @@ export const getAgentsByRegion = async(region) => {
     agents.push({name:data.firstName, id: data.uid})
   });
   return agents;
+};
+
+export const getSalespersonByAgent = async(agentID) => {
+  const queryRef = FIREBASE.firestore().collection("users")
+    .where("supervisorUid", "==", agentID);
+  const querySnap = await queryRef.get();
+  const salesperson = [];
+  querySnap.docs.forEach(doc => {
+    const data = doc.data();
+    salesperson.push({name:data.firstName, id: data.uid})
+  });
+  return salesperson;
 };
 
 export const getCurrentAgentData = async () => {
