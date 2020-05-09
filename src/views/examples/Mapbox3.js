@@ -44,12 +44,13 @@ const multiPolygonPaint = {
 
 class AllShapes extends React.Component {
   state = {
-    center: [-0.120736, 51.5118219],
-    zoom: [8],
-    circleRadius: 30,
+    center: [79.84473947511191,6.933374765107288],
+    zoom: [14],
+    circleRadius: 10,
     routeIndex: 0,
     route:[],
-    routeData:[]
+    routeData:[],
+    currentPos:null
   };
   mounted = false;
 
@@ -101,7 +102,8 @@ class AllShapes extends React.Component {
             }
           });
           this.setState({
-            routeData: routeData
+            routeData: routeData,
+            currentPos: routeData[querySnapshot.size-1]
           });
           console.log(querySnapshot.size,'FIREBASE QUERY',routeData)
         },
@@ -148,10 +150,10 @@ class AllShapes extends React.Component {
           {this.props.simulation ?
             <div>
               <Layer type="line" layout={lineLayout} paint={linePaint}>
-                <Feature coordinates={this.state.route} />
+                <Feature coordinates={this.state.routeData} />
               </Layer>
               <Layer type="circle" paint={this.getCirclePaint()}>
-                <Feature coordinates={mappedRoute[this.state.routeIndex]} />
+                <Feature coordinates={this.state.currentPos} />
               </Layer>
             </div>
             : null}
