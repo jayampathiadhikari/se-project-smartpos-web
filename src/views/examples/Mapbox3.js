@@ -29,7 +29,8 @@ const lineLayout = {
 
 const linePaint = {
   'line-color': '#4790E5',
-  'line-width': 12
+  'line-width': 12,
+  'line-opacity':0.8
 };
 
 const polygonPaint = {
@@ -50,7 +51,8 @@ class AllShapes extends React.Component {
     routeIndex: 0,
     route:[],
     routeData:[],
-    currentPos:null
+    currentPos:null,
+    firstFetch:true
   };
   mounted = false;
 
@@ -101,10 +103,19 @@ class AllShapes extends React.Component {
               console.log("data: ", change.doc.data())
             }
           });
-          this.setState({
-            routeData: routeData,
-            currentPos: routeData[querySnapshot.size-1]
-          });
+          if(this.state.firstFetch){
+            this.setState({
+              routeData: routeData,
+              currentPos: routeData[querySnapshot.size-1],
+              center:routeData[querySnapshot.size-1],
+              firstFetch:false
+            });
+          }else{
+            this.setState({
+              routeData: routeData,
+              currentPos: routeData[querySnapshot.size-1],
+            });
+          }
           console.log(querySnapshot.size,'FIREBASE QUERY',routeData)
         },
       });
@@ -119,7 +130,7 @@ class AllShapes extends React.Component {
    getCirclePaint = () => ({
     'circle-radius': this.state.circleRadius,
     'circle-color': '#E54E52',
-    'circle-opacity': 0.8
+    'circle-opacity': 1
   });
 
    onStyleLoad = (map) => {
