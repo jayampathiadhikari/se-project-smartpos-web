@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactMapboxGl, { Layer, Feature, ScaleControl, ZoomControl, RotationControl } from 'react-mapbox-gl';
+import ReactMapboxGl, {Layer,MapContext , Feature, ScaleControl, ZoomControl, RotationControl} from 'react-mapbox-gl';
 
 import {MAPBOX_TOKEN} from "../../config";
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
@@ -30,7 +30,7 @@ const lineLayout = {
 const linePaint = {
   'line-color': '#4790E5',
   'line-width': 12,
-  'line-opacity':0.8
+  'line-opacity': 0.8
 };
 
 const polygonPaint = {
@@ -45,14 +45,14 @@ const multiPolygonPaint = {
 
 class AllShapes extends React.Component {
   state = {
-    center: [79.84473947511191,6.933374765107288],
+    center: [79.84473947511191, 6.933374765107288],
     zoom: [14],
     circleRadius: 10,
     routeIndex: 0,
-    route:[],
-    routeData:[],
-    currentPos:null,
-    firstFetch:true
+    route: [],
+    routeData: [],
+    currentPos: null,
+    firstFetch: true
   };
   mounted = false;
 
@@ -62,8 +62,8 @@ class AllShapes extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if((prevProps.simulation != this.props.simulation) && this.props.simulation){
-      console.log("state changed",this.props.trackUserId);
+    if ((prevProps.simulation != this.props.simulation) && this.props.simulation) {
+      console.log("state changed", this.props.trackUserId);
       this.watchFirestore();
       // this.timeoutHandle = setTimeout(() => {
       //   if (this.mounted) {
@@ -97,26 +97,26 @@ class AllShapes extends React.Component {
         next: (querySnapshot) => {
           const routeData = this.state.routeData;
           querySnapshot.docChanges().forEach(change => {
-            if(change.type === 'added'){
+            if (change.type === 'added') {
               const coord = change.doc.data().location;
-              routeData.push([coord.longitude,coord.latitude]);
+              routeData.push([coord.longitude, coord.latitude]);
               console.log("data: ", change.doc.data())
             }
           });
-          if(this.state.firstFetch){
+          if (this.state.firstFetch) {
             this.setState({
               routeData: routeData,
-              currentPos: routeData[querySnapshot.size-1],
-              center:routeData[querySnapshot.size-1],
-              firstFetch:false
+              currentPos: routeData[querySnapshot.size - 1],
+              center: routeData[querySnapshot.size - 1],
+              firstFetch: false
             });
-          }else{
+          } else {
             this.setState({
               routeData: routeData,
-              currentPos: routeData[querySnapshot.size-1],
+              currentPos: routeData[querySnapshot.size - 1],
             });
           }
-          console.log(querySnapshot.size,'FIREBASE QUERY',routeData)
+          console.log(querySnapshot.size, 'FIREBASE QUERY', routeData)
         },
       });
   };
@@ -127,18 +127,19 @@ class AllShapes extends React.Component {
     this.unsubscribe();
   }
 
-   getCirclePaint = () => ({
+  getCirclePaint = () => ({
     'circle-radius': this.state.circleRadius,
     'circle-color': '#E54E52',
     'circle-opacity': 1
   });
 
-   onStyleLoad = (map) => {
-    const { onStyleLoad } = this.props;
+  onStyleLoad = (map) => {
+    console.log(map,'MAP OBJECT');
+    const {onStyleLoad} = this.props;
     return onStyleLoad && onStyleLoad(map);
   };
 
-   render() {
+  render() {
     return (
       <div>
         <Map
@@ -153,18 +154,25 @@ class AllShapes extends React.Component {
           zoom={this.state.zoom}
         >
           {/* Controls */}
-          <ScaleControl />
-          <ZoomControl />
-          <RotationControl style={{ top: 80 }} />
+          <ScaleControl/>
+          <ZoomControl/>
+          <RotationControl style={{top: 80}}/>
+          <MapContext.Consumer>
+            {(map) => {
+              map.on('click',(e) => {
+                console.log(e.lngLat)
 
+              })
+            }}
+          </MapContext.Consumer>
           {/* Line example */}
           {this.props.simulation ?
             <div>
               <Layer type="line" layout={lineLayout} paint={linePaint}>
-                <Feature coordinates={this.state.routeData} />
+                <Feature coordinates={this.state.routeData}/>
               </Layer>
               <Layer type="circle" paint={this.getCirclePaint()}>
-                <Feature coordinates={this.state.currentPos} />
+                <Feature coordinates={this.state.currentPos}/>
               </Layer>
             </div>
             : null}
