@@ -217,3 +217,4 @@ export const createGeojson = (shopData) => {
   });
   return data
 };
+//'#f40005'

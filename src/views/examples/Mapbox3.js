@@ -16,14 +16,19 @@ import {connect} from "react-redux";
 import {jsonObject} from "../demos/routeData";
 import FIREBASE from "../../firebase";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import {createGeojson, getRouteByWaypoints, getShopsWithNoRouteByDistrict, getShopsWithRouteByDistrict} from "../../Utils";
+import {
+  createGeojson,
+  getRouteByWaypoints,
+  getShopsWithNoRouteByDistrict,
+  getShopsWithRouteByDistrict
+} from "../../Utils";
 import {svg} from '../../constants'
 import mapboxgl from "react-map-gl/dist/es5/utils/mapboxgl";
 // tslint:disable-next-line:no-var-requires
 const mapData = require('../demos/allShapesStyle');
 // tslint:disable-next-line:no-var-requires
 const route = require('../demos/route');
-const commercial = require('../../assets/img/icons/commercial-15.png') ;
+const commercial = require('../../assets/img/icons/commercial-15.png');
 
 
 // const mappedRoute = route.points.map(
@@ -35,7 +40,7 @@ const Map = ReactMapboxGl({
   accessToken: MAPBOX_TOKEN
 });
 
-var myImage = new Image(59,59);
+var myImage = new Image(59, 59);
 myImage.src = '../../assets/img/icons/commercial-15.png';
 
 const lineLayout = {
@@ -59,10 +64,12 @@ const multiPolygonPaint = {
   'fill-opacity': 0.5
 };
 
-const layout = {'icon-image': 'grocery-15',
-  'icon-allow-overlap': true,};
+const layout = {
+  'icon-image': 'grocery-15',
+  'icon-allow-overlap': true,
+};
 // Define layout to use in Layer component
-const layoutLayer = { 'icon-image': 'londonCycle' };
+const layoutLayer = {'icon-image': 'londonCycle'};
 
 // Create an image for the Layer
 const image = new Image();
@@ -80,13 +87,16 @@ class AllShapes extends React.Component {
     currentPos: null,
     firstFetch: true,
     shops: null,
-    shopsArray:null,
-    shopsWithRouteGeoJson:null,
-    shopsWithNoRouteGeoJson:null
+    shopsArray: null,
+    shopsWithRouteGeoJson: null,
+    shopsWithNoRouteGeoJson: null,
+    newRoute:false
   };
   mounted = false;
   map = null;
   drawControl = null;
+  drawLine = false;
+  selectedShops = {};
 
   componentDidMount = async () => {
     this.mounted = true;
@@ -96,14 +106,16 @@ class AllShapes extends React.Component {
     let shopsWithNoRouteGeoJson = null;
     if (res.success) {
       shopsWithRouteGeoJson = createGeojson(res.data);
+      console.log(shopsWithRouteGeoJson, 'shopsWithRouteGeoJson')
     }
-    if (result.success){
-       shopsWithNoRouteGeoJson = createGeojson(result.data);
+    if (result.success) {
+      shopsWithNoRouteGeoJson = createGeojson(result.data);
+      console.log(shopsWithNoRouteGeoJson, 'shopsWithNoRouteGeoJson')
     }
     this.setState({
-      shopsWithRouteGeoJson,
-      shopsWithNoRouteGeoJson
-    })
+      shopsWithRouteGeoJson: shopsWithRouteGeoJson,
+      shopsWithNoRouteGeoJson: shopsWithNoRouteGeoJson
+    }, this.forceUpdate)
 
   };
 
@@ -152,7 +164,7 @@ class AllShapes extends React.Component {
   componentWillUnmount() {
     clearTimeout(this.timeoutHandle);
     clearInterval(this.intervalHandle);
-    this.unsubscribe();
+    // this.unsubscribe();
   }
 
   getCirclePaint = () => ({
@@ -206,20 +218,24 @@ class AllShapes extends React.Component {
           'line-width': 5,
           'line-opacity': 0.75
         }
-      });
+      },'shopsWithNoRouteLayer');
     }
-  };
 
-  onToggleHover = (cursor, {map}) => {
-    map.getCanvas().style.cursor = cursor;
   };
+  
+  onClickShopsWithNoRoute = (e) => {
+    console.log(e.features[0].properties.id);
 
-  markerClick = (shop) => {
-    console.log(shop,'clicked')
+
+      // new mapboxgl.Popup()
+      //   .setLngLat(e.lngLat)
+      //   .setHTML(e.features[0].properties.name)
+      //   .addTo(map);
+
   };
-
 
   render() {
+    console.log(this.state.shopsWithNoRouteGeoJson, 'RENDER');
     return (
       <div>
         <Map
@@ -239,24 +255,39 @@ class AllShapes extends React.Component {
           <RotationControl style={{top: 80}}/>
           <MapContext.Consumer>
             {(map) => {
-              console.log(this.state.shops);
               this.map = map;
+
+              map.on('draw.modechange',(e)=>{
+                if(e.mode === 'draw_line_string'){
+                  this.drawLine = true
+                }else{
+                  this.drawLine = false
+                }
+              });
+
               var symbol = 'shop';
-              map.addSource('shopsWithNoRoute', {
-                'type': 'geojson',
-                'data': this.state.shopsWithNoRouteGeoJson
-              });
-              map.addSource('shopsWithRoute', {
-                'type': 'geojson',
-                'data': this.state.shopsWithRouteGeoJson
-              });
-              if(!map.getLayer('shopsWithNoRouteLayer')){
+              console.log(this.state.shopsWithNoRouteGeoJson, 'this.state.shopsWithNoRouteGeoJson')
+              if (!map.getSource('shopsWithNoRoute')) {
+                map.addSource('shopsWithNoRoute', {
+                  'type': 'geojson',
+                  'data': this.state.shopsWithNoRouteGeoJson
+                });
+              }
+              if (!map.getSource('shopsWithRoute')) {
+                console.log(this.state.shopsWithRouteGeoJson, 'this.state.shopsWithRouteGeoJson')
+                map.addSource('shopsWithRoute', {
+                  'type': 'geojson',
+                  'data': this.state.shopsWithRouteGeoJson
+                });
+              }
+
+              if (!map.getLayer('shopsWithNoRouteLayer')) {
                 map.addLayer({
                   'id': 'shopsWithNoRouteLayer',
                   'type': 'symbol',
                   'source': 'shopsWithNoRoute',
                   'layout': {
-                    'icon-image': symbol+'-15',
+                    'icon-image': symbol + '-15',
                     'icon-allow-overlap': true,
                     'text-field': ['get', 'name'],
                     'text-font': [
@@ -269,19 +300,19 @@ class AllShapes extends React.Component {
                     'text-offset': [0, 1.5]
                   },
                   'paint': {
-                    'text-color': '#202',
+                    'text-color': '#f40005',
                     'text-halo-color': '#fff',
                     'text-halo-width': 2
                   }
                 });
               }
-              if(!map.getLayer('shopsWithRouteLayer')){
+              if (!map.getLayer('shopsWithRouteLayer')) {
                 map.addLayer({
                   'id': 'shopsWithRouteLayer',
                   'type': 'symbol',
                   'source': 'shopsWithRoute',
                   'layout': {
-                    'icon-image': 'grocery'+'-15',
+                    'icon-image': 'grocery' + '-15',
                     'icon-allow-overlap': true,
                     'text-field': ['get', 'name'],
                     'text-font': [
@@ -294,41 +325,32 @@ class AllShapes extends React.Component {
                     'text-offset': [0, 1.5]
                   },
                   'paint': {
-                    'text-color': '#202',
+                    'text-color': '#2e48f4',
                     'text-halo-color': '#fff',
                     'text-halo-width': 2
                   }
                 });
               }
 
-              map.on('click', 'shopsLayer', function(e) {
-                new mapboxgl.Popup()
-                  .setLngLat(e.lngLat)
-                  .setHTML(e.features[0].properties.name)
-                  .addTo(map);
-              });
-              map.on('mouseenter', 'shopsLayer', function() {
+              map.on('click', 'shopsWithNoRouteLayer', this.onClickShopsWithNoRoute
+              );
+              map.on('mouseenter', 'shopsWithNoRouteLayer', function () {
                 map.getCanvas().style.cursor = 'pointer';
               });
-              map.on('mouseleave', 'shopsLayer', function() {
+              map.on('mouseleave', 'shopsWithNoRouteLayer', function () {
                 map.getCanvas().style.cursor = '';
               });
             }}
           </MapContext.Consumer>
-          {/*{this.state.shopsArray != null ?*/}
-          {/*  <Layer type="symbol" id="marker" layout={layout}>*/}
-          {/*    {this.state.shopsArray.map((shop) => (*/}
-          {/*      <Feature*/}
-          {/*        key={shop.shop_id}*/}
-          {/*        onMouseEnter={this.onToggleHover.bind(this, 'pointer')}*/}
-          {/*        onMouseLeave={this.onToggleHover.bind(this, '')}*/}
-          {/*        onClick={this.markerClick.bind(this, shop)}*/}
-          {/*        coordinates={shop.coords}*/}
-          {/*      />*/}
-          {/*    ))}*/}
-          {/*  </Layer>: null*/}
+          {/*{this.state.shopsWithNoRouteGeoJson ?*/}
+          {/*<>*/}
+          {/*  <Source id="shopsWithNoRoute" geoJsonSource ={this.state.shopsWithNoRouteGeoJson} />*/}
+          {/*  <Layer type="symbol" id="shopsWithNoRouteLayer" sourceId="shopsWithNoRoute" />*/}
+          {/*</>:null*/}
           {/*}*/}
-           {/*Line example*/}
+
+
+          {/*Line example*/}
           {this.props.simulation ?
             <div>
               <Layer type="line" layout={lineLayout} paint={linePaint}>
@@ -343,7 +365,14 @@ class AllShapes extends React.Component {
           <DrawControl ref={(drawControl) => {
             this.drawControl = drawControl
           }} displayControlsDefault={false} onDrawCreate={this.onDraw} onDrawUpdate={this.onDraw}
-                       controls={{point: true, line_string: true, trash: true}}/>
+                       controls={{line_string: true, trash: true}}/>
+
+          <div className={'mapboxgl-ctrl-bottom-left'}>
+            <div className={"mapboxgl-ctrl-group mapboxgl-ctrl"} style={{minWidth:100, boxShadow:'0 0 2px 2px #0096ff'}}>
+              <button style={{minWidth:100}} disabled={this.state.newRoute}>Add New Route</button>
+            </div>
+          </div>
+
         </Map>
       </div>
 
