@@ -1,6 +1,7 @@
 import axios from 'axios';
 import FIREBASE from "./firebase";
 import 'firebase/functions';
+import {MAPBOX_TOKEN} from "./config";
 
 import User  from './models/User';
 
@@ -103,4 +104,116 @@ export const checkAuthentication = (email, password) => {
     var errorMessage = error.message;
     return {success:false, message: errorMessage}
   });
+};
+
+
+//check for arraylength
+export const getRouteByWaypoints = async(waypointsArray) => {
+  var coords = '';
+  waypointsArray.forEach((coord)=> {
+    coords += coord.join() + ';'
+  });
+  coords = coords.slice(0,coords.length-1);
+  console.log(coords,'COORDS STRING');
+  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}`;
+  const res = await axios.get(url,{params:{
+    alternatives: false,
+      geometries: "geojson",
+      steps: false,
+      access_token: MAPBOX_TOKEN
+    }}
+  );
+  return res;
+};
+
+export const getOptimizedRouteByWaypoints = async(waypointsArray) => {
+  var coords = '';
+  waypointsArray.forEach((coord)=> {
+    coords += coord.join() + ';'
+  });
+  coords = coords.slice(0,coords.length-1);
+  console.log(coords,'COORDS STRING');
+  const url = `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${coords}`;
+  const res = await axios.get(url,{params:{
+      alternatives: false,
+      geometries: "geojson",
+      steps: false,
+      access_token: MAPBOX_TOKEN
+    }}
+  );
+  return res;
+};
+//for now district is hardcoded as 6
+export const getShopsWithNoRouteByDistrict = async(id) => {
+  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/shop/viewshops-withnoroutebydistrict',{
+    district_id:id
+  });
+  console.log(res.data)
+  if(res.data.success){
+    console.log('success')
+    let shopData = res.data.data.map((shop,index)=>{
+      var shop_id = shop["shop_id"];
+      var name = shop ["name"];
+      var coords = [shop.longitude, shop.latitude];
+      return({shop_id,name,coords})
+    });
+    console.log(shopData,'shopdata');
+    return {
+      success: true,
+      data: shopData
+    }
+  }else{
+    console.log('false')
+    return {
+      success:false,
+    }
+  }
+};
+
+export const getShopsWithRouteByDistrict = async(id) => {
+  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/shop/viewshops-withroutebydistrict',{
+    district_id:id
+  });
+  console.log(res.data)
+  if(res.data.success){
+    console.log('success')
+    let shopData = res.data.data.map((shop,index)=>{
+      var shop_id = shop["shop_id"];
+      var name = shop ["name"];
+      var coords = [shop.longitude, shop.latitude];
+      return({shop_id,name,coords})
+    });
+    console.log(shopData,'shopdata');
+    return {
+      success: true,
+      data: shopData
+    }
+  }else{
+    console.log('false')
+    return {
+      success:false,
+    }
+  }
+};
+
+export const createGeojson = (shopData) => {
+  var data = {
+    'type': 'FeatureCollection',
+    'features': []
+  };
+  const feature = (shop) => ({
+    'type': 'Feature',
+    'properties': {
+      'name': shop.name,
+      'id': shop.shop_id
+    },
+    'geometry': {
+      'type': 'Point',
+      'coordinates': shop.coords
+    }
+  });
+  shopData.forEach(shop => {
+    data.features.push(feature(shop))
+  });
+  return data
 };
