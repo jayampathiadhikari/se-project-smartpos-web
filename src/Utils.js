@@ -217,4 +217,24 @@ export const createGeojson = (shopData) => {
   });
   return data
 };
+
+export const createNewRoute = async(shop_ids,formData) => {
+  //req object
+  const req_object = {
+    route_details: {
+      route_name:'IMbulowita',
+      district_id: 2,
+      salesperson_id:'W9FfmzqWI6QZjGWpRnZOpBhwGM02',
+      day_id:3
+    },
+    shop_ids : [3,4,5,6]
+  };
+  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/route/create-route',req_object);
+  return res;
+
+
+
+
+};
+
 //'#f40005'

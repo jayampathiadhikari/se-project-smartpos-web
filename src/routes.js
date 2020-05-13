@@ -7,6 +7,7 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Mapbox from "./views/examples/Mapbox3";
+
 //import Icons from "views/examples/Icons.js";
 import Edit from "views/examples/Edit.js";
 import AddUser from "./views/examples/AddUser";
@@ -17,6 +18,11 @@ import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
 //executive
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
 
+//Test
+import TestComponent from "./views/examples/Test";
+/**
+ *changed tables to TestComponent
+ */
 
 export var sideBarRoutes = [
   {
@@ -151,7 +157,7 @@ export const executiveSidebar = [
     path: "/tables",
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: TestComponent,
     layout: "/executive"
   },
   {

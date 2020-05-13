@@ -11,7 +11,7 @@ import ReactMapboxGl, {
 import DrawControl from 'react-mapbox-gl-draw';
 import {MAPBOX_TOKEN} from "../../config";
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
-import {setSimulation} from "../../redux/reducers/ui/action";
+import {setSimulation, toggleAddRouteModal} from "../../redux/reducers/ui/action";
 import {connect} from "react-redux";
 import {jsonObject} from "../demos/routeData";
 import FIREBASE from "../../firebase";
@@ -22,13 +22,13 @@ import {
   getShopsWithNoRouteByDistrict,
   getShopsWithRouteByDistrict
 } from "../../Utils";
-import {svg} from '../../constants'
+
+
 import mapboxgl from "react-map-gl/dist/es5/utils/mapboxgl";
-// tslint:disable-next-line:no-var-requires
-const mapData = require('../demos/allShapesStyle');
-// tslint:disable-next-line:no-var-requires
-const route = require('../demos/route');
-const commercial = require('../../assets/img/icons/commercial-15.png');
+import AddRoute from "../../components/AddRoute";
+
+
+
 
 
 // const mappedRoute = route.points.map(
@@ -40,8 +40,7 @@ const Map = ReactMapboxGl({
   accessToken: MAPBOX_TOKEN
 });
 
-var myImage = new Image(59, 59);
-myImage.src = '../../assets/img/icons/commercial-15.png';
+
 
 const lineLayout = {
   'line-cap': 'round',
@@ -54,27 +53,7 @@ const linePaint = {
   'line-opacity': 0.8
 };
 
-const polygonPaint = {
-  'fill-color': '#6F788A',
-  'fill-opacity': 0.7
-};
 
-const multiPolygonPaint = {
-  'fill-color': '#3bb2d0',
-  'fill-opacity': 0.5
-};
-
-const layout = {
-  'icon-image': 'grocery-15',
-  'icon-allow-overlap': true,
-};
-// Define layout to use in Layer component
-const layoutLayer = {'icon-image': 'londonCycle'};
-
-// Create an image for the Layer
-const image = new Image();
-image.src = 'data:image/svg+xml;charset=utf-8;base64,' + btoa(svg);
-const images = ['londonCycle', image];
 
 class AllShapes extends React.Component {
   state = {
@@ -96,7 +75,8 @@ class AllShapes extends React.Component {
   map = null;
   drawControl = null;
   drawLine = false;
-  selectedShops = {};
+  selectedShopsTemp = [];
+  selectedShops = [];
 
   componentDidMount = async () => {
     this.mounted = true;
@@ -179,7 +159,7 @@ class AllShapes extends React.Component {
   };
 
   onDraw = async ({features}) => {
-    console.log(features[0].geometry.coordinates);
+    console.log(features[0].geometry.coordinates,'by draw');
     const res = await getRouteByWaypoints(features[0].geometry.coordinates);
     var route = res.data.routes[0].geometry.coordinates;
     var geojson = {
@@ -222,11 +202,15 @@ class AllShapes extends React.Component {
     }
 
   };
-  
+
   onClickShopsWithNoRoute = (e) => {
-    console.log(e.features[0].properties.id);
-
-
+    if(this.drawLine){
+      if(!this.selectedShopsTemp.includes(e.features[0].properties.id)){
+        this.selectedShopsTemp.push(e.features[0].properties.id);
+      }
+      this.selectedShops = this.selectedShopsTemp;
+    }
+    console.log(this.selectedShops)
       // new mapboxgl.Popup()
       //   .setLngLat(e.lngLat)
       //   .setHTML(e.features[0].properties.name)
@@ -238,6 +222,7 @@ class AllShapes extends React.Component {
     console.log(this.state.shopsWithNoRouteGeoJson, 'RENDER');
     return (
       <div>
+        <AddRoute modalOpen={true} />
         <Map
           style={"mapbox://styles/mapbox/streets-v11"}
           // tslint:disable-next-line:jsx-no-lambda
@@ -259,9 +244,10 @@ class AllShapes extends React.Component {
 
               map.on('draw.modechange',(e)=>{
                 if(e.mode === 'draw_line_string'){
-                  this.drawLine = true
+                  this.drawLine = true;
                 }else{
-                  this.drawLine = false
+                  this.drawLine = false;
+                  this.selectedShopsTemp = []
                 }
               });
 
@@ -369,7 +355,7 @@ class AllShapes extends React.Component {
 
           <div className={'mapboxgl-ctrl-bottom-left'}>
             <div className={"mapboxgl-ctrl-group mapboxgl-ctrl"} style={{minWidth:100, boxShadow:'0 0 2px 2px #0096ff'}}>
-              <button style={{minWidth:100}} disabled={this.state.newRoute}>Add New Route</button>
+              <button style={{minWidth:100}} disabled={this.state.newRoute} onClick={()=> {this.props.toggle()}}>Add New Route</button>
             </div>
           </div>
 
@@ -387,6 +373,7 @@ const mapStateToProps = (state) => ({
 
 const bindAction = (dispatch) => ({
   setSimulation: (status) => dispatch(setSimulation(status)),
+  toggle: () => dispatch(toggleAddRouteModal())
 });
 
 export default connect(

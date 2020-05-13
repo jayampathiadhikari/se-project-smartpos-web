@@ -1,4 +1,4 @@
-import { SET_SIMULATION, SET_TRACKING_USER } from "../../actionTypes";
+import {SET_SIMULATION, SET_TRACKING_USER, TOGGLE_MODAL} from "../../actionTypes";
 
 export function setSimulation(status) {
   return (dispatch) => {
@@ -17,3 +17,13 @@ export function setTrackingUser(userid) {
     });
   };
 };
+
+export function toggleAddRouteModal() {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      payload: null
+    });
+  };
+};
+
