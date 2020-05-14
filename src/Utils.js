@@ -231,10 +231,27 @@ export const createNewRoute = async(shop_ids,formData) => {
   };
   const res = await axios.post('https://se-smartpos-backend.herokuapp.com/route/create-route',req_object);
   return res;
+};
 
-
-
-
+export const getUnassignedRoutes = async(salesperson_id) => {
+  const res = await  axios.post('https://se-smartpos-backend.herokuapp.com/salesperson/getunassigneddates',{
+    salesperson_id
+  });
+  if(res.data.success){
+    let routes = [];
+    res.data.data.forEach(data => {
+      routes.push(
+        {
+          day_id:data.day_id,
+          day: `Week ${data.week}: ${data.day}`
+      }
+      )
+    });
+    return {success:true,
+    data:routes}
+  }else{
+    return res.data
+  }
 };
 
 //'#f40005'

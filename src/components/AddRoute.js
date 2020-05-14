@@ -14,7 +14,7 @@ import {connect} from "react-redux";
 
 import CustomDropdown from "./Dropdown";
 import {toggleAddRouteModal} from "../redux/reducers/ui/action";
-import {getSalespersonByAgent} from "../Utils";
+import {getSalespersonByAgent, getUnassignedRoutes} from "../Utils";
 
 // core components
 
@@ -41,11 +41,14 @@ class AddRoute extends React.Component {
   onSelectSalesperson = async(sp) => {
     //must call api to get remianing days
     console.log(sp.id);
+    const res = await getUnassignedRoutes(sp.id);
+    console.log(res,'RESULT')
     this.setState({
       salespersonID: sp.id,
       day:true
     })
   };
+
   onSelectDay = async(day) => {
     //must call api to get remianing days
     console.log(day.id);
@@ -71,7 +74,7 @@ class AddRoute extends React.Component {
                   <Col lg="6">
                     <FormGroup>
                       <div className="form-control-label">SALESPERSON</div>
-                      <CustomDropdown data={this.state.salespersonData} id="salesperson" initial="select" onSelect={this.onSelectSalesperson} disabled={!this.state.salesperson}/>
+                      <CustomDropdown data={this.props.salesperson} id="salesperson" initial="select" onSelect={this.onSelectSalesperson} disabled={!this.props.salesperson.length}/>
                     </FormGroup>
                   </Col>
                   <Col lg="6">

@@ -18,7 +18,7 @@ import FIREBASE from "../../firebase";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import {
   createGeojson,
-  getRouteByWaypoints,
+  getRouteByWaypoints, getSalespersonByAgent,
   getShopsWithNoRouteByDistrict,
   getShopsWithRouteByDistrict
 } from "../../Utils";
@@ -69,7 +69,8 @@ class AllShapes extends React.Component {
     shopsArray: null,
     shopsWithRouteGeoJson: null,
     shopsWithNoRouteGeoJson: null,
-    newRoute:false
+    newRoute:false,
+    salesperson:[]
   };
   mounted = false;
   map = null;
@@ -105,6 +106,7 @@ class AllShapes extends React.Component {
       this.watchFirestore();
     }
   }
+
 
   watchFirestore() {
     const date = new Date();
@@ -218,11 +220,19 @@ class AllShapes extends React.Component {
 
   };
 
+  onAddNewRoute = async() => {
+    const salespersons = await getSalespersonByAgent('vsotjU8PuSUm5HxEmDbJ5zWvbgy2');
+    this.setState({
+      salesperson:salespersons
+    });
+    this.props.toggle()
+  };
+
   render() {
     console.log(this.state.shopsWithNoRouteGeoJson, 'RENDER');
     return (
       <div>
-        <AddRoute modalOpen={true} />
+        <AddRoute modalOpen={true} salesperson={this.state.salesperson} />
         <Map
           style={"mapbox://styles/mapbox/streets-v11"}
           // tslint:disable-next-line:jsx-no-lambda
@@ -355,7 +365,7 @@ class AllShapes extends React.Component {
 
           <div className={'mapboxgl-ctrl-bottom-left'}>
             <div className={"mapboxgl-ctrl-group mapboxgl-ctrl"} style={{minWidth:100, boxShadow:'0 0 2px 2px #0096ff'}}>
-              <button style={{minWidth:100}} disabled={this.state.newRoute} onClick={()=> {this.props.toggle()}}>Add New Route</button>
+              <button style={{minWidth:100}} disabled={this.state.newRoute} onClick={this.onAddNewRoute}>Add New Route</button>
             </div>
           </div>
 
