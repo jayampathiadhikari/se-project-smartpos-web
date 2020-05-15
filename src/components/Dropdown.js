@@ -35,7 +35,7 @@ class CustomDropdown extends React.Component{
       );
     });
     return(
-      <Dropdown size="md"  isOpen={this.state.dropdownOpen} toggle={this.toggle} disabled={this.props.disabled}>
+      <Dropdown size="md" isOpen={this.state.dropdownOpen} toggle={this.toggle} disabled={this.props.disabled}>
         <DropdownToggle caret>{this.state.selected}</DropdownToggle>
         <DropdownMenu
           modifiers={{

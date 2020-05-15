@@ -232,7 +232,7 @@ class AllShapes extends React.Component {
   };
 
   onAddNewRoute = async() => {
-    const salespersons = await getSalespersonByAgent('vsotjU8PuSUm5HxEmDbJ5zWvbgy2');
+    const salespersons = await getSalespersonByAgent(this.props.user.uid);
     this.setState({
       salesperson:salespersons
     });
@@ -243,7 +243,7 @@ class AllShapes extends React.Component {
     console.log(this.state.shopsWithNoRouteGeoJson, 'RENDER');
     return (
       <div>
-        <AddRoute modalOpen={true} salesperson={this.state.salesperson} />
+        <AddRoute modalOpen={true} salesperson={this.state.salesperson} selectedShops={this.selectedShops} />
         <Map
           style={"mapbox://styles/mapbox/streets-v11"}
           // tslint:disable-next-line:jsx-no-lambda
@@ -388,6 +388,7 @@ class AllShapes extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
   simulation: state.uiReducer.simulation,
   trackUserId: state.uiReducer.trackingUser
 });
