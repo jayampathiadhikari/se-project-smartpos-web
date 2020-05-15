@@ -62,7 +62,6 @@ class Login extends React.Component {
   };
 
   checkForAuthentication = (email,password) => {
-
     console.log('inside');
     if(email==='jayampathiadhikari@gmail.com' && password==='Windows8#'){
       this.props.setLogin(true);

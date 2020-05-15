@@ -105,6 +105,17 @@ class AllShapes extends React.Component {
       console.log("state changed", this.props.trackUserId);
       this.watchFirestore();
     }
+    if(prevState.shopsWithNoRouteGeoJson != this.state.shopsWithNoRouteGeoJson){
+      console.log('update source')
+      if(this.map!= null && this.map.getSource('shopsWithNoRoute')){
+        this.map.getSource('shopsWithNoRoute').setData(this.state.shopsWithNoRouteGeoJson);
+      }
+    }
+    if(this.map!= null && prevState.shopsWithRouteGeoJson != this.state.shopsWithRouteGeoJson){
+      if(this.map.getSource('shopsWithRoute')){
+        this.map.getSource('shopsWithRoute').setData(this.state.shopsWithRouteGeoJson);
+      }
+    }
   }
 
 

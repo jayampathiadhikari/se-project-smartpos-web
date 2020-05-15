@@ -1,4 +1,4 @@
-import { SET_SIGNIN_STATUS, SET_EXECUTIVE, SET_AGENT } from "../../actionTypes";
+import { SET_SIGNIN_STATUS, SET_EXECUTIVE, SET_AGENT, SET_USER, SIGNOUT_USER } from "../../actionTypes";
 
 export function setSignInStatus(status) {
   return (dispatch) => {
@@ -23,6 +23,23 @@ export function setAgentLogin(status) {
     dispatch({
       type: SET_AGENT,
       payload: status
+    });
+  };
+};
+
+export function setUser(user) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_USER,
+      payload: user
+    });
+  };
+};
+
+export function signOut() {
+  return (dispatch) => {
+    dispatch({
+      type: SIGNOUT_USER,
     });
   };
 };
