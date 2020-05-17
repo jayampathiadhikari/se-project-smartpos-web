@@ -49,8 +49,8 @@ const data = [
     product_id: 'item001',
     name: 'Maari',
     quantity: 1000,
-    pr_cost : 10,
-    selling_price:30
+    pr_cost: 10,
+    selling_price: 30
   },
 
 ];
@@ -93,8 +93,16 @@ class Stock extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-          {/* Table */}
           <Row>
+            <div className="col">
+              <span>
+                <Button size={'lg'}>Add New Product</Button>
+                <Button size={'lg'}>Add Item To Warehouse</Button>
+            </span>
+            </div>
+          </Row>
+          {/* Table */}
+          <Row className={"mt-5"}>
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
