@@ -123,6 +123,7 @@ export const getRouteByWaypoints = async (waypointsArray) => {
         alternatives: false,
         geometries: "geojson",
         steps: false,
+        overview:"full",
         access_token: MAPBOX_TOKEN
       }
     }
@@ -180,9 +181,9 @@ export const getShopsWithRouteByDistrict = async (id) => {
   const res = await axios.post('https://se-smartpos-backend.herokuapp.com/shop/viewshops-withroutebydistrict', {
     district_id: id
   });
-  console.log(res.data)
+  console.log(res.data);
   if (res.data.success) {
-    console.log('success')
+    console.log('success');
     let shopData = res.data.data.map((shop, index) => {
       var shop_id = shop["shop_id"];
       var name = shop ["name"];

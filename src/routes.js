@@ -14,10 +14,11 @@ import AddUser from "./views/examples/AddUser";
 import ResetPassword from "./views/examples/ResetPassword";
 //agent
 import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
-
+import AgentMap from "./views/agent/Maps";
 //executive
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
-
+import ExecMap from './views/executive/Maps';
+import StockReq from "./views/executive/StockReq";
 //Test
 import TestComponent from "./views/examples/Test";
 /**
@@ -150,21 +151,28 @@ export const executiveSidebar = [
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",
-    component: Mapbox,
+    component: ExecMap,
     layout: "/executive"
   },
   {
     path: "/tables",
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",
-    component: TestComponent,
+    component: Tables,
     layout: "/executive"
   },
   {
-    path: "/addemployee",
+    path: "/add-employee",
     name: "Add Employee",
-    icon: "ni ni-circle-08 text-pink",
+    icon: "ni ni-circle-08 text-primary",
     component: AddEmployeeEx,
+    layout: "/executive"
+  },
+  {
+    path: "/stock-requests",
+    name: "Stock Requests",
+    icon: "ni ni-box-2 text-red",
+    component: StockReq,
     layout: "/executive"
   }
 ];
@@ -180,7 +188,7 @@ export const agentSidebar = [
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",
-    component: Mapbox,
+    component: AgentMap,
     layout: "/agent"
   },
   {
