@@ -46,10 +46,10 @@ import CustomDropdown from "../../components/Dropdown";
 
 const data = [
   {
-  name: 'agent1',
-  region: 'kegalle',
-  id: 'agent1_id'
-},
+    name: 'agent1',
+    region: 'kegalle',
+    id: 'agent1_id'
+  },
   {
     name: 'agent1',
     region: 'kegalle',
@@ -57,20 +57,8 @@ const data = [
   },
 ];
 
-const reqData = [
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  },
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  }
-];
 
-class StockReq extends React.Component {
+class MyAgents extends React.Component {
   state = {
     agent_id: null
   };
@@ -125,65 +113,6 @@ class StockReq extends React.Component {
     )
   };
 
-  onClickSend = (prod_details) => {
-    console.log(prod_details);
-  };
-
-  renderInvoiceTableRows = () => {
-    return reqData.map((item) => (
-        <tr>
-          <th scope="row">
-            <Media className="align-items-center">
-              <Media>
-                <span className="mb-0 text-sm">
-                  {item.product_name}
-                </span>
-              </Media>
-            </Media>
-          </th>
-          <td>{item.request_amount}</td>
-          <td>
-            {item.in_stock}
-          </td>
-          <td className="text-right">
-            <Button color="primary" size={'md'} onClick={()=>{this.onClickSend(item)}}>
-              Send
-            </Button>
-          </td>
-        </tr>
-      )
-    )
-  };
-
-  renderInvoiceTable = () => {
-    return(
-      <Row className="mt-5">
-        <div className="col">
-          <Card className="bg-default shadow">
-            <CardHeader className="bg-transparent border-0">
-              <h3 className="text-white mb-0">Agents List</h3>
-            </CardHeader>
-            <Table className="align-items-center table-dark table-flush" responsive>
-              <thead className="thead-dark">
-              <tr>
-                <th scope="col">Product Name</th>
-                <th scope="col">Required Amount</th>
-                <th scope="col">Amount In Stock</th>
-                <th scope="col"/>
-              </tr>
-              </thead>
-              <tbody>
-              {this.renderInvoiceTableRows()}
-              </tbody>
-            </Table>
-            <CardFooter className="py-4 bg-transparent border-0">
-
-            </CardFooter>
-          </Card>
-        </div>
-      </Row>
-    )
-  };
 
   render() {
     return (
@@ -216,11 +145,10 @@ class StockReq extends React.Component {
               </Card>
             </div>
           </Row>
-          {this.renderInvoiceTable()}
         </Container>
       </>
     );
   }
 }
 
-export default StockReq;
+export default MyAgents;

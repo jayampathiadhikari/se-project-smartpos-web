@@ -19,8 +19,8 @@ import AgentMap from "./views/agent/Maps";
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
 import ExecMap from './views/executive/Maps';
 import StockReq from "./views/executive/StockReq";
-//Test
-import TestComponent from "./views/examples/Test";
+import MyAgents from "./views/executive/MyAgents";
+
 /**
  *changed tables to TestComponent
  */
@@ -174,7 +174,15 @@ export const executiveSidebar = [
     icon: "ni ni-box-2 text-red",
     component: StockReq,
     layout: "/executive"
-  }
+  },
+  {
+    path: "/my-agents",
+    name: "My Agents",
+    icon: "ni ni-user-run text-primary",
+    component: MyAgents,
+    layout: "/executive"
+  },
+
 ];
 export const agentSidebar = [
   {
