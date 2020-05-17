@@ -12,14 +12,17 @@ import Mapbox from "./views/examples/Mapbox3";
 import Edit from "views/examples/Edit.js";
 import AddUser from "./views/examples/AddUser";
 import ResetPassword from "./views/examples/ResetPassword";
+
 //agent
 import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
 import AgentMap from "./views/agent/Maps";
+
 //executive
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
 import ExecMap from './views/executive/Maps';
 import StockReq from "./views/executive/StockReq";
 import MyAgents from "./views/executive/MyAgents";
+import Stock from "./views/executive/Stock";
 
 /**
  *changed tables to TestComponent
@@ -171,7 +174,7 @@ export const executiveSidebar = [
   {
     path: "/stock-requests",
     name: "Stock Requests",
-    icon: "ni ni-box-2 text-red",
+    icon: "ni ni-delivery-fast text-red",
     component: StockReq,
     layout: "/executive"
   },
@@ -182,7 +185,13 @@ export const executiveSidebar = [
     component: MyAgents,
     layout: "/executive"
   },
-
+  {
+    path: "/my-stock",
+    name: "My Stock",
+    icon: "ni ni-box-2 text-primary",
+    component: Stock,
+    layout: "/executive"
+  },
 ];
 export const agentSidebar = [
   {
