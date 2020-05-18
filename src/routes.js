@@ -25,7 +25,8 @@ import MyAgents from "./views/executive/MyAgents";
 import Stock from "./views/executive/Stock";
 import StockAddNewProduct from "./views/executive/Stock-AddNewProduct";
 import StockAddToWarehouse from "./views/executive/Stock-AddToWarehouse";
-
+import ExecReports from "./views/executive/Reports";
+import ViewReports from "./views/executive/ViewReports";
 /**
  *changed tables to TestComponent
  */
@@ -143,7 +144,7 @@ var hiddenRoutes = [
   },
   {
     path: "/my-stock/add-new-product",
-    name: "add-new-product",
+    name: "add new product",
     icon: "ni ni-circle-08 text-pink",
     component: StockAddNewProduct,
     layout: "/executive"
@@ -153,6 +154,13 @@ var hiddenRoutes = [
     name: "add to warehouse",
     icon: "ni ni-circle-08 text-pink",
     component: StockAddToWarehouse,
+    layout: "/executive"
+  },
+  {
+    path: "/reports/view-reports",
+    name: "add to warehouse",
+    icon: "ni ni-circle-08 text-pink",
+    component: ViewReports,
     layout: "/executive"
   },
 
@@ -206,6 +214,13 @@ export const executiveSidebar = [
     name: "My Stock",
     icon: "ni ni-box-2 text-primary",
     component: Stock,
+    layout: "/executive"
+  },
+  {
+    path: "/reports",
+    name: "Reports",
+    icon: "ni ni-collection text-primary",
+    component: ExecReports,
     layout: "/executive"
   },
 ];

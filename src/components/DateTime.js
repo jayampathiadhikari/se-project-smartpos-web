@@ -28,6 +28,7 @@ class Datepicker extends React.Component {
               inputProps={{
                 placeholder: "Date Picker Here"
               }}
+              onChange={this.props.onChange}
               timeFormat={false}
             />
           </InputGroup>

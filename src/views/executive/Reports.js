@@ -19,90 +19,25 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardBody,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
-  Progress,
-  Table,
+  Form,
   Container,
   Row,
-  UncontrolledTooltip, Button
+  Button, Col, FormGroup, Input, Table, Media, Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from "reactstrap";
 // core components
-import Pagination from "react-js-pagination";
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 
+import {data} from "./MyAgents";
+import Pagination from "react-js-pagination";
 
+//id,name,prod cost, selling price,, quantity
 
-export const data = [
-  {
-    name: 'agent1',
-    region: 'kegalle',
-    id: 'agent1_id'
-  },
-  {
-    name: 'agent2',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-  {
-    name: 'agent2',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-  {
-    name: 'agent2',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-  {
-    name: 'agent2',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-  {
-    name: 'agent2',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-  {
-    name: 'agent6',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-  {
-    name: 'agent4',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-  {
-    name: 'agent8',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-  {
-    name: 'agent9',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-  {
-    name: 'agent10',
-    region: 'kegalle',
-    id: 'agent2_id'
-  },
-
-];
-
-
-class MyAgents extends React.Component {
+class ExecReports extends React.Component {
   state = {
     agent_id: null,
     current_data: [],
@@ -110,8 +45,11 @@ class MyAgents extends React.Component {
     activePage:1
   };
 
-  onSeeRequests = (id) => {
-    console.log(id);
+  seeReports = (agent_id) => {
+    this.props.history.push({
+      pathname: '/executive/reports/view-reports',
+      state: {agent_id:agent_id}
+    })
   };
 
   renderTableRows = () => {
@@ -129,12 +67,6 @@ class MyAgents extends React.Component {
             </Media>
           </th>
           <td>{item.region}</td>
-          <td>
-            <Badge color="" className="badge-dot mr-4">
-              <i className="bg-warning"/>
-              pending
-            </Badge>
-          </td>
           <td className="text-right">
             <UncontrolledDropdown>
               <DropdownToggle
@@ -150,9 +82,9 @@ class MyAgents extends React.Component {
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem
                   href="#pablo"
-                  onClick={e => {e.preventDefault(); this.onSeeRequests(item.id)}}
+                  onClick={e => {e.preventDefault(); this.seeReports(item.id)}}
                 >
-                  See Requests
+                  See Reports
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
@@ -167,7 +99,6 @@ class MyAgents extends React.Component {
     this.setState({activePage: pageNumber});
   }
 
-
   render() {
     return (
       <>
@@ -176,17 +107,18 @@ class MyAgents extends React.Component {
         <Container className="mt--7" fluid>
           {/* Table */}
           <Row>
+            <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+            </Col>
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">Agents Info</h3>
+                  <h3 className="mb-0">Reports</h3>
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
                     <th scope="col">District</th>
-                    <th scope="col">Status</th>
                     <th scope="col"/>
                   </tr>
                   </thead>
@@ -206,7 +138,6 @@ class MyAgents extends React.Component {
                       linkClass="page-link"
                     />
                   </div>
-
                 </CardFooter>
               </Card>
             </div>
@@ -217,4 +148,4 @@ class MyAgents extends React.Component {
   }
 }
 
-export default MyAgents;
+export default ExecReports;

@@ -19,7 +19,6 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardBody,
@@ -30,7 +29,6 @@ import {
   Button, Col, FormGroup, Input
 } from "reactstrap";
 // core components
-import Pagination from "react-js-pagination";
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 
@@ -52,7 +50,6 @@ class StockAddToWarehouse extends React.Component {
       });
       console.log(this.props.location.state.product)
     }
-
   }
 
   onSubmit = (e) => {
