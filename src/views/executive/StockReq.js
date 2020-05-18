@@ -70,7 +70,9 @@ const reqData = [
 class StockReq extends React.Component {
   state = {
     agent_id: null,
-    activePage: 1
+    activePage: 1,
+    activePageReq:1,
+    pageSize: 5
   };
 
   onSeeRequests = (id) => {
@@ -78,7 +80,9 @@ class StockReq extends React.Component {
   };
 
   renderTableRows = () => {
-    return data.map((item) => (
+    const {pageSize, activePage} = this.state;
+    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item) => (
         <tr>
           <th scope="row">
             <Media className="align-items-center">
@@ -132,8 +136,15 @@ class StockReq extends React.Component {
     this.setState({activePage: pageNumber});
   }
 
+  handlePageChangeInvoiceTable(pageNumber) {
+    console.log(`active page invoice table is ${pageNumber}`);
+    this.setState({activePageReq: pageNumber});
+  }
+
   renderInvoiceTableRows = () => {
-    return reqData.map((item) => (
+    const {pageSize, activePageReq} = this.state;
+    const pagedArray = reqData.slice(pageSize*(activePageReq-1),pageSize*activePageReq);
+    return pagedArray.map((item) => (
         <tr>
           <th scope="row">
             <Media className="align-items-center">
@@ -182,11 +193,11 @@ class StockReq extends React.Component {
             <CardFooter className="py-4 bg-transparent border-0">
               <div className="pagination justify-content-end mb-0">
                 <Pagination
-                  activePage={this.state.activePage}
+                  activePage={this.state.activePageReq}
                   itemsCountPerPage={5}
-                  totalItemsCount={data.length}
+                  totalItemsCount={reqData.length}
                   pageRangeDisplayed={3}
-                  onChange={this.handlePageChange.bind(this)}
+                  onChange={this.handlePageChangeInvoiceTable.bind(this)}
                   itemClass="page-item"
                   linkClass="page-link"
                 />

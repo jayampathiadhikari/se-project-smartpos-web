@@ -23,6 +23,8 @@ import ExecMap from './views/executive/Maps';
 import StockReq from "./views/executive/StockReq";
 import MyAgents from "./views/executive/MyAgents";
 import Stock from "./views/executive/Stock";
+import StockAddNewProduct from "./views/executive/Stock-AddNewProduct";
+import StockAddToWarehouse from "./views/executive/Stock-AddToWarehouse";
 
 /**
  *changed tables to TestComponent
@@ -137,6 +139,20 @@ var hiddenRoutes = [
     name: "Edit",
     icon: "ni ni-circle-08 text-pink",
     component: Edit,
+    layout: "/executive"
+  },
+  {
+    path: "/my-stock/add-new-product",
+    name: "add-new-product",
+    icon: "ni ni-circle-08 text-pink",
+    component: StockAddNewProduct,
+    layout: "/executive"
+  },
+  {
+    path: "/my-stock/add-to-warehouse",
+    name: "add to warehouse",
+    icon: "ni ni-circle-08 text-pink",
+    component: StockAddToWarehouse,
     layout: "/executive"
   },
 

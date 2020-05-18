@@ -29,19 +29,17 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   Media,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Progress,
   Table,
   Container,
   Row,
-  UncontrolledTooltip, Button
+  Col,
+  UncontrolledTooltip, Button, Input
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.js";
+import Datepicker from "../../components/DateTime";
+import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-import CustomDropdown from "../../components/Dropdown";
+
 
 
 const data = [
@@ -52,21 +50,46 @@ const data = [
     pr_cost: 10,
     selling_price: 30
   },
+  {
+    product_id: 'item002',
+    name: 'Nice',
+    quantity: 1000,
+    pr_cost: 10,
+    selling_price: 30
+  },
 
 ];
 
 
 class Stock extends React.Component {
   state = {
-    agent_id: null
+    agent_id: null,
+    activePage : 1,
+    initialData:[],
+    data: []
   };
 
-  onSeeRequests = (id) => {
-    console.log(id);
+  componentDidMount() {
+    this.setState({
+      initialData:data,
+      data:data
+    })
+  }
+
+  onClick = (product) => {
+    this.props.history.push({
+      pathname: '/executive/my-stock/add-to-warehouse',
+      state: {product:product}
+    })
   };
+
+  handlePageChange(pageNumber) {
+    console.log(`active page is ${pageNumber}`);
+    this.setState({activePage: pageNumber});
+  }
 
   renderTableRows = () => {
-    return data.map((item) => (
+    return this.state.data.map((item) => (
         <tr>
           <th scope="row">
             <Media className="align-items-center">
@@ -81,11 +104,24 @@ class Stock extends React.Component {
           <td>{item.quantity}</td>
           <td>{item.pr_cost}</td>
           <td>{item.selling_price}</td>
+          <td className="text-right">
+            <Button color="primary" size={'md'} onClick={()=>{this.onClick(item)}}>
+              +
+            </Button>
+          </td>
         </tr>
       )
     )
   };
 
+  filter = (e) => {
+    const filteredArray = this.state.initialData.filter(
+      data => {return (data.name.toLowerCase().includes(e.target.value.toLowerCase())) }
+    );
+    this.setState({
+      data:filteredArray
+    });
+  };
 
   render() {
     return (
@@ -96,8 +132,7 @@ class Stock extends React.Component {
           <Row>
             <div className="col">
               <span>
-                <Button size={'lg'}>Add New Product</Button>
-                <Button size={'lg'}>Add Item To Warehouse</Button>
+                <Button size={'lg'} onClick={()=>{this.props.history.push('/executive/my-stock/add-new-product')}}>Add New Product</Button>
             </span>
             </div>
           </Row>
@@ -106,7 +141,23 @@ class Stock extends React.Component {
             <div className="col">
               <Card className="bg-default shadow">
                 <CardHeader className="bg-transparent border-0">
-                  <h3 className="text-white mb-0">My Stock</h3>
+                  <Row>
+                    <Col lg={7}>
+                      <h3 className="text-white mb-0">My Stock</h3>
+                    </Col>
+                    <Col lg={5}>
+                      <div>
+                        <Input
+                          className="form-control-alternative"
+                          id="firstName"
+                          type="text"
+                          placeholder={"Filter by product name..."}
+                          autocomplete = "false"
+                          onChange = {this.filter}
+                        />
+                      </div>
+                    </Col>
+                  </Row>
                 </CardHeader>
                 <Table className="align-items-center table-dark table-flush" responsive>
                   <thead className="thead-dark">
@@ -116,6 +167,7 @@ class Stock extends React.Component {
                     <th scope="col">Quantity</th>
                     <th scope="col">Production Cost</th>
                     <th scope="col">Selling Price</th>
+                    <th scope="col"/>
                   </tr>
                   </thead>
                   <tbody>
@@ -123,6 +175,17 @@ class Stock extends React.Component {
                   </tbody>
                 </Table>
                 <CardFooter className="py-4 bg-transparent border-0">
+                  <div className="pagination justify-content-end mb-0">
+                    <Pagination
+                      activePage={this.state.activePage}
+                      itemsCountPerPage={5}
+                      totalItemsCount={data.length}
+                      pageRangeDisplayed={3}
+                      onChange={this.handlePageChange.bind(this)}
+                      itemClass="page-item"
+                      linkClass="page-link"
+                    />
+                  </div>
                 </CardFooter>
               </Card>
             </div>
