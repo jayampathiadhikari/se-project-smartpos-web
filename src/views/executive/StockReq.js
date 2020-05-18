@@ -29,19 +29,16 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   Media,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Progress,
   Table,
   Container,
   Row,
   UncontrolledTooltip, Button
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.js";
+
+import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-import CustomDropdown from "../../components/Dropdown";
+
 
 
 const data = [
@@ -72,7 +69,8 @@ const reqData = [
 
 class StockReq extends React.Component {
   state = {
-    agent_id: null
+    agent_id: null,
+    activePage: 1
   };
 
   onSeeRequests = (id) => {
@@ -129,6 +127,11 @@ class StockReq extends React.Component {
     console.log(prod_details);
   };
 
+  handlePageChange(pageNumber) {
+    console.log(`active page is ${pageNumber}`);
+    this.setState({activePage: pageNumber});
+  }
+
   renderInvoiceTableRows = () => {
     return reqData.map((item) => (
         <tr>
@@ -177,7 +180,17 @@ class StockReq extends React.Component {
               </tbody>
             </Table>
             <CardFooter className="py-4 bg-transparent border-0">
-
+              <div className="pagination justify-content-end mb-0">
+                <Pagination
+                  activePage={this.state.activePage}
+                  itemsCountPerPage={5}
+                  totalItemsCount={data.length}
+                  pageRangeDisplayed={3}
+                  onChange={this.handlePageChange.bind(this)}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
+              </div>
             </CardFooter>
           </Card>
         </div>
@@ -212,6 +225,17 @@ class StockReq extends React.Component {
                   </tbody>
                 </Table>
                 <CardFooter className="py-4">
+                  <div className="pagination justify-content-end mb-0">
+                    <Pagination
+                      activePage={this.state.activePage}
+                      itemsCountPerPage={5}
+                      totalItemsCount={data.length}
+                      pageRangeDisplayed={3}
+                      onChange={this.handlePageChange.bind(this)}
+                      itemClass="page-item"
+                      linkClass="page-link"
+                    />
+                  </div>
                 </CardFooter>
               </Card>
             </div>

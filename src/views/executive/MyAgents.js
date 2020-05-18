@@ -29,9 +29,6 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   Media,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Progress,
   Table,
   Container,
@@ -39,9 +36,10 @@ import {
   UncontrolledTooltip, Button
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.js";
+import Pagination from "react-js-pagination";
+
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-import CustomDropdown from "../../components/Dropdown";
+
 
 
 const data = [
@@ -76,12 +74,27 @@ const data = [
     id: 'agent2_id'
   },
   {
-    name: 'agent2',
+    name: 'agent6',
     region: 'kegalle',
     id: 'agent2_id'
   },
   {
-    name: 'agent2',
+    name: 'agent4',
+    region: 'kegalle',
+    id: 'agent2_id'
+  },
+  {
+    name: 'agent8',
+    region: 'kegalle',
+    id: 'agent2_id'
+  },
+  {
+    name: 'agent9',
+    region: 'kegalle',
+    id: 'agent2_id'
+  },
+  {
+    name: 'agent10',
     region: 'kegalle',
     id: 'agent2_id'
   },
@@ -93,7 +106,8 @@ class MyAgents extends React.Component {
   state = {
     agent_id: null,
     current_data: [],
-    pageSize: 5
+    pageSize: 5,
+    activePage:1
   };
 
   onSeeRequests = (id) => {
@@ -101,7 +115,9 @@ class MyAgents extends React.Component {
   };
 
   renderTableRows = () => {
-    return data.map((item) => (
+    const {pageSize, activePage} = this.state;
+    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item) => (
         <tr>
           <th scope="row">
             <Media className="align-items-center">
@@ -146,10 +162,10 @@ class MyAgents extends React.Component {
     )
   };
 
-  getPaginationItems = () => {
-    const pageSize = 5;
-
-  };
+  handlePageChange(pageNumber) {
+    console.log(`active page is ${pageNumber}`);
+    this.setState({activePage: pageNumber});
+  }
 
 
   render() {
@@ -163,7 +179,7 @@ class MyAgents extends React.Component {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">Request Invoice</h3>
+                  <h3 className="mb-0">Agents Info</h3>
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
@@ -179,54 +195,18 @@ class MyAgents extends React.Component {
                   </tbody>
                 </Table>
                 <CardFooter className="py-4">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
-                  >
-                    <PaginationItem className="disabled">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                        tabIndex="-1"
-                      >
-                        <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem className="active">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
+                  <div className="pagination justify-content-end mb-0">
+                    <Pagination
+                      activePage={this.state.activePage}
+                      itemsCountPerPage={5}
+                      totalItemsCount={data.length}
+                      pageRangeDisplayed={3}
+                      onChange={this.handlePageChange.bind(this)}
+                      itemClass="page-item"
+                      linkClass="page-link"
+                    />
+                  </div>
+
                 </CardFooter>
               </Card>
             </div>
