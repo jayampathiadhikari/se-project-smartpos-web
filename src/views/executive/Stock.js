@@ -102,14 +102,14 @@ class Stock extends React.Component {
             </div>
           </Row>
           {/* Table */}
-          <Row className={"mt-5"}>
+          <Row className={"mt-7"}>
             <div className="col">
-              <Card className="shadow">
-                <CardHeader className="border-0">
-                  <h3 className="mb-0">My Stock</h3>
+              <Card className="bg-default shadow">
+                <CardHeader className="bg-transparent border-0">
+                  <h3 className="text-white mb-0">My Stock</h3>
                 </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
+                <Table className="align-items-center table-dark table-flush" responsive>
+                  <thead className="thead-dark">
                   <tr>
                     <th scope="col">Product ID</th>
                     <th scope="col">Name</th>
@@ -122,7 +122,7 @@ class Stock extends React.Component {
                   {this.renderTableRows()}
                   </tbody>
                 </Table>
-                <CardFooter className="py-4">
+                <CardFooter className="py-4 bg-transparent border-0">
                 </CardFooter>
               </Card>
             </div>
