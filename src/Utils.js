@@ -98,7 +98,7 @@ export const checkAuthentication = (email, password) => {
         const userQueryRef = FIREBASE.firestore().collection('users').where('email', '==', email);
         const userQuerySnapshot = await userQueryRef.get();
         const type = userQuerySnapshot.docs[0].data().type;
-        console.log(userQuerySnapshot.docs[0].data(), 'USER DATA')
+        console.log(userQuerySnapshot.docs[0].data(), 'USER DATA');
         return {success: true, type: type, user: userQuerySnapshot.docs[0].data()}
       }
     )
