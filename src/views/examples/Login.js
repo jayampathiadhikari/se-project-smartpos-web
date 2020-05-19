@@ -22,7 +22,7 @@ import {
   Col
 } from "reactstrap";
 
-import {setAgentLogin, setExecutiveLogin, setSignInStatus} from "../../redux/reducers/authentication/action";
+import {setAgentLogin, setExecutiveLogin, setSignInStatus, setUser} from "../../redux/reducers/authentication/action";
 
 
 class Login extends React.Component {
@@ -37,6 +37,7 @@ class Login extends React.Component {
     const res = await checkAuthentication(this.state.email,this.state.password);
     console.log(res);
     if(res.success){
+      this.props.setUser(res.user);
       if(res.type === 'exec'){
         this.props.setIsExecutive(true);
         setTimeout(()=>{this.props.history.push('/executive/dashboard')},100);
@@ -62,7 +63,6 @@ class Login extends React.Component {
   };
 
   checkForAuthentication = (email,password) => {
-
     console.log('inside');
     if(email==='jayampathiadhikari@gmail.com' && password==='Windows8#'){
       this.props.setLogin(true);
@@ -178,6 +178,7 @@ const mapStateToProps = (state) => ({
 });
 
 const bindAction = (dispatch) => ({
+  setUser:(user) => dispatch(setUser(user)),
   setLogin: (status) => dispatch(setSignInStatus(status)),
   setIsExecutive: (status) => dispatch(setExecutiveLogin(status)),
   setIsAgent: (status) => dispatch(setAgentLogin(status)),

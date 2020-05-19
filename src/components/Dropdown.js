@@ -5,7 +5,7 @@ import React from "react";
 class CustomDropdown extends React.Component{
   state ={
     dropdownOpen: false,
-    selected: 'Region'
+    selected: this.props.initial
   };
 
   toggle = ()=> {
@@ -17,7 +17,7 @@ class CustomDropdown extends React.Component{
   handleCountrySelection(selectedCountry) {
     console.log(selectedCountry);
     this.setState({
-      selected: selectedCountry
+      selected: selectedCountry.name
     });
     this.props.onSelect(selectedCountry);
     // this.props.onSetCountry(selectedCountry);
@@ -30,12 +30,12 @@ class CustomDropdown extends React.Component{
           key={index.toString()}
           onClick={() => {this.handleCountrySelection(country)}}
         >
-          {country}
+          {country.name}
         </DropdownItem>
       );
     });
     return(
-      <Dropdown size="md"  isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+      <Dropdown size="md" isOpen={this.state.dropdownOpen} toggle={this.toggle} disabled={this.props.disabled}>
         <DropdownToggle caret>{this.state.selected}</DropdownToggle>
         <DropdownMenu
           modifiers={{

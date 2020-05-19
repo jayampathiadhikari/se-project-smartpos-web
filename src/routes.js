@@ -7,11 +7,29 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Mapbox from "./views/examples/Mapbox3";
+
 //import Icons from "views/examples/Icons.js";
 import Edit from "views/examples/Edit.js";
 import AddUser from "./views/examples/AddUser";
 import ResetPassword from "./views/examples/ResetPassword";
+
+//agent
+import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
+import AgentMap from "./views/agent/Maps";
+
+//executive
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
+import ExecMap from './views/executive/Maps';
+import StockReq from "./views/executive/StockReq";
+import MyAgents from "./views/executive/MyAgents";
+import Stock from "./views/executive/Stock";
+import StockAddNewProduct from "./views/executive/Stock-AddNewProduct";
+import StockAddToWarehouse from "./views/executive/Stock-AddToWarehouse";
+import ExecReports from "./views/executive/Reports";
+import ViewReports from "./views/executive/ViewReports";
+/**
+ *changed tables to TestComponent
+ */
 
 export var sideBarRoutes = [
   {
@@ -124,6 +142,27 @@ var hiddenRoutes = [
     component: Edit,
     layout: "/executive"
   },
+  {
+    path: "/my-stock/add-new-product",
+    name: "add new product",
+    icon: "ni ni-circle-08 text-pink",
+    component: StockAddNewProduct,
+    layout: "/executive"
+  },
+  {
+    path: "/my-stock/add-to-warehouse",
+    name: "add to warehouse",
+    icon: "ni ni-circle-08 text-pink",
+    component: StockAddToWarehouse,
+    layout: "/executive"
+  },
+  {
+    path: "/reports/view-reports",
+    name: "add to warehouse",
+    icon: "ni ni-circle-08 text-pink",
+    component: ViewReports,
+    layout: "/executive"
+  },
 
 ];
 
@@ -139,7 +178,7 @@ export const executiveSidebar = [
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",
-    component: Mapbox,
+    component: ExecMap,
     layout: "/executive"
   },
   {
@@ -150,12 +189,40 @@ export const executiveSidebar = [
     layout: "/executive"
   },
   {
-    path: "/addemployee",
+    path: "/add-employee",
     name: "Add Employee",
-    icon: "ni ni-circle-08 text-pink",
+    icon: "ni ni-circle-08 text-primary",
     component: AddEmployeeEx,
     layout: "/executive"
-  }
+  },
+  {
+    path: "/stock-requests",
+    name: "Stock Requests",
+    icon: "ni ni-delivery-fast text-red",
+    component: StockReq,
+    layout: "/executive"
+  },
+  {
+    path: "/my-agents",
+    name: "My Agents",
+    icon: "ni ni-user-run text-primary",
+    component: MyAgents,
+    layout: "/executive"
+  },
+  {
+    path: "/my-stock",
+    name: "My Stock",
+    icon: "ni ni-box-2 text-primary",
+    component: Stock,
+    layout: "/executive"
+  },
+  {
+    path: "/reports",
+    name: "Reports",
+    icon: "ni ni-collection text-primary",
+    component: ExecReports,
+    layout: "/executive"
+  },
 ];
 export const agentSidebar = [
   {
@@ -169,7 +236,7 @@ export const agentSidebar = [
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",
-    component: Mapbox,
+    component: AgentMap,
     layout: "/agent"
   },
   {
@@ -183,7 +250,7 @@ export const agentSidebar = [
     path: "/adduser",
     name: "Add Employee",
     icon: "ni ni-circle-08 text-pink",
-    component: AddUser,
+    component: AddEmployeeAgent,
     layout: "/agent"
   }
 ];

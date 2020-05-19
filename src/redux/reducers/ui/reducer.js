@@ -1,7 +1,9 @@
-import { SET_SIMULATION } from '../../actionTypes';
+import { SET_SIMULATION,SET_TRACKING_USER,TOGGLE_MODAL } from '../../actionTypes';
 
 const uiReducerDefaultState = {
-  simulation:false
+  simulation:false,
+  trackingUser : null,
+  modal:false
 };
 
 export function uiReducer(state = uiReducerDefaultState, action) {
@@ -10,6 +12,16 @@ export function uiReducer(state = uiReducerDefaultState, action) {
       return {
         ...state,
         simulation: action.payload
+      };
+    case SET_TRACKING_USER:
+      return {
+        ...state,
+        trackingUser: action.payload
+      };
+    case TOGGLE_MODAL:
+      return {
+        ...state,
+        modal:!state.modal
       };
     default:
       return state;
