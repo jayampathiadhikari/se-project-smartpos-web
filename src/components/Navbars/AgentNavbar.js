@@ -50,13 +50,6 @@ class AgentNavbar extends React.Component {
     }
   }
 
-  componentDidMount() {
-    axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
-      this.setState({
-        profile: result.data
-      })
-    })
-  }
 
   onSignOut = () => {
     console.log('SIGN OUT')
@@ -106,7 +99,7 @@ class AgentNavbar extends React.Component {
                         return (<div>
                             <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold">
-                        {profileObj.first_name} {profileObj.last_name}
+                        {this.props.user.firstName} {this.props.user.lastName}
                       </span>
                             </Media>
                           </div>
@@ -154,7 +147,9 @@ class AgentNavbar extends React.Component {
   }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
+});
 
 const bindAction = (dispatch) => ({
   setLogin: (status) => dispatch(setAgentLogin(status)),
