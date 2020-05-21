@@ -20,6 +20,9 @@ import RequestStock from "./views/agent/Request Stock";
 import MyShops from "./views/agent/My Shops";
 import ShopSuggestShop from "./views/agent/Shop-SuggestShop";
 import MyReports from "./views/agent/My Reports";
+import MyStock from "./views/agent/My Stock";
+import MyStockLoad from "./views/agent/My Stock - Load";
+import MyStockAddToWarehouse from "./views/agent/My Stock - AddToWarehouse";
 //executive
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
 import ExecMap from './views/executive/Maps';
@@ -173,6 +176,20 @@ var hiddenRoutes = [
     component: ShopSuggestShop,
     layout: "/agent"
   },
+  {
+    path: "/my-stock/load",
+    name: "load",
+    icon: "ni ni-circle-08 text-pink",
+    component: MyStockLoad,
+    layout: "/agent"
+  },
+  {
+    path: "/my-stock/add-to-warehouse",
+    name: "add to warehouse",
+    icon: "ni ni-circle-08 text-pink",
+    component: MyStockAddToWarehouse,
+    layout: "/agent"
+  },
 
 ];
 
@@ -279,9 +296,16 @@ export const agentSidebar = [
   },
   {
     path: "/my-reports",
-    name: "My reports",
+    name: "My Reports",
     icon: "ni ni-collection text-primary",
     component: MyReports,
+    layout: "/agent"
+  },
+  {
+    path: "/my-stock",
+    name: "My Stock",
+    icon: "ni ni-box-2 text-primary",
+    component: MyStock,
     layout: "/agent"
   },
 ];
