@@ -16,7 +16,10 @@ import ResetPassword from "./views/examples/ResetPassword";
 //agent
 import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
 import AgentMap from "./views/agent/Maps";
-
+import RequestStock from "./views/agent/Request Stock";
+import MyShops from "./views/agent/My Shops";
+import ShopSuggestShop from "./views/agent/Shop-SuggestShop";
+import MyReports from "./views/agent/My Reports";
 //executive
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
 import ExecMap from './views/executive/Maps';
@@ -158,10 +161,17 @@ var hiddenRoutes = [
   },
   {
     path: "/reports/view-reports",
-    name: "add to warehouse",
+    name: "View Reports",
     icon: "ni ni-circle-08 text-pink",
     component: ViewReports,
     layout: "/executive"
+  },
+  {
+    path: "/my-shops/suggest-shop",
+    name: "suggest shop",
+    icon: "ni ni-circle-08 text-pink",
+    component: ShopSuggestShop,
+    layout: "/agent"
   },
 
 ];
@@ -252,7 +262,28 @@ export const agentSidebar = [
     icon: "ni ni-circle-08 text-pink",
     component: AddEmployeeAgent,
     layout: "/agent"
-  }
+  },
+  {
+    path: "/request-stock",
+    name: "Request Stock",
+    icon: "ni ni-delivery-fast text-red",
+    component: RequestStock,
+    layout: "/agent"
+  },
+  {
+    path: "/my-shops",
+    name: "My Shops",
+    icon: "ni ni-shop text-primary",
+    component: MyShops,
+    layout: "/agent"
+  },
+  {
+    path: "/my-reports",
+    name: "My reports",
+    icon: "ni ni-collection text-primary",
+    component: MyReports,
+    layout: "/agent"
+  },
 ];
 
 
