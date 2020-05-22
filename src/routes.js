@@ -33,6 +33,7 @@ import StockAddNewProduct from "./views/executive/Stock-AddNewProduct";
 import StockAddToWarehouse from "./views/executive/Stock-AddToWarehouse";
 import ExecReports from "./views/executive/Reports";
 import ViewReports from "./views/executive/ViewReports";
+import AcceptShop from "./views/executive/AcceptShop";
 /**
  *changed tables to TestComponent
  */
@@ -250,6 +251,14 @@ export const executiveSidebar = [
     component: ExecReports,
     layout: "/executive"
   },
+  {
+    path: "/accept-shop",
+    name: "Accept shop",
+    icon: "ni ni-shop text-primary",
+    component: AcceptShop,
+    layout: "/executive"
+  },
+
 ];
 export const agentSidebar = [
   {
