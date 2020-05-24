@@ -126,6 +126,22 @@ class StockReq extends React.Component {
     console.log(res,'SEND');
   };
 
+  onClickReject = async(prod_details) => {
+    const {invoiceData} = this.state;
+    const res = await Executive.rejectRequest(prod_details.requesting_invoice_items_id)
+    if(res.data.success){
+      const index = invoiceData.indexOf(prod_details);
+      const newInvoiceData = invoiceData;
+      newInvoiceData.splice(index,1);
+      if (index > -1) {
+        this.setState({
+          invoiceData: newInvoiceData
+        })
+      }
+    }
+    console.log(res,'SEND');
+  };
+
   handlePageChange(pageNumber) {
     console.log(`active page is ${pageNumber}`);
     this.setState({activePage: pageNumber});
@@ -139,8 +155,8 @@ class StockReq extends React.Component {
   renderInvoiceTableRows = () => {
     const {pageSize, activePageReq, invoiceData} = this.state;
     const pagedArray = invoiceData.slice(pageSize*(activePageReq-1),pageSize*activePageReq);
-    return pagedArray.map((item) => (
-        <tr>
+    return pagedArray.map((item,i) => (
+        <tr key={i.toString()}>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
@@ -152,9 +168,12 @@ class StockReq extends React.Component {
           </th>
           <td>{item.quantity}</td>
           <td>
-            {item.in_stock}
+            {item.available_qantity}
           </td>
           <td className="text-right">
+            <Button color="danger" size={'md'} outline type="button" onClick={()=>{this.onClickReject(item)}}>
+              Reject
+            </Button>
             <Button color="primary" size={'md'} onClick={()=>{this.onClickSend(item)}}>
               Send
             </Button>
@@ -170,7 +189,7 @@ class StockReq extends React.Component {
         <div className="col">
           <Card className="bg-default shadow">
             <CardHeader className="bg-transparent border-0">
-              <h3 className="text-white mb-0">Agents List</h3>
+              <h3 className="text-white mb-0">Request List</h3>
             </CardHeader>
             <Table className="align-items-center table-dark table-flush" responsive>
               <thead className="thead-dark">

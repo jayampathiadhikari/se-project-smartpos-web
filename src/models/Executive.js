@@ -39,12 +39,26 @@ class Executive{
   };
 
   sendRequest = async (agent_id,product_id,quantity) => {
-    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/product/sendtoagent',{
+    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/product/send-agent-requested',{
       agent_id,
       product_id,
       quantity
     })
   };
+
+  rejectRequest = async (requesting_invoice_items_id) => {
+    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/reqinvoice/declaresuggestion',{
+      requesting_invoice_items_id
+    })
+  };
+
+  sendStock = async(agent_id,product_id,quantity) => {
+    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/product/send-to-agent',{
+      agent_id,
+      product_id,
+      quantity
+    })
+  }
 
   getReports = async (agent_id,sold_date) => {
     return await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/viewreport',{
@@ -66,7 +80,7 @@ class Executive{
   };
 
   rejectShopSiggestion = async(shop_suggestion_id) => {
-    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/owner/acceptsuggestion',{
+    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/owner/declinesuggestion',{
       shop_suggestion_id
     })
   }
