@@ -2,26 +2,19 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
   Media,
   Table,
   Container,
   Row,
-  UncontrolledTooltip, Button
+  Button
 } from "reactstrap";
 // core components
 
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-
 
 
 const data = [

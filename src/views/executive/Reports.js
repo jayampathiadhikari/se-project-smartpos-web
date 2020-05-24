@@ -1,48 +1,36 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
 import {
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
-  Form,
   Container,
   Row,
-  Button, Col, FormGroup, Input, Table, Media, Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
+  Col,Table, Media,UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from "reactstrap";
 // core components
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-
-import {data} from "./MyAgents";
 import Pagination from "react-js-pagination";
+import Executive from "../../models/Executive";
 
 //id,name,prod cost, selling price,, quantity
 
 class ExecReports extends React.Component {
   state = {
     agent_id: null,
-    current_data: [],
+    agentData: [],
     pageSize: 5,
     activePage:1
+  };
+
+  componentDidMount = async() =>{
+    const res = await Executive.getAllAgents()
+    this.setState({
+      agentData: res
+    });
+    console.log(res)
   };
 
   seeReports = (agent_id) => {
@@ -53,15 +41,15 @@ class ExecReports extends React.Component {
   };
 
   renderTableRows = () => {
-    const {pageSize, activePage} = this.state;
-    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
-    return pagedArray.map((item) => (
-        <tr>
+    const {pageSize, activePage, agentData} = this.state;
+    const pagedArray = agentData.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item,index) => (
+        <tr key={index.toString()}>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
                 <span className="mb-0 text-sm">
-                  {item.name}
+                  {item.firstName}
                 </span>
               </Media>
             </Media>
@@ -82,7 +70,7 @@ class ExecReports extends React.Component {
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem
                   href="#pablo"
-                  onClick={e => {e.preventDefault(); this.seeReports(item.id)}}
+                  onClick={e => {e.preventDefault(); this.seeReports(item.uid)}}
                 >
                   See Reports
                 </DropdownItem>
@@ -116,7 +104,7 @@ class ExecReports extends React.Component {
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
-                  <tr>
+                  <tr >
                     <th scope="col">Name</th>
                     <th scope="col">District</th>
                     <th scope="col"/>
@@ -131,7 +119,7 @@ class ExecReports extends React.Component {
                     <Pagination
                       activePage={this.state.activePage}
                       itemsCountPerPage={5}
-                      totalItemsCount={data.length}
+                      totalItemsCount={this.state.agentData.length}
                       pageRangeDisplayed={3}
                       onChange={this.handlePageChange.bind(this)}
                       itemClass="page-item"

@@ -1,64 +1,22 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
   Media,
   Table,
   Container,
   Row,
   Col,
-  UncontrolledTooltip, Button, Input
+  Button, Input
 } from "reactstrap";
 // core components
-import Datepicker from "../../components/DateTime";
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import Executive from "../../models/Executive";
 
-
-
-const data = [
-  {
-    product_id: 'item001',
-    name: 'Maari',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-  {
-    product_id: 'item002',
-    name: 'Nice',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-
-];
 
 
 class Stock extends React.Component {
@@ -69,12 +27,22 @@ class Stock extends React.Component {
     data: []
   };
 
-  componentDidMount() {
-    this.setState({
-      initialData:data,
-      data:data
-    })
-  }
+  componentDidMount = async () =>{
+    const res = await Executive.getStock();
+    console.log(res);
+    if(res.success){
+      this.setState({
+        initialData:res.data,
+        data:res.data
+      })
+    }
+    else {
+      this.setState({
+        initialData:[],
+        data:[]
+      })
+    }
+  };
 
   onClick = (product) => {
     this.props.history.push({
@@ -89,8 +57,8 @@ class Stock extends React.Component {
   }
 
   renderTableRows = () => {
-    return this.state.data.map((item) => (
-        <tr>
+    return this.state.data.map((item,i) => (
+        <tr key={i.toString()}>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
@@ -102,7 +70,7 @@ class Stock extends React.Component {
           </th>
           <td>{item.name}</td>
           <td>{item.quantity}</td>
-          <td>{item.pr_cost}</td>
+          <td>{item.production_cost}</td>
           <td>{item.selling_price}</td>
           <td className="text-right">
             <Button color="primary" size={'md'} onClick={()=>{this.onClick(item)}}>
@@ -152,7 +120,7 @@ class Stock extends React.Component {
                           id="firstName"
                           type="text"
                           placeholder={"Filter by product name..."}
-                          autocomplete = "false"
+                          autoComplete = "false"
                           onChange = {this.filter}
                         />
                       </div>
@@ -179,7 +147,7 @@ class Stock extends React.Component {
                     <Pagination
                       activePage={this.state.activePage}
                       itemsCountPerPage={5}
-                      totalItemsCount={data.length}
+                      totalItemsCount={this.state.data.length}
                       pageRangeDisplayed={3}
                       onChange={this.handlePageChange.bind(this)}
                       itemClass="page-item"

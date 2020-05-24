@@ -125,6 +125,7 @@ class Index extends React.Component {
                       options={chartExample1.options}
                       getDatasetAtEvent={e => console.log(e)}
                     />
+
                   </div>
                 </CardBody>
               </Card>

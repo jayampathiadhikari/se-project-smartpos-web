@@ -8,18 +8,12 @@ import ReactMapboxGl, {
   ZoomControl,
   RotationControl
 } from 'react-mapbox-gl';
-import DrawControl from 'react-mapbox-gl-draw';
 import {MAPBOX_TOKEN} from "../../config";
 import {setSimulation, toggleAddRouteModal} from "../../redux/reducers/ui/action";
 import {connect} from "react-redux";
 import FIREBASE from "../../firebase";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import {
-  createGeojson,
-  getRouteByWaypoints, getSalespersonByAgent,
-  getShopsWithNoRouteByDistrict,
-  getShopsWithRouteByDistrict
-} from "../../Utils";
+
 
 const Map = ReactMapboxGl({
   accessToken: MAPBOX_TOKEN
