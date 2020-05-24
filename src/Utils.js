@@ -27,10 +27,26 @@ export const createUserWithEmail = async (data) => {
       async (result) => {
         if (result.data.success) {
           try {
-            await axios.post('https://se-smartpos-backend.herokuapp.com/employee/register', {
-              type: result.data.data.type,
-              employee_id: result.data.data.uid
-            });
+            const type = result.data.data.type;
+            const district_id = getDistrictId(result.data.data.region);
+            if (type === 'agent'){
+              await axios.post('https://se-smartpos-backend.herokuapp.com/employee/registeragent', {
+                owner_id: result.data.data.supervisorUid,
+                employee_id: result.data.data.uid,
+                district_id: district_id
+              });
+            }else if(type === 'salesperson'){
+              await axios.post('https://se-smartpos-backend.herokuapp.com/employee/registersalesperson', {
+                agent_id: result.data.data.supervisorUid,
+                employee_id: result.data.data.uid,
+                district_id: district_id
+              });
+            }
+            // await axios.post('https://se-smartpos-backend.herokuapp.com/employee/register', {
+            //   type: result.data.data.type,
+            //   employee_id: result.data.data.uid,
+            //   district_id: district_id
+            // });
             await FIREBASE.auth().sendPasswordResetEmail(data.email);
             return {success: true}
           } catch (e) {

@@ -16,7 +16,7 @@ import {
 import Datepicker from "../../components/DateTime";
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-import executive from "../../models/Executive";
+import Executive from "../../models/Executive";
 
 
 
@@ -102,7 +102,7 @@ class ViewReports extends React.Component {
   getReports = async() => {
     const {agent_id,selectedDate} = this.state;
     if(this.state.selectedDate){
-      const res = await executive.getReports(agent_id,selectedDate);
+      const res = await Executive.getReports(agent_id,selectedDate);
       if(res.data.success){
         if(res.data.data.length > 0){
           this.setState({

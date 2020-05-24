@@ -15,6 +15,7 @@ import {
 
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import Executive from "../../models/Executive";
 
 
 const data = [
@@ -45,7 +46,7 @@ const reqData = [
 
 class AcceptShop extends React.Component {
   state = {
-    agent_id: null,
+    data:[],
     activePage: 1,
     activePageReq:1,
     pageSize: 5
@@ -55,10 +56,25 @@ class AcceptShop extends React.Component {
     console.log(id);
   };
 
-  onClickSend = (prod_details) => {
-    console.log(prod_details);
+  componentDidMount = async () => {
+    const res = await Executive.getShopSuggestion();
+    console.log(res)
+    if(res.data.success){
+      this.setState({
+        data:res.data.data
+      })
+      console.log(res.data.data)
+    }
   };
 
+  onClickAccept = async (prod_details) => {
+    const res = await Executive.acceptShopSuggestion(prod_details.shop_suggestion_id);
+    console.log(res)
+  };
+  onClickReject = async (prod_details) => {
+    const res = await Executive.rejectShopSiggestion(prod_details.shop_suggestion_id);
+    console.log(res)
+  };
   handlePageChange(pageNumber) {
     console.log(`active page is ${pageNumber}`);
     this.setState({activePage: pageNumber});
@@ -70,29 +86,35 @@ class AcceptShop extends React.Component {
   }
 
   renderInvoiceTableRows = () => {
-    const {pageSize, activePageReq} = this.state;
-    const pagedArray = reqData.slice(pageSize*(activePageReq-1),pageSize*activePageReq);
-    return pagedArray.map((item) => (
-        <tr>
+    const {pageSize, activePageReq, data} = this.state;
+    const pagedArray = data.slice(pageSize*(activePageReq-1),pageSize*activePageReq);
+    return pagedArray.map((item,i) => (
+        <tr key={i.toString()}>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
                 <span className="mb-0 text-sm">
-                  {item.product_name}
+                  {item.name}
                 </span>
               </Media>
             </Media>
           </th>
-          <td>{item.request_amount}</td>
+          <td>{item.name}</td>
           <td>
-            {item.in_stock}
+            {item.name_with_initial}
+          </td>
+          <td>
+            {item.contact_num_cell}
+          </td>
+          <td>
+            {item.email}
           </td>
           <td className="text-right">
-            <Button color="danger" size={'md'} outline type="button">
-              Decline
+            <Button color="danger" size={'md'} outline type="button" onClick={()=>{this.onClickReject(item)}}>
+              Reject
             </Button>
-            <Button color="primary" size={'md'} onClick={()=>{this.onClickSend(item)}}>
-              Request
+            <Button color="primary" size={'md'} onClick={()=>{this.onClickAccept(item)}}>
+              Accept
             </Button>
           </td>
         </tr>
@@ -106,14 +128,17 @@ class AcceptShop extends React.Component {
         <div className="col">
           <Card className="bg-default shadow">
             <CardHeader className="bg-transparent border-0">
-              <h3 className="text-white mb-0">Products List</h3>
+              <h3 className="text-white mb-0">Suggestions List</h3>
             </CardHeader>
             <Table className="align-items-center table-dark table-flush" responsive>
               <thead className="thead-dark">
               <tr>
-                <th scope="col">Product Name</th>
-                <th scope="col">Required Amount</th>
-                <th scope="col">Amount In Stock</th>
+                <th scope="col">Shop Name</th>
+                <th scope="col">Shop Contact</th>
+                <th scope="col">District</th>
+                <th scope="col">Owner</th>
+                <th scope="col">Owner Contact</th>
+                <th scope="col">Email</th>
                 <th scope="col"/>
               </tr>
               </thead>
@@ -126,7 +151,7 @@ class AcceptShop extends React.Component {
                 <Pagination
                   activePage={this.state.activePageReq}
                   itemsCountPerPage={5}
-                  totalItemsCount={reqData.length}
+                  totalItemsCount={this.state.data.length}
                   pageRangeDisplayed={3}
                   onChange={this.handlePageChangeInvoiceTable.bind(this)}
                   itemClass="page-item"

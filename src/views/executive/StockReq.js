@@ -222,7 +222,7 @@ class StockReq extends React.Component {
                   <tr>
                     <th scope="col">Name</th>
                     <th scope="col">District</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Contact</th>
                     <th scope="col"/>
                   </tr>
                   </thead>

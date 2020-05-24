@@ -53,6 +53,22 @@ class Executive{
         sold_date
       }
     })
+  };
+
+  getShopSuggestion = async () => {
+    return await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/owner/viewsuggestion')
+  };
+
+  acceptShopSuggestion = async(shop_suggestion_id) => {
+    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/owner/acceptsuggestion',{
+      shop_suggestion_id
+    })
+  };
+
+  rejectShopSiggestion = async(shop_suggestion_id) => {
+    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/owner/acceptsuggestion',{
+      shop_suggestion_id
+    })
   }
 }
 
