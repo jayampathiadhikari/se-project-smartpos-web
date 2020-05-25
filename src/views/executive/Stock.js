@@ -24,6 +24,7 @@ class Stock extends React.Component {
     agent_id: null,
     activePage : 1,
     initialData:[],
+    pageSize:5,
     data: []
   };
 
@@ -57,7 +58,9 @@ class Stock extends React.Component {
   }
 
   renderTableRows = () => {
-    return this.state.data.map((item,i) => (
+    const {pageSize, activePage, data} = this.state;
+    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item,i) => (
         <tr key={i.toString()}>
           <th scope="row">
             <Media className="align-items-center">
@@ -101,6 +104,7 @@ class Stock extends React.Component {
             <div className="col">
               <span>
                 <Button size={'lg'} onClick={()=>{this.props.history.push('/executive/my-stock/add-new-product')}}>Add New Product</Button>
+                <Button size={'lg'} onClick={()=>{this.props.history.push('/executive/my-stock/send-to-agent')}}>Send To Agent</Button>
             </span>
             </div>
           </Row>
