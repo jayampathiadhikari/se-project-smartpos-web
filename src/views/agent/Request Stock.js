@@ -38,49 +38,67 @@ import {
 
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import Agent from '../../models/Agent'
+
+import {connect} from "react-redux";
 
 
+// employee_id: "vsotjU8PuSUm5HxEmDbJ5zWvbgy2"
+// name: "noodles"
+// product_id: "3"
+// production_cost: 180
+// quantity: 80
+// requesting_invoice_items_id: 3
+// selling_price: 200
+// state_accepted: "false"
 
-const data = [
-  {
-    name: 'agent1',
-    region: 'kegalle',
-    id: 'agent1_id'
-  },
-  {
-    name: 'agent1',
-    region: 'kegalle',
-    id: 'agent1_id'
-  },
-];
-
-const reqData = [
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  },
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  }
-];
 
 class RequestStock extends React.Component {
   state = {
     agent_id: null,
     activePage: 1,
     activePageReq:1,
-    pageSize: 5
+    pageSize: 5,
+    data:[]
+
   };
 
-  onSeeRequests = (id) => {
-    console.log(id);
+  componentDidMount =async () => {
+    const res = await Agent.viewSuggestedList(this.props.user.uid);
+    if(res.data.success){
+      this.setState({
+        data:res.data.data
+      })
+    }
+    console.log(res);
   };
 
-  onClickSend = (prod_details) => {
-    console.log(prod_details);
+  onClickSend = async(prod_details) => {
+    const res = await Agent.acceptSuggestion(prod_details.requesting_invoice_items_id);
+    console.log(res,'Accept');
+    if(res.data.success){
+      const res = await Agent.viewSuggestedList(this.props.user.uid);
+      console.log(res,'new suggestions');
+      if(res.data.success){
+        this.setState({
+          data:res.data.data
+        })
+      }
+    }
+  };
+
+  onClickDecline = async (prod_details) => {
+    const res = await Agent.declineSuggestion(prod_details.requesting_invoice_items_id);
+    console.log(res,'Decline');
+    if(res.data.success){
+      const res = await Agent.viewSuggestedList(this.props.user.uid);
+      console.log(res,'new suggestions');
+      if(res.data.success){
+        this.setState({
+          data:res.data.data
+        })
+      }
+    }
   };
 
   handlePageChange(pageNumber) {
@@ -94,25 +112,25 @@ class RequestStock extends React.Component {
   }
 
   renderInvoiceTableRows = () => {
-    const {pageSize, activePageReq} = this.state;
-    const pagedArray = reqData.slice(pageSize*(activePageReq-1),pageSize*activePageReq);
-    return pagedArray.map((item) => (
-        <tr>
+    const {pageSize, activePageReq,data} = this.state;
+    const pagedArray = data.slice(pageSize*(activePageReq-1),pageSize*activePageReq);
+    return pagedArray.map((item,i) => (
+        <tr key={i.toString()}>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
                 <span className="mb-0 text-sm">
-                  {item.product_name}
+                  {item.product_id}
                 </span>
               </Media>
             </Media>
           </th>
-          <td>{item.request_amount}</td>
+          <td>{item.name}</td>
           <td>
-            {item.in_stock}
+            {item.quantity}
           </td>
           <td className="text-right">
-            <Button color="danger" size={'md'} outline type="button">
+            <Button color="danger" size={'md'} outline type="button" onClick={()=>{this.onClickDecline(item)}}>
               Decline
             </Button>
             <Button color="primary" size={'md'} onClick={()=>{this.onClickSend(item)}}>
@@ -135,9 +153,9 @@ class RequestStock extends React.Component {
             <Table className="align-items-center table-dark table-flush" responsive>
               <thead className="thead-dark">
               <tr>
+                <th scope="col">Product ID</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Required Amount</th>
-                <th scope="col">Amount In Stock</th>
                 <th scope="col"/>
               </tr>
               </thead>
@@ -150,7 +168,7 @@ class RequestStock extends React.Component {
                 <Pagination
                   activePage={this.state.activePageReq}
                   itemsCountPerPage={5}
-                  totalItemsCount={reqData.length}
+                  totalItemsCount={this.state.data.length}
                   pageRangeDisplayed={3}
                   onChange={this.handlePageChangeInvoiceTable.bind(this)}
                   itemClass="page-item"
@@ -171,11 +189,22 @@ class RequestStock extends React.Component {
         {/* Page content */}
         <Container className="mt--7" fluid>
           {/* Table */}
-          {this.renderInvoiceTable()}
+          {this.state.data.length > 0 ? this.renderInvoiceTable() : null}
         </Container>
       </>
     );
   }
 }
 
-export default RequestStock;
+
+const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
+});
+
+const bindAction = () => ({
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(RequestStock);

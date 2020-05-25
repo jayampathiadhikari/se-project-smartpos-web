@@ -69,7 +69,8 @@ class MyShops extends React.Component {
     data: []
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
+
     this.setState({
       initialData:data,
       data:data

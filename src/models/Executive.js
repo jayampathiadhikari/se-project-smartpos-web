@@ -58,7 +58,7 @@ class Executive{
       product_id,
       quantity
     })
-  }
+  };
 
   getReports = async (agent_id,sold_date) => {
     return await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/viewreport',{

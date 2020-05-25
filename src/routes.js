@@ -31,6 +31,7 @@ import MyAgents from "./views/executive/MyAgents";
 import Stock from "./views/executive/Stock";
 import StockAddNewProduct from "./views/executive/Stock-AddNewProduct";
 import StockAddToWarehouse from "./views/executive/Stock-AddToWarehouse";
+import StockSendToAgent from "./views/executive/Stock-SendToAgent";
 import ExecReports from "./views/executive/Reports";
 import ViewReports from "./views/executive/ViewReports";
 import AcceptShop from "./views/executive/AcceptShop";
@@ -164,6 +165,13 @@ var hiddenRoutes = [
     layout: "/executive"
   },
   {
+    path: "/my-stock/send-to-agent",
+    name: "send to agent",
+    icon: "ni ni-circle-08 text-pink",
+    component: StockSendToAgent,
+    layout: "/executive"
+  },
+  {
     path: "/reports/view-reports",
     name: "View Reports",
     icon: "ni ni-circle-08 text-pink",
@@ -252,8 +260,8 @@ export const executiveSidebar = [
     layout: "/executive"
   },
   {
-    path: "/accept-shop",
-    name: "Accept shop",
+    path: "/shop-suggestions",
+    name: "Shop Suggestions",
     icon: "ni ni-shop text-primary",
     component: AcceptShop,
     layout: "/executive"
