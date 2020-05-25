@@ -17,7 +17,7 @@
 */
 import React from "react";
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 // reactstrap components
 import {
   DropdownMenu,
@@ -35,109 +35,133 @@ import {
   Container,
   Media
 } from "reactstrap";
+import {setSignInStatus} from "../../redux/reducers/authentication/action";
+import {connect} from "react-redux";
 
 class AdminNavbar extends React.Component {
 
   constructor(props) {
-        super(props);
-        this.state = {
-            profile: [],
-            first_name:'',
-            employee_id:'',
-            count:''
-        }
+    super(props);
+    this.state = {
+      profile: [],
+      first_name: '',
+      employee_id: '',
+      count: ''
     }
+  }
 
-    componentDidMount() {
-        axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
-            this.setState({
-                profile: result.data
-            })
-        })
-    }
+  componentDidMount() {
+    axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
+      this.setState({
+        profile: result.data
+      })
+    })
+  }
+
+  onSignOut = () => {
+    console.log('SIGN OUT')
+    this.props.setLogin(false);
+  };
+
   render() {
-    var {profile} =this.state;
-    return (
-      <>
-        <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
-          <Container fluid>
-            <Link
-              className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-              to="/"
-            >
-              {this.props.brandText}
-            </Link>
-            <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-              <FormGroup className="mb-0">
-                <InputGroup className="input-group-alternative">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="fas fa-search" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input placeholder="Search" type="text" />
-                </InputGroup>
-              </FormGroup>
-            </Form>
+    var {profile} = this.state;
+    if (this.props.location.pathname === '/admin/maps') {
+      return (null)
+    } else {
+      return (
+        <>
+          <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
+            <Container fluid>
+              <Link
+                className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
+                to="/"
+              >
+                {this.props.brandText}
+              </Link>
+              <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+                <FormGroup className="mb-0">
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="fas fa-search"/>
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input placeholder="Search" type="text"/>
+                  </InputGroup>
+                </FormGroup>
+              </Form>
 
-            <Nav className="align-items-center d-none d-md-flex" navbar>
-              <UncontrolledDropdown nav>
-                <DropdownToggle className="pr-0" nav>
-                  <Media className="align-items-center">
+              <Nav className="align-items-center d-none d-md-flex" navbar>
+                <UncontrolledDropdown nav>
+                  <DropdownToggle className="pr-0" nav>
+                    <Media className="align-items-center">
                     <span className="avatar avatar-sm rounded-circle">
                       <img
                         alt="..."
                         src={require("assets/img/theme/team-1-800x800.jpg")}
                       />
                     </span>
-                    {profile && (profile).map((profileObj) => {
+                      {profile && (profile).map((profileObj) => {
 
-                                            return (<div>
-                    <Media className="ml-2 d-none d-lg-block">
+                        return (<div>
+                            <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold">
                         {profileObj.first_name} {profileObj.last_name}
                       </span>
+                            </Media>
+                          </div>
+                        )
+                      })}
                     </Media>
-</div>
-                      )})}
-                  </Media>
-                </DropdownToggle>
-                <DropdownMenu className="dropdown-menu-arrow" right>
-                  <DropdownItem className="noti-title" header tag="div">
-                    <h6 className="text-overflow m-0">Welcome!</h6>
-                  </DropdownItem>
-                  <DropdownItem to="/admin/agent-profile" tag={Link}>
-                    <i className="ni ni-single-02" />
-                    <span>My profile</span>
-                  </DropdownItem>
-                  <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-settings-gear-65" />
-                    <span>Settings</span>
-                  </DropdownItem>
-                  <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-calendar-grid-58" />
-                    <span>Activity</span>
-                  </DropdownItem>
-                  <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-support-16" />
-                    <span>Support</span>
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
-                    <i className="ni ni-user-run" />
-                    <span>Logout</span>
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </Nav>
+                  </DropdownToggle>
+                  <DropdownMenu className="dropdown-menu-arrow" right>
+                    <DropdownItem className="noti-title" header tag="div">
+                      <h6 className="text-overflow m-0">Welcome!</h6>
+                    </DropdownItem>
+                    <DropdownItem to="/admin/agent-profile" tag={Link}>
+                      <i className="ni ni-single-02"/>
+                      <span>My profile</span>
+                    </DropdownItem>
+                    <DropdownItem to="/admin/user-profile" tag={Link}>
+                      <i className="ni ni-settings-gear-65"/>
+                      <span>Settings</span>
+                    </DropdownItem>
+                    <DropdownItem to="/admin/user-profile" tag={Link}>
+                      <i className="ni ni-calendar-grid-58"/>
+                      <span>Activity</span>
+                    </DropdownItem>
+                    <DropdownItem to="/admin/user-profile" tag={Link}>
+                      <i className="ni ni-support-16"/>
+                      <span>Support</span>
+                    </DropdownItem>
+                    <DropdownItem divider/>
+                    <DropdownItem href="/login" onClick={this.onSignOut}>
+                      <i className="ni ni-user-run"/>
+                      <span>Logout</span>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              </Nav>
 
-          </Container>
-        </Navbar>
+            </Container>
+          </Navbar>
 
 
-      </>
-    );
+        </>
+      );
+    }
+
   }
 }
 
-export default AdminNavbar;
+const mapStateToProps = () => ({});
+
+const bindAction = (dispatch) => ({
+  setLogin: (status) => dispatch(setSignInStatus(status)),
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(AdminNavbar);
+

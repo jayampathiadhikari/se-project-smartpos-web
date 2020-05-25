@@ -125,13 +125,12 @@ class Index extends React.Component {
                       options={chartExample1.options}
                       getDatasetAtEvent={e => console.log(e)}
                     />
+
                   </div>
                 </CardBody>
               </Card>
             </Col>
             <Col xl="4">
-
-
               <Card className="shadow">
                 <CardHeader className="bg-transparent">
                   <Row className="align-items-center">

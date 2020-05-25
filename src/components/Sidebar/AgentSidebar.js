@@ -23,11 +23,6 @@ import { PropTypes } from "prop-types";
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
@@ -45,16 +40,17 @@ import {
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
-  Col
+  Col,
 } from "reactstrap";
+import {setSignInStatus} from "../../redux/reducers/authentication/action";
+import {connect} from "react-redux";
+import TrackingOptions from "./TrackingOptions";
 
 var ps;
 
-class Sidebar extends React.Component {
+class AgentSidebar extends React.Component {
   state = {
     collapseOpen: false
   };
@@ -62,6 +58,7 @@ class Sidebar extends React.Component {
     super(props);
     this.activeRoute.bind(this);
   }
+
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
     return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -78,8 +75,27 @@ class Sidebar extends React.Component {
       collapseOpen: false
     });
   };
+  renderTrackingOptions = () => {
+    if(this.props.location.pathname === '/agent/maps'){
+      return(
+        <div>
+          <h6 className="navbar-heading text-muted">Tracking Options</h6>
+          {/* Navigation */}
+          <TrackingOptions/>
+        </div>
+      )
+    }else{
+      return (null)
+    }
+  }
   // creates the links that appear in the left menu / Sidebar
   createLinks = routes => {
+    if(this.props.location.pathname === '/agent/maps'){
+      var routes = routes.filter((route)=>{
+        return (route.name === 'Maps' ||route.name === 'Dashboard' )
+      });
+
+    }
     return routes.map((prop, key) => {
       return (
         <NavItem key={key}>
@@ -126,15 +142,15 @@ class Sidebar extends React.Component {
             <span className="navbar-toggler-icon" />
           </button>
           {/* Brand */}
-          // {logo ? (
-          //   <NavbarBrand className="pt-0" {...navbarBrandProps}>
-          //     <img
-          //       alt={logo.imgAlt}
-          //       className="navbar-brand-img"
-          //       src={logo.imgSrc}
-          //     />
-          //   </NavbarBrand>
-          // ) : null}
+          {logo ? (
+            <NavbarBrand className="pt-0" {...navbarBrandProps}>
+              <img
+                alt={logo.imgAlt}
+                className="navbar-brand-img"
+                src={logo.imgSrc}
+              />
+            </NavbarBrand>
+          ) : null}
           {/* User */}
           <Nav className="align-items-center d-md-none">
             <UncontrolledDropdown nav>
@@ -184,10 +200,12 @@ class Sidebar extends React.Component {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
-                  <i className="ni ni-user-run" />
-                  <span>Logout</span>
-                </DropdownItem>
+                <div onClick={()=>{console.log('asdsad')}}>
+                  <DropdownItem>
+                    <i className="ni ni-user-run" />
+                    <span>Logout</span>
+                  </DropdownItem>
+                </div>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
@@ -237,41 +255,13 @@ class Sidebar extends React.Component {
                 </InputGroupAddon>
               </InputGroup>
             </Form>
+            <h6 className="navbar-heading text-muted">Navigation</h6>
             {/* Navigation */}
             <Nav navbar>{this.createLinks(routes)}</Nav>
             {/* Divider */}
             <hr className="my-3" />
             {/* Heading */}
-            <h6 className="navbar-heading text-muted">Documentation</h6>
-            {/* Navigation */}
-            <Nav className="mb-md-3" navbar>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/overview?ref=adr-admin-sidebar">
-                  <i className="ni ni-spaceship" />
-                  Getting started
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/colors?ref=adr-admin-sidebar">
-                  <i className="ni ni-palette" />
-                  Foundation
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/alerts?ref=adr-admin-sidebar">
-                  <i className="ni ni-ui-04" />
-                  Components
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <Nav className="mb-md-3" navbar>
-              <NavItem className="active-pro active">
-                <NavLink href="https://www.creative-tim.com/product/argon-dashboard-pro-react?ref=adr-admin-sidebar">
-                  <i className="ni ni-spaceship" />
-                  Upgrade to PRO
-                </NavLink>
-              </NavItem>
-            </Nav>
+            {this.renderTrackingOptions()}
           </Collapse>
         </Container>
       </Navbar>
@@ -279,11 +269,11 @@ class Sidebar extends React.Component {
   }
 }
 
-Sidebar.defaultProps = {
+AgentSidebar.defaultProps = {
   routes: [{}]
 };
 
-Sidebar.propTypes = {
+AgentSidebar.propTypes = {
   // links that will be displayed inside the component
   routes: PropTypes.arrayOf(PropTypes.object),
   logo: PropTypes.shape({
@@ -300,4 +290,17 @@ Sidebar.propTypes = {
   })
 };
 
-export default Sidebar;
+
+const mapStateToProps = () => ({
+
+});
+
+const bindAction = (dispatch) => ({
+  setLogin: (status) => dispatch(setSignInStatus(status)),
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(AgentSidebar);
+
