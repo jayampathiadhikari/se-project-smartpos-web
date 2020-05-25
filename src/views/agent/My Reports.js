@@ -2,24 +2,49 @@ import React from "react";
 
 // reactstrap components
 import {
+  Badge,
   Card,
   CardHeader,
+  CardBody,
   CardFooter,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  DropdownToggle,
   Media,
   Table,
   Container,
   Row,
   Col,
-  Button, Input
+  UncontrolledTooltip, Button, Input
 } from "reactstrap";
 // core components
+import Datepicker from "../../components/DateTime";
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-import Executive from "../../models/Executive";
+import {setSimulation, toggleAddRouteModal} from "../../redux/reducers/ui/action";
+import {connect} from "react-redux";
+
+const data = [
+  {
+    product_id: 'item001',
+    name: 'Maari',
+    quantity: 1000,
+    pr_cost: 10,
+    selling_price: 30
+  },
+  {
+    product_id: 'item002',
+    name: 'Nice',
+    quantity: 1000,
+    pr_cost: 10,
+    selling_price: 30
+  },
+
+];
 
 
-
-class Stock extends React.Component {
+class MyReports extends React.Component {
   state = {
     agent_id: null,
     activePage : 1,
@@ -27,22 +52,12 @@ class Stock extends React.Component {
     data: []
   };
 
-  componentDidMount = async () =>{
-    const res = await Executive.getStock();
-    console.log(res);
-    if(res.success){
-      this.setState({
-        initialData:res.data,
-        data:res.data
-      })
-    }
-    else {
-      this.setState({
-        initialData:[],
-        data:[]
-      })
-    }
-  };
+  componentDidMount() {
+    this.setState({
+      initialData:data,
+      data:data
+    })
+  }
 
   onClick = (product) => {
     this.props.history.push({
@@ -57,8 +72,8 @@ class Stock extends React.Component {
   }
 
   renderTableRows = () => {
-    return this.state.data.map((item,i) => (
-        <tr key={i.toString()}>
+    return this.state.data.map((item) => (
+        <tr>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
@@ -70,7 +85,7 @@ class Stock extends React.Component {
           </th>
           <td>{item.name}</td>
           <td>{item.quantity}</td>
-          <td>{item.production_cost}</td>
+          <td>{item.pr_cost}</td>
           <td>{item.selling_price}</td>
           <td className="text-right">
             <Button color="primary" size={'md'} onClick={()=>{this.onClick(item)}}>
@@ -91,6 +106,10 @@ class Stock extends React.Component {
     });
   };
 
+  getReports = () => {
+
+  };
+
   render() {
     return (
       <>
@@ -98,11 +117,12 @@ class Stock extends React.Component {
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-            <div className="col">
-              <span>
-                <Button size={'lg'} onClick={()=>{this.props.history.push('/executive/my-stock/add-new-product')}}>Add New Product</Button>
-            </span>
-            </div>
+            <Col lg={4}>
+              <Datepicker onChange = {(e) => {console.log(e.format())}}/>
+            </Col>
+            <Col lg={4}>
+              <Button size={'md'} onClick={()=>{}}>Get Reports</Button>
+            </Col>
           </Row>
           {/* Table */}
           <Row className={"mt-7"}>
@@ -120,7 +140,7 @@ class Stock extends React.Component {
                           id="firstName"
                           type="text"
                           placeholder={"Filter by product name..."}
-                          autoComplete = "false"
+                          autocomplete = "false"
                           onChange = {this.filter}
                         />
                       </div>
@@ -147,7 +167,7 @@ class Stock extends React.Component {
                     <Pagination
                       activePage={this.state.activePage}
                       itemsCountPerPage={5}
-                      totalItemsCount={this.state.data.length}
+                      totalItemsCount={data.length}
                       pageRangeDisplayed={3}
                       onChange={this.handlePageChange.bind(this)}
                       itemClass="page-item"
@@ -164,4 +184,15 @@ class Stock extends React.Component {
   }
 }
 
-export default Stock;
+const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
+});
+
+const bindAction = (dispatch) => ({
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(MyReports);
+

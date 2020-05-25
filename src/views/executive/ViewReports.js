@@ -1,79 +1,46 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
   Media,
   Table,
   Container,
   Row,
   Col,
-  UncontrolledTooltip, Button, Input
+  Button, Input
 } from "reactstrap";
 // core components
 import Datepicker from "../../components/DateTime";
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import Executive from "../../models/Executive";
 
 
 
-const data = [
-  {
-    product_id: 'item001',
-    name: 'Maari',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-  {
-    product_id: 'item002',
-    name: 'Nice',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-
-];
 
 
 class ViewReports extends React.Component {
   state = {
+    selectedDate:null,
     agent_id: null,
     activePage : 1,
-    initialData:[],
-    data: []
+    reports:[],
+    data: [],
+    showReports: false
   };
 
   componentDidMount() {
-    this.setState({
-      initialData:data,
-      data:data
-    })
+    if(this.props.location.state != undefined){
+      this.setState({
+        agent_id : this.props.location.state.agent_id,
+      });
+      console.log(this.props.location.state.agent_id)
+    }else{
+      alert('undefined')
+    }
   }
 
   onClick = (product) => {
@@ -89,8 +56,8 @@ class ViewReports extends React.Component {
   }
 
   renderTableRows = () => {
-    return this.state.data.map((item) => (
-        <tr>
+    return this.state.data.map((item,index) => (
+        <tr key={index.toString()}>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
@@ -123,8 +90,33 @@ class ViewReports extends React.Component {
     });
   };
 
-  getReports = () => {
-    
+  onSelectDate = (e) => {
+    const date = this.formatDate(e.format());
+    this.setState({
+      selectedDate: date
+    });
+  };
+
+  formatDate = (date) => (date.split('T')[0]);
+
+  getReports = async() => {
+    const {agent_id,selectedDate} = this.state;
+    if(this.state.selectedDate){
+      const res = await Executive.getReports(agent_id,selectedDate);
+      if(res.data.success){
+        if(res.data.data.length > 0){
+          this.setState({
+            data:res.data.data,
+            showReports:true
+          })
+        }else{
+          alert('NO REPORTS FOR GIVEN DATE')
+        }
+      }else{
+        alert('FETCHING ERROR')
+      }
+      console.log(res.data)
+    }
   };
 
   render() {
@@ -135,66 +127,57 @@ class ViewReports extends React.Component {
         <Container className="mt--7" fluid>
           <Row>
             <Col lg={4}>
-              <Datepicker onChange = {(e) => {console.log(e.format())}}/>
+              <Datepicker onChange = {this.onSelectDate}/>
             </Col>
             <Col lg={4}>
-              <Button size={'md'} onClick={()=>{}}>Get Reports</Button>
+              <Button size={'md'} onClick={this.getReports}>Get Reports</Button>
             </Col>
           </Row>
           {/* Table */}
-          <Row className={"mt-7"}>
-            <div className="col">
-              <Card className="bg-default shadow">
-                <CardHeader className="bg-transparent border-0">
-                  <Row>
-                    <Col lg={7}>
-                      <h3 className="text-white mb-0">My Stock</h3>
-                    </Col>
-                    <Col lg={5}>
-                      <div>
-                        <Input
-                          className="form-control-alternative"
-                          id="firstName"
-                          type="text"
-                          placeholder={"Filter by product name..."}
-                          autocomplete = "false"
-                          onChange = {this.filter}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                </CardHeader>
-                <Table className="align-items-center table-dark table-flush" responsive>
-                  <thead className="thead-dark">
-                  <tr>
-                    <th scope="col">Product ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Production Cost</th>
-                    <th scope="col">Selling Price</th>
-                    <th scope="col"/>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {this.renderTableRows()}
-                  </tbody>
-                </Table>
-                <CardFooter className="py-4 bg-transparent border-0">
-                  <div className="pagination justify-content-end mb-0">
-                    <Pagination
-                      activePage={this.state.activePage}
-                      itemsCountPerPage={5}
-                      totalItemsCount={data.length}
-                      pageRangeDisplayed={3}
-                      onChange={this.handlePageChange.bind(this)}
-                      itemClass="page-item"
-                      linkClass="page-link"
-                    />
-                  </div>
-                </CardFooter>
-              </Card>
-            </div>
-          </Row>
+          {this.state.showReports ?
+            <Row className={"mt-7"}>
+              <div className="col">
+                <Card className="bg-default shadow">
+                  <CardHeader className="bg-transparent border-0">
+                    <Row>
+                      <Col lg={7}>
+                        <h3 className="text-white mb-0">{this.state.selectedDate} Reports</h3>
+                      </Col>
+                    </Row>
+                  </CardHeader>
+                  <Table className="align-items-center table-dark table-flush" responsive>
+                    <thead className="thead-dark">
+                    <tr>
+                      <th scope="col">Product ID</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Production Cost</th>
+                      <th scope="col">Selling Price</th>
+                      <th scope="col"/>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.renderTableRows()}
+                    </tbody>
+                  </Table>
+                  <CardFooter className="py-4 bg-transparent border-0">
+                    <div className="pagination justify-content-end mb-0">
+                      <Pagination
+                        activePage={this.state.activePage}
+                        itemsCountPerPage={5}
+                        totalItemsCount={this.state.data.length}
+                        pageRangeDisplayed={3}
+                        onChange={this.handlePageChange.bind(this)}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                      />
+                    </div>
+                  </CardFooter>
+                </Card>
+              </div>
+            </Row> : null
+          }
+
         </Container>
       </>
     );

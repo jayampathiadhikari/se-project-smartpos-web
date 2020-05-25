@@ -1,4 +1,5 @@
 import React from "react";
+
 // reactstrap components
 import {
   Card,
@@ -16,7 +17,7 @@ import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 
 //id,name,prod cost, selling price,, quantity
 
-class StockAddToWarehouse extends React.Component {
+class MyStockAddToWarehouse extends React.Component {
   state = {
     agent_id: null,
     current_data: [],
@@ -143,4 +144,4 @@ class StockAddToWarehouse extends React.Component {
   }
 }
 
-export default StockAddToWarehouse;
+export default MyStockAddToWarehouse;

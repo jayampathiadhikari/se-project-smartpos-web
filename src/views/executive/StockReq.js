@@ -1,28 +1,9 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
   DropdownMenu,
   DropdownItem,
@@ -32,73 +13,75 @@ import {
   Table,
   Container,
   Row,
-  UncontrolledTooltip, Button
+  Button
 } from "reactstrap";
 // core components
 
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import Executive from "../../models/Executive";
 
 
-
-const data = [
-  {
-  name: 'agent1',
-  region: 'kegalle',
-  id: 'agent1_id'
-},
-  {
-    name: 'agent1',
-    region: 'kegalle',
-    id: 'agent1_id'
-  },
-];
-
-const reqData = [
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  },
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  }
-];
 
 class StockReq extends React.Component {
   state = {
-    agent_id: null,
+    agents:[],
     activePage: 1,
     activePageReq:1,
-    pageSize: 5
+    pageSize: 5,
+    invoiceData:[],
+    invoiceTable:false
   };
 
-  onSeeRequests = (id) => {
-    console.log(id);
+  componentDidMount = async() => {
+    const result = await Executive.getAllAgents();
+    const res = await Executive.getAgentsWithRequests();
+    console.log(res.data.data,'AGENTS WITH REQUESTS')
+    if(res.data.success){
+      const agents = this.filterData(result,res.data.data);
+      this.setState({
+        agents:agents
+      })
+    }
+  };
+
+  filterData = (filter, container) => {
+    var agentsWithReq =  filter.filter(function(agent) {
+      return container.includes(agent.uid);
+    });
+    console.log(agentsWithReq);
+    return agentsWithReq;
+  };
+
+  onSeeRequests = async (id) => {
+    const res = await Executive.getAgentRequests(id);
+    if(res.data.success){
+      this.setState({
+        agentID:id,
+        invoiceTable:true,
+        invoiceData:res.data.data
+      })
+    }
+    console.log(res.data);
   };
 
   renderTableRows = () => {
     const {pageSize, activePage} = this.state;
-    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
-    return pagedArray.map((item) => (
-        <tr>
+    const pagedArray = this.state.agents.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item,i) => (
+        <tr key={i.toString()}>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
                 <span className="mb-0 text-sm">
-                  {item.name}
+                  {item.firstName}
                 </span>
               </Media>
             </Media>
           </th>
           <td>{item.region}</td>
           <td>
-            <Badge color="" className="badge-dot mr-4">
-              <i className="bg-warning"/>
-              pending
-            </Badge>
+            {item.phoneNumber}
           </td>
           <td className="text-right">
             <UncontrolledDropdown>
@@ -115,7 +98,7 @@ class StockReq extends React.Component {
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem
                   href="#pablo"
-                  onClick={e => {e.preventDefault(); this.onSeeRequests(item.id)}}
+                  onClick={e => {e.preventDefault(); this.onSeeRequests(item.uid)}}
                 >
                   See Requests
                 </DropdownItem>
@@ -127,8 +110,20 @@ class StockReq extends React.Component {
     )
   };
 
-  onClickSend = (prod_details) => {
-    console.log(prod_details);
+  onClickSend = async (prod_details) => {
+    const {invoiceData,agentID} = this.state;
+    const res = await Executive.sendRequest(agentID,prod_details.product_id,prod_details.quantity);
+    if(res.data.success){
+      const index = invoiceData.indexOf(prod_details);
+      const newInvoiceData = invoiceData;
+      newInvoiceData.splice(index,1);
+      if (index > -1) {
+        this.setState({
+          invoiceData: newInvoiceData
+        })
+      }
+    }
+    console.log(res,'SEND');
   };
 
   handlePageChange(pageNumber) {
@@ -142,20 +137,20 @@ class StockReq extends React.Component {
   }
 
   renderInvoiceTableRows = () => {
-    const {pageSize, activePageReq} = this.state;
-    const pagedArray = reqData.slice(pageSize*(activePageReq-1),pageSize*activePageReq);
+    const {pageSize, activePageReq, invoiceData} = this.state;
+    const pagedArray = invoiceData.slice(pageSize*(activePageReq-1),pageSize*activePageReq);
     return pagedArray.map((item) => (
         <tr>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
                 <span className="mb-0 text-sm">
-                  {item.product_name}
+                  {item.product_id}
                 </span>
               </Media>
             </Media>
           </th>
-          <td>{item.request_amount}</td>
+          <td>{item.quantity}</td>
           <td>
             {item.in_stock}
           </td>
@@ -195,7 +190,7 @@ class StockReq extends React.Component {
                 <Pagination
                   activePage={this.state.activePageReq}
                   itemsCountPerPage={5}
-                  totalItemsCount={reqData.length}
+                  totalItemsCount={this.state.invoiceData.length}
                   pageRangeDisplayed={3}
                   onChange={this.handlePageChangeInvoiceTable.bind(this)}
                   itemClass="page-item"
@@ -227,7 +222,7 @@ class StockReq extends React.Component {
                   <tr>
                     <th scope="col">Name</th>
                     <th scope="col">District</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Contact</th>
                     <th scope="col"/>
                   </tr>
                   </thead>
@@ -240,7 +235,7 @@ class StockReq extends React.Component {
                     <Pagination
                       activePage={this.state.activePage}
                       itemsCountPerPage={5}
-                      totalItemsCount={data.length}
+                      totalItemsCount={this.state.agents.length}
                       pageRangeDisplayed={3}
                       onChange={this.handlePageChange.bind(this)}
                       itemClass="page-item"
@@ -251,7 +246,7 @@ class StockReq extends React.Component {
               </Card>
             </div>
           </Row>
-          {this.renderInvoiceTable()}
+          {this.state.invoiceTable ? this.renderInvoiceTable() : null}
         </Container>
       </>
     );

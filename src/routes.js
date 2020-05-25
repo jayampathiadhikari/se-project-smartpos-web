@@ -16,7 +16,13 @@ import ResetPassword from "./views/examples/ResetPassword";
 //agent
 import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
 import AgentMap from "./views/agent/Maps";
-
+import RequestStock from "./views/agent/Request Stock";
+import MyShops from "./views/agent/My Shops";
+import ShopSuggestShop from "./views/agent/Shop-SuggestShop";
+import MyReports from "./views/agent/My Reports";
+import MyStock from "./views/agent/My Stock";
+import MyStockLoad from "./views/agent/My Stock - Load";
+import MyStockAddToWarehouse from "./views/agent/My Stock - AddToWarehouse";
 //executive
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
 import ExecMap from './views/executive/Maps';
@@ -27,6 +33,7 @@ import StockAddNewProduct from "./views/executive/Stock-AddNewProduct";
 import StockAddToWarehouse from "./views/executive/Stock-AddToWarehouse";
 import ExecReports from "./views/executive/Reports";
 import ViewReports from "./views/executive/ViewReports";
+import AcceptShop from "./views/executive/AcceptShop";
 /**
  *changed tables to TestComponent
  */
@@ -158,10 +165,31 @@ var hiddenRoutes = [
   },
   {
     path: "/reports/view-reports",
-    name: "add to warehouse",
+    name: "View Reports",
     icon: "ni ni-circle-08 text-pink",
     component: ViewReports,
     layout: "/executive"
+  },
+  {
+    path: "/my-shops/suggest-shop",
+    name: "suggest shop",
+    icon: "ni ni-circle-08 text-pink",
+    component: ShopSuggestShop,
+    layout: "/agent"
+  },
+  {
+    path: "/my-stock/load",
+    name: "load",
+    icon: "ni ni-circle-08 text-pink",
+    component: MyStockLoad,
+    layout: "/agent"
+  },
+  {
+    path: "/my-stock/add-to-warehouse",
+    name: "add to warehouse",
+    icon: "ni ni-circle-08 text-pink",
+    component: MyStockAddToWarehouse,
+    layout: "/agent"
   },
 
 ];
@@ -223,6 +251,14 @@ export const executiveSidebar = [
     component: ExecReports,
     layout: "/executive"
   },
+  {
+    path: "/accept-shop",
+    name: "Accept shop",
+    icon: "ni ni-shop text-primary",
+    component: AcceptShop,
+    layout: "/executive"
+  },
+
 ];
 export const agentSidebar = [
   {
@@ -252,7 +288,35 @@ export const agentSidebar = [
     icon: "ni ni-circle-08 text-pink",
     component: AddEmployeeAgent,
     layout: "/agent"
-  }
+  },
+  {
+    path: "/request-stock",
+    name: "Request Stock",
+    icon: "ni ni-delivery-fast text-red",
+    component: RequestStock,
+    layout: "/agent"
+  },
+  {
+    path: "/my-shops",
+    name: "My Shops",
+    icon: "ni ni-shop text-primary",
+    component: MyShops,
+    layout: "/agent"
+  },
+  {
+    path: "/my-reports",
+    name: "My Reports",
+    icon: "ni ni-collection text-primary",
+    component: MyReports,
+    layout: "/agent"
+  },
+  {
+    path: "/my-stock",
+    name: "My Stock",
+    icon: "ni ni-box-2 text-primary",
+    component: MyStock,
+    layout: "/agent"
+  },
 ];
 
 

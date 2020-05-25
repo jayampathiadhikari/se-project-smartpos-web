@@ -1,25 +1,79 @@
+/*!
+
+=========================================================
+* Argon Dashboard React - v1.1.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
+* Copyright 2019 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
+
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
 import React from "react";
 
 // reactstrap components
 import {
+  Badge,
   Card,
   CardHeader,
+  CardBody,
   CardFooter,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  DropdownToggle,
   Media,
   Table,
   Container,
   Row,
   Col,
-  Button, Input
+  UncontrolledTooltip, Button, Input
 } from "reactstrap";
 // core components
+import Datepicker from "../../components/DateTime";
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-import Executive from "../../models/Executive";
+import CustomDropdown from "../../components/Dropdown";
 
 
 
-class Stock extends React.Component {
+const data = [
+  {
+    product_id: 'item001',
+    name: 'Maari',
+    quantity: 1000,
+    pr_cost: 10,
+    selling_price: 30
+  },
+  {
+    product_id: 'item002',
+    name: 'Nice',
+    quantity: 1000,
+    pr_cost: 10,
+    selling_price: 30
+  },
+
+];
+
+const salesperson =  [
+  {
+    id: 'sp01',
+    name: 'SP1',
+  },
+  {
+    id: 'item002',
+    name: 'SP2',
+  },
+
+];
+
+class MyStockLoad extends React.Component {
   state = {
     agent_id: null,
     activePage : 1,
@@ -27,22 +81,12 @@ class Stock extends React.Component {
     data: []
   };
 
-  componentDidMount = async () =>{
-    const res = await Executive.getStock();
-    console.log(res);
-    if(res.success){
-      this.setState({
-        initialData:res.data,
-        data:res.data
-      })
-    }
-    else {
-      this.setState({
-        initialData:[],
-        data:[]
-      })
-    }
-  };
+  componentDidMount() {
+    this.setState({
+      initialData:data,
+      data:data
+    })
+  }
 
   onClick = (product) => {
     this.props.history.push({
@@ -57,8 +101,8 @@ class Stock extends React.Component {
   }
 
   renderTableRows = () => {
-    return this.state.data.map((item,i) => (
-        <tr key={i.toString()}>
+    return this.state.data.map((item) => (
+        <tr>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
@@ -70,8 +114,16 @@ class Stock extends React.Component {
           </th>
           <td>{item.name}</td>
           <td>{item.quantity}</td>
-          <td>{item.production_cost}</td>
-          <td>{item.selling_price}</td>
+          <td>
+            <Input
+              className="form-control-alternative"
+              id={item.product_id}
+              type="text"
+              required={true}
+              style={{maxWidth:90}}
+            />
+          </td>
+
           <td className="text-right">
             <Button color="primary" size={'md'} onClick={()=>{this.onClick(item)}}>
               +
@@ -91,6 +143,10 @@ class Stock extends React.Component {
     });
   };
 
+  onSelect = (sp) => {
+    console.log(sp.name,sp.id)
+  };
+
   render() {
     return (
       <>
@@ -99,10 +155,9 @@ class Stock extends React.Component {
         <Container className="mt--7" fluid>
           <Row>
             <div className="col">
-              <span>
-                <Button size={'lg'} onClick={()=>{this.props.history.push('/executive/my-stock/add-new-product')}}>Add New Product</Button>
-            </span>
+              <CustomDropdown data = {salesperson} initial={"SELECT SALESPERSON"} onSelect={this.onSelect}/>
             </div>
+
           </Row>
           {/* Table */}
           <Row className={"mt-7"}>
@@ -120,7 +175,7 @@ class Stock extends React.Component {
                           id="firstName"
                           type="text"
                           placeholder={"Filter by product name..."}
-                          autoComplete = "false"
+                          autocomplete = "false"
                           onChange = {this.filter}
                         />
                       </div>
@@ -132,9 +187,8 @@ class Stock extends React.Component {
                   <tr>
                     <th scope="col">Product ID</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Production Cost</th>
-                    <th scope="col">Selling Price</th>
+                    <th scope="col">In Stock</th>
+                    <th scope="col">Load Amount</th>
                     <th scope="col"/>
                   </tr>
                   </thead>
@@ -147,7 +201,7 @@ class Stock extends React.Component {
                     <Pagination
                       activePage={this.state.activePage}
                       itemsCountPerPage={5}
-                      totalItemsCount={this.state.data.length}
+                      totalItemsCount={data.length}
                       pageRangeDisplayed={3}
                       onChange={this.handlePageChange.bind(this)}
                       itemClass="page-item"
@@ -164,4 +218,4 @@ class Stock extends React.Component {
   }
 }
 
-export default Stock;
+export default MyStockLoad;
