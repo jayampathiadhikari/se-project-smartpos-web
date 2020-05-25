@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
@@ -36,46 +19,30 @@ import {
   UncontrolledTooltip, Button, Input
 } from "reactstrap";
 // core components
-import Datepicker from "../../components/DateTime";
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-
-
-
-const data = [
-  {
-    product_id: 'item001',
-    name: 'Maari',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-  {
-    product_id: 'item002',
-    name: 'Nice',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-
-];
-
+import {getDistrictId} from "../../Utils";
+import {connect} from "react-redux";
+import Agent from '../../models/Agent'
 
 class MyShops extends React.Component {
   state = {
     agent_id: null,
     activePage : 1,
+    pageSize:5,
     initialData:[],
     data: []
   };
 
   componentDidMount = async () => {
-
-    this.setState({
-      initialData:data,
-      data:data
-    })
-  }
+    const res = await Agent.getShops(getDistrictId(this.props.user.region));
+    if(res.data.success){
+      this.setState({
+        initialData:res.data.data,
+        data:res.data.data
+      })
+    }
+  };
 
   onClick = (product) => {
     this.props.history.push({
@@ -90,26 +57,17 @@ class MyShops extends React.Component {
   }
 
   renderTableRows = () => {
-    return this.state.data.map((item) => (
-        <tr>
-          <th scope="row">
-            <Media className="align-items-center">
-              <Media>
-                <span className="mb-0 text-sm">
-                  {item.product_id}
-                </span>
-              </Media>
-            </Media>
-          </th>
+    const {pageSize, activePage,data} = this.state;
+    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item,index) => (
+        <tr key={index.toString()}>
+
           <td>{item.name}</td>
-          <td>{item.quantity}</td>
-          <td>{item.pr_cost}</td>
-          <td>{item.selling_price}</td>
-          <td className="text-right">
-            <Button color="primary" size={'md'} onClick={()=>{this.onClick(item)}}>
-              +
-            </Button>
-          </td>
+          <td>{item.shop_contact_num}</td>
+          <td>{item.name_with_initial}</td>
+          <td>{item.contact_num_cell}</td>
+          <td>{item.contact_num_land}</td>
+          <td>{item.email}</td>
         </tr>
       )
     )
@@ -163,12 +121,12 @@ class MyShops extends React.Component {
                 <Table className="align-items-center table-dark table-flush" responsive>
                   <thead className="thead-dark">
                   <tr>
-                    <th scope="col">Product ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Production Cost</th>
-                    <th scope="col">Selling Price</th>
-                    <th scope="col"/>
+                    <th scope="col">Shop Name</th>
+                    <th scope="col">Shop Contact</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Owner Mobile</th>
+                    <th scope="col">Owner Contact</th>
+                    <th scope="col">Email</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -180,7 +138,7 @@ class MyShops extends React.Component {
                     <Pagination
                       activePage={this.state.activePage}
                       itemsCountPerPage={5}
-                      totalItemsCount={data.length}
+                      totalItemsCount={this.state.data.length}
                       pageRangeDisplayed={3}
                       onChange={this.handlePageChange.bind(this)}
                       itemClass="page-item"
@@ -197,4 +155,16 @@ class MyShops extends React.Component {
   }
 }
 
-export default MyShops;
+
+const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
+});
+
+const bindAction = () => ({
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(MyShops);
+
