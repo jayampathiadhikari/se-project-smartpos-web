@@ -18,8 +18,32 @@ import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Executive from "../../models/Executive";
 
+// "2020-04-30"
+// "2019-05-22"
+// "2020-04-30"
+// "2020-05-22"
+// "2020-04-24"
+// "2020-04-24" ------
+// "2019-05-24"
+// "2019-05-24"
+// "2019-05-24"
+// "2020-03-24"
+// "2019-05-24"
+// "2020-04-24"
+// "2019-03-24"
+// "2019-04-24"
+// "2020-04-24"
 
-
+//agent_id: "ySRNCA8E4hacmi9ZNsofSki5Uyv1"
+// name: "chilly powder"
+// product_id: "1"
+// production_cost: 90
+// quantity: 600
+// sales_id: 24
+// salesperson_id: "W9FfmzqWI6QZjGWpRnZOpBhwGM02"
+// selling_price: 100
+// shop_id: 8
+// sold_date: "2020-04-24T00:00:00.000Z"
 
 
 class ViewReports extends React.Component {
@@ -27,6 +51,7 @@ class ViewReports extends React.Component {
     selectedDate:null,
     agent_id: null,
     activePage : 1,
+    pageSize: 5,
     reports:[],
     data: [],
     showReports: false
@@ -43,20 +68,15 @@ class ViewReports extends React.Component {
     }
   }
 
-  onClick = (product) => {
-    this.props.history.push({
-      pathname: '/executive/my-stock/add-to-warehouse',
-      state: {product:product}
-    })
-  };
-
   handlePageChange(pageNumber) {
     console.log(`active page is ${pageNumber}`);
     this.setState({activePage: pageNumber});
   }
 
   renderTableRows = () => {
-    return this.state.data.map((item,index) => (
+    const {pageSize, activePage,data} = this.state;
+    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item,index) => (
         <tr key={index.toString()}>
           <th scope="row">
             <Media className="align-items-center">
@@ -69,26 +89,15 @@ class ViewReports extends React.Component {
           </th>
           <td>{item.name}</td>
           <td>{item.quantity}</td>
-          <td>{item.pr_cost}</td>
+          <td>{item.production_cost}</td>
           <td>{item.selling_price}</td>
-          <td className="text-right">
-            <Button color="primary" size={'md'} onClick={()=>{this.onClick(item)}}>
-              +
-            </Button>
-          </td>
+          <td>{item.salesperson_id}</td>
+          <td>{item.shop_id}</td>
         </tr>
       )
     )
   };
 
-  filter = (e) => {
-    const filteredArray = this.state.initialData.filter(
-      data => {return (data.name.toLowerCase().includes(e.target.value.toLowerCase())) }
-    );
-    this.setState({
-      data:filteredArray
-    });
-  };
 
   onSelectDate = (e) => {
     const date = this.formatDate(e.format());
@@ -153,7 +162,8 @@ class ViewReports extends React.Component {
                       <th scope="col">Quantity</th>
                       <th scope="col">Production Cost</th>
                       <th scope="col">Selling Price</th>
-                      <th scope="col"/>
+                      <th scope="col">Salesperson ID</th>
+                      <th scope="col">Shop ID</th>
                     </tr>
                     </thead>
                     <tbody>

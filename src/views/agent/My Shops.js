@@ -25,6 +25,7 @@ import {getDistrictId} from "../../Utils";
 import {connect} from "react-redux";
 import Agent from '../../models/Agent'
 
+//need to implement filter
 class MyShops extends React.Component {
   state = {
     agent_id: null,
@@ -102,7 +103,7 @@ class MyShops extends React.Component {
                 <CardHeader className="bg-transparent border-0">
                   <Row>
                     <Col lg={7}>
-                      <h3 className="text-white mb-0">My Stock</h3>
+                      <h3 className="text-white mb-0">My Shops</h3>
                     </Col>
                     <Col lg={5}>
                       <div>
@@ -110,8 +111,8 @@ class MyShops extends React.Component {
                           className="form-control-alternative"
                           id="firstName"
                           type="text"
-                          placeholder={"Filter by product name..."}
-                          autocomplete = "false"
+                          placeholder={"Filter by shop name..."}
+                          autoComplete = "false"
                           onChange = {this.filter}
                         />
                       </div>

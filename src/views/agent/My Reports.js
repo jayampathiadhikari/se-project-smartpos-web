@@ -2,68 +2,59 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
   Media,
   Table,
   Container,
   Row,
   Col,
-  UncontrolledTooltip, Button, Input
+  Button, Input
 } from "reactstrap";
 // core components
 import Datepicker from "../../components/DateTime";
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
-import {setSimulation, toggleAddRouteModal} from "../../redux/reducers/ui/action";
+import Agent from "../../models/Agent";
 import {connect} from "react-redux";
 
-const data = [
-  {
-    product_id: 'item001',
-    name: 'Maari',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-  {
-    product_id: 'item002',
-    name: 'Nice',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
+// "2020-04-30"
+// "2019-05-22"
+// "2020-04-30"
+// "2020-05-22"
+// "2020-04-24"
+// "2020-04-24" ------
+// "2019-05-24"
+// "2019-05-24"
+// "2019-05-24"
+// "2020-03-24"
+// "2019-05-24"
+// "2020-04-24"
+// "2019-03-24"
+// "2019-04-24"
+// "2020-04-24"
 
-];
+//agent_id: "ySRNCA8E4hacmi9ZNsofSki5Uyv1"
+// name: "chilly powder"
+// product_id: "1"
+// production_cost: 90
+// quantity: 600
+// sales_id: 24
+// salesperson_id: "W9FfmzqWI6QZjGWpRnZOpBhwGM02"
+// selling_price: 100
+// shop_id: 8
+// sold_date: "2020-04-24T00:00:00.000Z"
 
 
 class MyReports extends React.Component {
   state = {
-    agent_id: null,
+    selectedDate:null,
     activePage : 1,
-    initialData:[],
-    data: []
-  };
-
-  componentDidMount() {
-    this.setState({
-      initialData:data,
-      data:data
-    })
-  }
-
-  onClick = (product) => {
-    this.props.history.push({
-      pathname: '/executive/my-stock/add-to-warehouse',
-      state: {product:product}
-    })
+    pageSize: 5,
+    reports:[],
+    data: [],
+    showReports: false
   };
 
   handlePageChange(pageNumber) {
@@ -72,8 +63,10 @@ class MyReports extends React.Component {
   }
 
   renderTableRows = () => {
-    return this.state.data.map((item) => (
-        <tr>
+    const {pageSize, activePage,data} = this.state;
+    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item,index) => (
+        <tr key={index.toString()}>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
@@ -85,13 +78,10 @@ class MyReports extends React.Component {
           </th>
           <td>{item.name}</td>
           <td>{item.quantity}</td>
-          <td>{item.pr_cost}</td>
+          <td>{item.production_cost}</td>
           <td>{item.selling_price}</td>
-          <td className="text-right">
-            <Button color="primary" size={'md'} onClick={()=>{this.onClick(item)}}>
-              +
-            </Button>
-          </td>
+          <td>{item.salesperson_id}</td>
+          <td>{item.shop_id}</td>
         </tr>
       )
     )
@@ -106,11 +96,37 @@ class MyReports extends React.Component {
     });
   };
 
-  getReports = () => {
+  onSelectDate = (e) => {
+    const date = this.formatDate(e.format());
+    this.setState({
+      selectedDate: date
+    });
+  };
 
+  formatDate = (date) => (date.split('T')[0]);
+
+  getReports = async() => {
+    const {selectedDate} = this.state;
+    if(this.state.selectedDate){
+      const res = await Agent.getReports(this.props.user.uid,selectedDate);
+      if(res.data.success){
+        if(res.data.data.length > 0){
+          this.setState({
+            data:res.data.data,
+            showReports:true
+          })
+        }else{
+          alert('NO REPORTS FOR GIVEN DATE')
+        }
+      }else{
+        alert('FETCHING ERROR')
+      }
+      console.log(res.data)
+    }
   };
 
   render() {
+    console.log(this.props.user.uid)
     return (
       <>
         <HeaderNoCards/>
@@ -118,81 +134,72 @@ class MyReports extends React.Component {
         <Container className="mt--7" fluid>
           <Row>
             <Col lg={4}>
-              <Datepicker onChange = {(e) => {console.log(e.format())}}/>
+              <Datepicker onChange = {this.onSelectDate}/>
             </Col>
             <Col lg={4}>
-              <Button size={'md'} onClick={()=>{}}>Get Reports</Button>
+              <Button size={'md'} onClick={this.getReports}>Get Reports</Button>
             </Col>
           </Row>
           {/* Table */}
-          <Row className={"mt-7"}>
-            <div className="col">
-              <Card className="bg-default shadow">
-                <CardHeader className="bg-transparent border-0">
-                  <Row>
-                    <Col lg={7}>
-                      <h3 className="text-white mb-0">My Stock</h3>
-                    </Col>
-                    <Col lg={5}>
-                      <div>
-                        <Input
-                          className="form-control-alternative"
-                          id="firstName"
-                          type="text"
-                          placeholder={"Filter by product name..."}
-                          autocomplete = "false"
-                          onChange = {this.filter}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                </CardHeader>
-                <Table className="align-items-center table-dark table-flush" responsive>
-                  <thead className="thead-dark">
-                  <tr>
-                    <th scope="col">Product ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Production Cost</th>
-                    <th scope="col">Selling Price</th>
-                    <th scope="col"/>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {this.renderTableRows()}
-                  </tbody>
-                </Table>
-                <CardFooter className="py-4 bg-transparent border-0">
-                  <div className="pagination justify-content-end mb-0">
-                    <Pagination
-                      activePage={this.state.activePage}
-                      itemsCountPerPage={5}
-                      totalItemsCount={data.length}
-                      pageRangeDisplayed={3}
-                      onChange={this.handlePageChange.bind(this)}
-                      itemClass="page-item"
-                      linkClass="page-link"
-                    />
-                  </div>
-                </CardFooter>
-              </Card>
-            </div>
-          </Row>
+          {this.state.showReports ?
+            <Row className={"mt-7"}>
+              <div className="col">
+                <Card className="bg-default shadow">
+                  <CardHeader className="bg-transparent border-0">
+                    <Row>
+                      <Col lg={7}>
+                        <h3 className="text-white mb-0">{this.state.selectedDate} Reports</h3>
+                      </Col>
+                    </Row>
+                  </CardHeader>
+                  <Table className="align-items-center table-dark table-flush" responsive>
+                    <thead className="thead-dark">
+                    <tr>
+                      <th scope="col">Product ID</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Production Cost</th>
+                      <th scope="col">Selling Price</th>
+                      <th scope="col">Salesperson ID</th>
+                      <th scope="col">Shop ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.renderTableRows()}
+                    </tbody>
+                  </Table>
+                  <CardFooter className="py-4 bg-transparent border-0">
+                    <div className="pagination justify-content-end mb-0">
+                      <Pagination
+                        activePage={this.state.activePage}
+                        itemsCountPerPage={5}
+                        totalItemsCount={this.state.data.length}
+                        pageRangeDisplayed={3}
+                        onChange={this.handlePageChange.bind(this)}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                      />
+                    </div>
+                  </CardFooter>
+                </Card>
+              </div>
+            </Row> : null
+          }
         </Container>
       </>
     );
   }
 }
 
+
 const mapStateToProps = (state) => ({
   user: state.AuthenticationReducer.user,
 });
 
-const bindAction = (dispatch) => ({
+const bindAction = () => ({
 });
 
 export default connect(
   mapStateToProps,
   bindAction
 )(MyReports);
-

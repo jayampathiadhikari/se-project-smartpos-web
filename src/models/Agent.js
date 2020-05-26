@@ -30,7 +30,22 @@ class Agent{
     })
   };
 
+  getReports = async (agent_id,sold_date) => {
+    return await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/viewreport',{
+      params:{
+        agent_id,
+        sold_date
+      }
+    })
+  };
 
+  getStock = async (agent_id) => {
+    return await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/stock/viewagentstock',{
+      params:{
+        agent_id,
+      }
+    })
+  };
 }
 
 const agent = new Agent();
