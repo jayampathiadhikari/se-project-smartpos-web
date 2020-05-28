@@ -220,6 +220,36 @@ class Executive{
     }
   };
 
+  getTopProductsByMonth = async (owner_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-pr-owner-month',{
+      params: {
+        owner_id
+      }
+    });
+    return res.data;
+  };
+
+  getTopProductsByYear = async (owner_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-pr-owner-year',{
+      params: {
+        owner_id
+      }
+    });
+    return res.data;
+  };
+
+  getTopDistrictsByYear = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-dis-year');
+    return res.data;
+  };
+
+  getTopDistrictsByMonth = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-dis-month');
+    return res.data;
+  };
+
+
+
 }
 
 const executive = new Executive();

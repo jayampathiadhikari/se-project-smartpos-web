@@ -25,6 +25,10 @@ class ExecReports extends React.Component {
     pageSize: 5,
     activePage:1,
     activeButton : '1',
+    productsByMonth : [],
+    productsByYear : [],
+    districtsByMonth : [],
+    districtsByYear: []
   };
 
   componentDidMount = async() =>{
@@ -89,11 +93,95 @@ class ExecReports extends React.Component {
     this.setState({activePage: pageNumber});
   }
 
-  onClick = (e) => {
-    console.log(typeof e.target.value)
+  onClick = async(e) => {
+    const button = e.target.value;
     this.setState({
-      activeButton : e.target.value
-    })
+      activeButton : button
+    });
+    if(button=== '2' && this.state.productsByMonth.length === 0){
+      const productsByMonth = await Executive.getTopProductsByMonth();
+      const productsByYear = await Executive.getTopProductsByYear();
+      if(productsByYear.success && productsByMonth.success){
+        this.setState({
+          productsByMonth: productsByMonth.data,
+          productsByYear: productsByYear.data
+        })
+      }
+      console.log(productsByMonth,productsByYear,'data first')
+    }else if (button === '3' && this.state.districtsByMonth.length === 0){
+      const districtsByMonth = await Executive.getTopProductsByMonth();
+      const districtsByYear = await Executive.getTopProductsByYear();
+      if(districtsByMonth.success && districtsByYear.success){
+        this.setState({
+          districtsByMonth: districtsByMonth.data,
+          districtsByYear: districtsByYear.data
+        })
+      }
+      console.log(districtsByMonth,districtsByYear,'data first d')
+    }
+
+  };
+
+
+  renderTopSellingProducts = () => {
+    return null
+  };
+
+  renderTopSellingDistricts = () => {
+    return null
+  };
+
+  renderAgentwiseSales = () => {
+    return(
+      <Row className='mt-7'>
+        <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+        </Col>
+        <div className="col">
+          <Card className="shadow">
+            <CardHeader className="border-0">
+              <h3 className="mb-0">Reports</h3>
+            </CardHeader>
+            <Table className="align-items-center table-flush" responsive>
+              <thead className="thead-light">
+              <tr >
+                <th scope="col">Name</th>
+                <th scope="col">District</th>
+                <th scope="col"/>
+              </tr>
+              </thead>
+              <tbody>
+              {this.renderTableRows()}
+              </tbody>
+            </Table>
+            <CardFooter className="py-4">
+              <div className="pagination justify-content-end mb-0">
+                <Pagination
+                  activePage={this.state.activePage}
+                  itemsCountPerPage={5}
+                  totalItemsCount={this.state.agentData.length}
+                  pageRangeDisplayed={3}
+                  onChange={this.handlePageChange.bind(this)}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+      </Row>
+    )
+  };
+
+  renderContent = () => {
+    if (this.state.activeButton === '1'){
+      return this.renderAgentwiseSales()
+    }
+    else if (this.state.activeButton === '2'){
+      return this.renderTopSellingProducts()
+
+    }else{
+      return this.renderTopSellingDistricts()
+    }
   };
   render() {
     return (
@@ -111,42 +199,7 @@ class ExecReports extends React.Component {
             </div>
           </Row>
           {/* Table */}
-          <Row>
-            <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
-            </Col>
-            <div className="col">
-              <Card className="shadow">
-                <CardHeader className="border-0">
-                  <h3 className="mb-0">Reports</h3>
-                </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                  <tr >
-                    <th scope="col">Name</th>
-                    <th scope="col">District</th>
-                    <th scope="col"/>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {this.renderTableRows()}
-                  </tbody>
-                </Table>
-                <CardFooter className="py-4">
-                  <div className="pagination justify-content-end mb-0">
-                    <Pagination
-                      activePage={this.state.activePage}
-                      itemsCountPerPage={5}
-                      totalItemsCount={this.state.agentData.length}
-                      pageRangeDisplayed={3}
-                      onChange={this.handlePageChange.bind(this)}
-                      itemClass="page-item"
-                      linkClass="page-link"
-                    />
-                  </div>
-                </CardFooter>
-              </Card>
-            </div>
-          </Row>
+          {this.renderContent()}
         </Container>
       </>
     );
