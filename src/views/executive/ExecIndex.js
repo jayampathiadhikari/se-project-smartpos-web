@@ -30,34 +30,45 @@ import {
 import Header from "components/Headers/Header.js";
 import {connect} from "react-redux";
 import Executive from "../../models/Executive";
-import {graphs} from "../../Utils";
+import CustomDropdown from "../../components/Dropdown";
 
 class ExecIndex extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lineData:{},
-      districtMonthLineData:{},
-      districtYearLineData:{},
+      productID: null,
+      lineData: {},
+      stock: [],
       activeNav: 1,
-      chartExample1Data: "data1"
+      activeNavBar: 1,
+      chartExample1Data: "data1",
+      chartExample2Data: "data1",
+      barData: {}
     };
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
     }
-    this.graphData = {data1:{},
-    data2:{}};
-    this.districtLineData = [];
   }
 
   componentDidMount = async () => {
     const lineData = await Executive.getLineGraphData(this.props.user.uid);
     const districtMonthLineData = await Executive.getDistrictMonthLineData();
     const districtYearLineData = await Executive.getDistrictYearLineData();
-    chartExample1.data1 = (canvas)=> (districtMonthLineData);
-    chartExample1.data2 = (canvas)=>(districtYearLineData);
+    const res = await Executive.getStock();
+    const stock = [];
+    if (res.success) {
+      res.data.forEach((data) => {
+        stock.push({
+          name: data.name,
+          id: data.product_id
+        })
+      })
+    }
+    chartExample1.data1 = (canvas) => (districtMonthLineData);
+    chartExample1.data2 = (canvas) => (districtYearLineData);
     this.setState({
       lineData,
+      stock
     });
   };
 
@@ -68,6 +79,15 @@ class ExecIndex extends React.Component {
       activeNav: index,
       chartExample1Data:
         this.state.chartExample1Data === "data1" ? "data2" : "data1",
+    });
+  };
+
+  toggleNavsBar = (e, index) => {
+    e.preventDefault();
+    this.setState({
+      activeNavBar: index,
+      chartExample2Data:
+        this.state.chartExample2Data === "data1" ? "data2" : "data1",
     });
   };
 
@@ -109,7 +129,7 @@ class ExecIndex extends React.Component {
                       href="#pablo"
                       onClick={e => this.toggleNavs(e, 2)}
                     >
-                      <span className="d-none d-md-block">Week</span>
+                      <span className="d-none d-md-block">Year</span>
                       <span className="d-md-none">W</span>
                     </NavLink>
                   </NavItem>
@@ -125,19 +145,84 @@ class ExecIndex extends React.Component {
                 options={chartExample1.options}
                 getDatasetAtEvent={e => console.log(e)}
               />
-
             </div>
           </CardBody>
         </Card>
       </Col>
     )
-  }
+  };
 
-  ;
+  onSelect = async (product) => {
+    const barData = await Executive.getBarGraphData(this.props.user.uid, product.id);
+    const barDataDistrictMonthly = await Executive.getDistrictMonthBarData(product.id);
+    const barDataDistrictAnnually = await Executive.getDistrictYearBarData(product.id);
+
+    chartExample2.data1 = (canvas) => (barDataDistrictMonthly);
+    chartExample2.data2 = (canvas) => (barDataDistrictAnnually);
+    this.setState({
+      productID: product.id,
+      barData: barData
+    })
+  };
+
+  renderBarGraph = (data) => {
+    return (
+      <Col xl="12">
+        <Card className="shadow">
+          <CardHeader className="bg-transparent">
+            <Row className="align-items-center">
+              <div className="col">
+                <h6 className="text-uppercase text-muted ls-1 mb-1">
+                  Performance
+                </h6>
+                <h2 className="mb-0">Total orders</h2>
+              </div>
+              <div className="col">
+                <Nav className="justify-content-end" pills>
+                  <NavItem>
+                    <NavLink
+                      className={classnames("py-2 px-3", {
+                        active: this.state.activeNavBar === 1
+                      })}
+                      href="#pablo"
+                      onClick={e => this.toggleNavsBar(e, 1)}
+                    >
+                      <span className="d-none d-md-block">Month</span>
+                      <span className="d-md-none">M</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames("py-2 px-3", {
+                        active: this.state.activeNavBar === 2
+                      })}
+                      data-toggle="tab"
+                      href="#pablo"
+                      onClick={e => this.toggleNavsBar(e, 2)}
+                    >
+                      <span className="d-none d-md-block">Year</span>
+                      <span className="d-md-none">W</span>
+                    </NavLink>
+                  </NavItem>
+                </Nav>
+              </div>
+            </Row>
+          </CardHeader>
+          <CardBody>
+            {/* Chart */}
+            <div className="chart">
+              <Bar
+                data={data}
+                options={chartExample2.options}
+              />
+            </div>
+          </CardBody>
+        </Card>
+      </Col>
+    )
+  };
 
   render() {
-    console.log(chartExample1.data1)
-    const {activeNav } = this.state;
     return (
       <>
         <Header/>
@@ -156,31 +241,6 @@ class ExecIndex extends React.Component {
                     </div>
                     <div className="col">
                       <Nav className="justify-content-end" pills>
-                        <NavItem>
-                          <NavLink
-                            className={classnames("py-2 px-3", {
-                              active: this.state.activeNav === 1
-                            })}
-                            href="#pablo"
-                            onClick={e => this.toggleNavs(e, 1)}
-                          >
-                            <span className="d-none d-md-block">Month</span>
-                            <span className="d-md-none">M</span>
-                          </NavLink>
-                        </NavItem>
-                        <NavItem>
-                          <NavLink
-                            className={classnames("py-2 px-3", {
-                              active: this.state.activeNav === 2
-                            })}
-                            data-toggle="tab"
-                            href="#pablo"
-                            onClick={e => this.toggleNavs(e, 2)}
-                          >
-                            <span className="d-none d-md-block">Week</span>
-                            <span className="d-md-none">W</span>
-                          </NavLink>
-                        </NavItem>
                       </Nav>
                     </div>
                   </Row>
@@ -203,31 +263,44 @@ class ExecIndex extends React.Component {
             {this.renderLineGraph(chartExample1[this.state.chartExample1Data])}
           </Row>
 
-
           <Row className="mt-5">
             <Col xl="4">
-              <Card className="shadow">
-                <CardHeader className="bg-transparent">
-                  <Row className="align-items-center">
-                    <div className="col">
-                      <h6 className="text-uppercase text-muted ls-1 mb-1">
-                        Performance
-                      </h6>
-                      <h2 className="mb-0">Total orders</h2>
-                    </div>
-                  </Row>
-                </CardHeader>
-                <CardBody>
-                  {/* Chart */}
-                  <div className="chart">
-                    <Bar
-                      data={this.state.barData}
-                      options={chartExample2.options}
-                    />
-                  </div>
-                </CardBody>
-              </Card>
+              <CustomDropdown data={this.state.stock} initial="Select a product"
+                              disabled={this.state.stock.length === 0} onSelect={this.onSelect}/>
             </Col>
+          </Row>
+
+          <Row className="mt-5">
+            {this.state.productID ?
+              <Col xl="12">
+                <Card className="shadow">
+                  <CardHeader className="bg-transparent">
+                    <Row className="align-items-center">
+                      <div className="col">
+                        <h6 className="text-uppercase text-muted ls-1 mb-1">
+                          Performance
+                        </h6>
+                        <h2 className="mb-0">Total orders</h2>
+                      </div>
+                    </Row>
+                  </CardHeader>
+                  <CardBody>
+                    {/* Chart */}
+                    <div className="chart">
+                      <Bar
+                        data={this.state.barData}
+                        options={chartExample2.options}
+                      />
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col> : null
+            }
+
+          </Row>
+          {/*second graph*/}
+          <Row className="mt-5">
+            {this.state.productID ? this.renderBarGraph(chartExample2[this.state.chartExample2Data]) : null}
           </Row>
         </Container>
       </>
