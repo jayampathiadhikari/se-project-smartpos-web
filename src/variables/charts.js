@@ -359,7 +359,8 @@ let chartExample1 = {
         }
       ]
     };
-  }
+  },
+
 };
 
 // Example 2 of Chart inside src/views/Index.js (Total orders - Card)
@@ -372,7 +373,7 @@ let chartExample2 = {
             callback: function(value) {
               if (!(value % 10)) {
                 //return '$' + value + 'k'
-                return value/1000 + 'k';
+                return value ;
               }
             }
           }
@@ -388,7 +389,7 @@ let chartExample2 = {
           if (data.datasets.length > 1) {
             content += label;
           }
-          content += yLabel/1000 + 'k';
+          content += yLabel;
           return content;
         }
       }
@@ -399,7 +400,7 @@ let chartExample2 = {
     datasets: [
       {
         label: "Sales",
-        data: [25, 20, 30, 22, 17, 29],
+        data: [100, 70, 90, 12, 67, 29],
         maxBarThickness: 10
       }
     ]
@@ -410,9 +411,33 @@ let chartExample2 = {
       {
         label: "Sales",
         data: [25, 20, 30, 22, 17, 29],
-        maxBarThickness: 10
+        maxBarThickness: 20
       }
     ]
+  },
+  data3: canvas => {
+    return {
+      labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      datasets: [
+        {
+          label: "Performance",
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          maxBarThickness: 20
+        }
+      ]
+    };
+  },
+  data4: canvas => {
+    return {
+      labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      datasets: [
+        {
+          label: "Performance",
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          maxBarThickness: 20
+        }
+      ]
+    };
   }
 };
 

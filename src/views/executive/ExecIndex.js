@@ -31,6 +31,7 @@ import Header from "components/Headers/Header.js";
 import {connect} from "react-redux";
 import Executive from "../../models/Executive";
 import CustomDropdown from "../../components/Dropdown";
+import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 
 class ExecIndex extends React.Component {
   constructor(props) {
@@ -42,8 +43,9 @@ class ExecIndex extends React.Component {
       activeNav: 1,
       activeNavBar: 1,
       chartExample1Data: "data1",
-      chartExample2Data: "data1",
-      barData: {}
+      chartExample2Data: "data3",
+      barData: {},
+      productName: ''
     };
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
@@ -87,7 +89,7 @@ class ExecIndex extends React.Component {
     this.setState({
       activeNavBar: index,
       chartExample2Data:
-        this.state.chartExample2Data === "data1" ? "data2" : "data1",
+        this.state.chartExample2Data === "data3" ? "data4" : "data3",
     });
   };
 
@@ -157,9 +159,10 @@ class ExecIndex extends React.Component {
     const barDataDistrictMonthly = await Executive.getDistrictMonthBarData(product.id);
     const barDataDistrictAnnually = await Executive.getDistrictYearBarData(product.id);
 
-    chartExample2.data1 = (canvas) => (barDataDistrictMonthly);
-    chartExample2.data2 = (canvas) => (barDataDistrictAnnually);
+    chartExample2.data3 = (canvas) => (barDataDistrictMonthly);
+    chartExample2.data4 = (canvas) => (barDataDistrictAnnually);
     this.setState({
+      productName: product.name,
       productID: product.id,
       barData: barData
     })
@@ -167,15 +170,18 @@ class ExecIndex extends React.Component {
 
   renderBarGraph = (data) => {
     return (
-      <Col xl="12">
+      <Col className="xl-12">
         <Card className="shadow">
           <CardHeader className="bg-transparent">
             <Row className="align-items-center">
               <div className="col">
                 <h6 className="text-uppercase text-muted ls-1 mb-1">
-                  Performance
+                  District wise Performance
                 </h6>
-                <h2 className="mb-0">Total orders</h2>
+                {this.state.productID ?
+                  <h2 className="mb-0">Total orders of {this.state.productName}</h2> :
+                  <h2 className="mb-0">No product selected</h2>
+                }
               </div>
               <div className="col">
                 <Nav className="justify-content-end" pills>
@@ -214,6 +220,7 @@ class ExecIndex extends React.Component {
               <Bar
                 data={data}
                 options={chartExample2.options}
+                getDatasetAtEvent={e => console.log(e)}
               />
             </div>
           </CardBody>
@@ -225,7 +232,7 @@ class ExecIndex extends React.Component {
   render() {
     return (
       <>
-        <Header/>
+        <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
@@ -264,6 +271,7 @@ class ExecIndex extends React.Component {
           </Row>
 
           <Row className="mt-5">
+
             <Col xl="4">
               <CustomDropdown data={this.state.stock} initial="Select a product"
                               disabled={this.state.stock.length === 0} onSelect={this.onSelect}/>
@@ -271,16 +279,20 @@ class ExecIndex extends React.Component {
           </Row>
 
           <Row className="mt-5">
-            {this.state.productID ?
+            {
               <Col xl="12">
                 <Card className="shadow">
                   <CardHeader className="bg-transparent">
                     <Row className="align-items-center">
                       <div className="col">
                         <h6 className="text-uppercase text-muted ls-1 mb-1">
-                          Performance
+                          Annual Performance
                         </h6>
-                        <h2 className="mb-0">Total orders</h2>
+                        {this.state.productID ?
+                          <h2 className="mb-0">Total orders of {this.state.productName}</h2> :
+                          <h2 className="mb-0">No product selected</h2>
+                        }
+
                       </div>
                     </Row>
                   </CardHeader>
@@ -294,13 +306,13 @@ class ExecIndex extends React.Component {
                     </div>
                   </CardBody>
                 </Card>
-              </Col> : null
+              </Col>
             }
 
           </Row>
           {/*second graph*/}
           <Row className="mt-5">
-            {this.state.productID ? this.renderBarGraph(chartExample2[this.state.chartExample2Data]) : null}
+            {this.renderBarGraph(chartExample2[this.state.chartExample2Data])}
           </Row>
         </Container>
       </>
