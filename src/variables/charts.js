@@ -313,8 +313,8 @@ let chartExample1 = {
           },
           ticks: {
             callback: function(value) {
-              if (!(value % 10)) {
-                return "$" + value + "k";
+              if (!((value/1000) % 10)) {
+                return "Rs " + value/1000 + "k";
               }
             }
           }
@@ -332,7 +332,7 @@ let chartExample1 = {
             content += label;
           }
 
-          content += "$" + yLabel + "k";
+          content += "Rs " + yLabel/1000 + "k";
           return content;
         }
       }
@@ -344,7 +344,7 @@ let chartExample1 = {
       datasets: [
         {
           label: "Performance",
-          data: [0, 20, 10, 30, 15, 40, 20, 60, 60]
+          data: [0, 20, 10.5, 30, 15, 43.25, 20, 60, 60]
         }
       ]
     };
@@ -372,7 +372,7 @@ let chartExample2 = {
             callback: function(value) {
               if (!(value % 10)) {
                 //return '$' + value + 'k'
-                return value;
+                return value/1000 + 'k';
               }
             }
           }
@@ -388,7 +388,7 @@ let chartExample2 = {
           if (data.datasets.length > 1) {
             content += label;
           }
-          content += yLabel;
+          content += yLabel/1000 + 'k';
           return content;
         }
       }

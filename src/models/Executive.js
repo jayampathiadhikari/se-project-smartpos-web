@@ -83,7 +83,134 @@ class Executive{
     return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/owner/declinesuggestion',{
       shop_suggestion_id
     })
-  }
+  };
+
+  getLineGraphData = async (owner_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/ownerlinegraph',{
+      params:{
+        owner_id
+      }
+    });
+    if(res.data.success){
+      return {
+        labels: res.data.data[1].reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: res.data.data[0].reverse()
+          }
+        ]
+      };
+    }
+  };
+
+  getBarGraphData = async (owner_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/ownerbargraph',{
+      params:{
+        owner_id
+      }
+    });
+    if(res.data.success){
+      return {
+        labels: res.data.data[1].reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: res.data.data[0].reverse()
+          }
+        ]
+      };
+    }
+  };
+
+  getDistrictMonthLineData = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-month-graph');
+    if(res.data.success){
+      const dataSet = res.data.data;
+      const labels = [];
+      const dataArray = [];
+      dataSet.forEach(data => {
+        labels.push(data.district_name);
+        dataArray.push(data.total_revenue);
+      });
+      return {
+        labels: labels.reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: dataArray.reverse()
+          }
+        ]
+      };
+    }
+  };
+
+  getDistrictYearLineData = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-yr-graph');
+    if(res.data.success){
+      const dataSet = res.data.data;
+      const labels = [];
+      const dataArray = [];
+      dataSet.forEach(data => {
+        labels.push(data.district_name);
+        dataArray.push(data.total_revenue);
+      });
+      return {
+        labels: labels.reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: dataArray.reverse()
+          }
+        ]
+      };
+    }
+  };
+
+  getDistrictMonthBarData = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-month-bar-graph');
+    if(res.data.success){
+      const dataSet = res.data.data;
+      const labels = [];
+      const dataArray = [];
+      dataSet.forEach(data => {
+        labels.push(data.district_name);
+        dataArray.push(data.total_quantity);
+      });
+      return {
+        labels: labels.reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: dataArray.reverse()
+          }
+        ]
+      };
+    }
+  };
+
+  getDistrictYearBarData = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-yr-bar-graph');
+    if(res.data.success){
+      const dataSet = res.data.data;
+      const labels = [];
+      const dataArray = [];
+      dataSet.forEach(data => {
+        labels.push(data.district_name);
+        dataArray.push(data.total_quantity);
+      });
+      return {
+        labels: labels.reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: dataArray.reverse()
+          }
+        ]
+      };
+    }
+  };
+
 }
 
 const executive = new Executive();
