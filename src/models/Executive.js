@@ -104,10 +104,11 @@ class Executive{
     }
   };
 
-  getBarGraphData = async (owner_id) => {
+  getBarGraphData = async (owner_id,product_id) => {
     const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/ownerbargraph',{
       params:{
-        owner_id
+        owner_id,
+        product_id
       }
     });
     if(res.data.success){
@@ -134,11 +135,11 @@ class Executive{
         dataArray.push(data.total_revenue);
       });
       return {
-        labels: labels.reverse(),
+        labels: labels,
         datasets: [
           {
             label: "Performance",
-            data: dataArray.reverse()
+            data: dataArray
           }
         ]
       };
@@ -156,19 +157,23 @@ class Executive{
         dataArray.push(data.total_revenue);
       });
       return {
-        labels: labels.reverse(),
+        labels: labels,
         datasets: [
           {
             label: "Performance",
-            data: dataArray.reverse()
+            data: dataArray
           }
         ]
       };
     }
   };
 
-  getDistrictMonthBarData = async () => {
-    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-month-bar-graph');
+  getDistrictMonthBarData = async (product_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-month-bar-graph',{
+      params:{
+        product_id
+      }
+    });
     if(res.data.success){
       const dataSet = res.data.data;
       const labels = [];
@@ -189,8 +194,12 @@ class Executive{
     }
   };
 
-  getDistrictYearBarData = async () => {
-    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-yr-bar-graph');
+  getDistrictYearBarData = async (product_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-yr-bar-graph',{
+      params:{
+        product_id
+      }
+    });
     if(res.data.success){
       const dataSet = res.data.data;
       const labels = [];

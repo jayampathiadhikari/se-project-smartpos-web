@@ -290,4 +290,11 @@ export const getDistrictId = (name) => {
   return districtA.id;
 };
 
+export const graphs = {
+
+  getData: (data) => {
+    return data
+  }
+};
+
 //'#f40005'
