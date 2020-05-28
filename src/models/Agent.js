@@ -63,6 +63,43 @@ class Agent{
     })
   };
 
+  getLineGraphData = async (agent_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/agentlinegraph',{
+      params:{
+        agent_id
+      }
+    });
+    if(res.data.success){
+      return {
+        labels: res.data.data[1].reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: res.data.data[0].reverse()
+          }
+        ]
+      };
+    }
+  };
+  getBarGraphData = async (agent_id,product_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/agentbargraph',{
+      params:{
+        agent_id,
+        product_id
+      }
+    });
+    if(res.data.success){
+      return {
+        labels: res.data.data[1].reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: res.data.data[0].reverse()
+          }
+        ]
+      };
+    }
+  };
 }
 
 const agent = new Agent();

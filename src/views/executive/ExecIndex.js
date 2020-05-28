@@ -265,19 +265,18 @@ class ExecIndex extends React.Component {
               </Card>
             </Col>
           </Row>
-
+          {/*second graph*/}
           <Row className="mt-5">
             {this.renderLineGraph(chartExample1[this.state.chartExample1Data])}
           </Row>
 
           <Row className="mt-5">
-
             <Col xl="4">
               <CustomDropdown data={this.state.stock} initial="Select a product"
                               disabled={this.state.stock.length === 0} onSelect={this.onSelect}/>
             </Col>
           </Row>
-
+          {/*bar 1*/}
           <Row className="mt-5">
             {
               <Col xl="12">
@@ -292,7 +291,6 @@ class ExecIndex extends React.Component {
                           <h2 className="mb-0">Total orders of {this.state.productName}</h2> :
                           <h2 className="mb-0">No product selected</h2>
                         }
-
                       </div>
                     </Row>
                   </CardHeader>
@@ -308,8 +306,8 @@ class ExecIndex extends React.Component {
                 </Card>
               </Col>
             }
-
           </Row>
+
           {/*second graph*/}
           <Row className="mt-5">
             {this.renderBarGraph(chartExample2[this.state.chartExample2Data])}
