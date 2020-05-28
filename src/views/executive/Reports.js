@@ -7,13 +7,14 @@ import {
   CardFooter,
   Container,
   Row,
-  Col,Table, Media,UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
+  Col, Table, Media, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Nav, NavItem, NavLink, Button
 } from "reactstrap";
 // core components
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Pagination from "react-js-pagination";
 import Executive from "../../models/Executive";
+import classnames from "classnames";
 
 //id,name,prod cost, selling price,, quantity
 
@@ -22,7 +23,8 @@ class ExecReports extends React.Component {
     agent_id: null,
     agentData: [],
     pageSize: 5,
-    activePage:1
+    activePage:1,
+    activeButton : '1',
   };
 
   componentDidMount = async() =>{
@@ -87,12 +89,27 @@ class ExecReports extends React.Component {
     this.setState({activePage: pageNumber});
   }
 
+  onClick = (e) => {
+    console.log(typeof e.target.value)
+    this.setState({
+      activeButton : e.target.value
+    })
+  };
   render() {
     return (
       <>
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <Row>
+            <div className="col">
+              <span>
+                <Button size={'lg'} value={'1'} color={this.state.activeButton === '1' ? 'primary' : 'secondary'} onClick={this.onClick}>Agentwise Sales</Button>
+                <Button size={'lg'} value={'2'} color={this.state.activeButton === '2' ? 'primary' : 'secondary'} onClick={this.onClick}>Top Selling Products</Button>
+                <Button size={'lg'} value={'3'} color={this.state.activeButton === '3' ? 'primary' : 'secondary'} onClick={this.onClick}>Top Selling Districts</Button>
+            </span>
+            </div>
+          </Row>
           {/* Table */}
           <Row>
             <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
