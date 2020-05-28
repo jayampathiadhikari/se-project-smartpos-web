@@ -100,6 +100,24 @@ class Agent{
       };
     }
   };
+
+  getTopProductsByMonth = async (agent_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-pr-agent-month',{
+      params: {
+        agent_id
+      }
+    });
+    return res.data;
+  };
+
+  getTopProductsByYear = async (agent_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-pr-agent-year',{
+      params: {
+        agent_id
+      }
+    });
+    return res.data;
+  };
 }
 
 const agent = new Agent();

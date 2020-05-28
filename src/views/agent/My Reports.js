@@ -18,6 +18,7 @@ import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Agent from "../../models/Agent";
 import {connect} from "react-redux";
+import Executive from "../../models/Executive";
 
 // "2020-04-30"
 // "2019-05-22"
@@ -54,13 +55,89 @@ class MyReports extends React.Component {
     pageSize: 5,
     reports:[],
     data: [],
-    showReports: false
+    showReports: false,
+    productsByMonth:[],
+    productsByYear:[],
+    products: 'productsByMonth',
+    activeButtonProduct: '1',
+  };
+
+  componentDidMount = async () => {
+    const productsByMonth = await Agent.getTopProductsByMonth(this.props.user.uid);
+    const productsByYear = await Agent.getTopProductsByYear(this.props.user.uid);
+    if (productsByYear.success && productsByMonth.success) {
+      this.setState({
+        productsByMonth: productsByMonth.data,
+        productsByYear: productsByYear.data
+      })
+    }
   };
 
   handlePageChange(pageNumber) {
     console.log(`active page is ${pageNumber}`);
     this.setState({activePage: pageNumber});
   }
+
+  onClickProduct = (e) => {
+    const button = e.target.value;
+    this.setState({
+      activeButtonProduct : button,
+      products :
+        button === '1' ? 'productsByMonth' : 'productsByYear'
+    })
+  };
+
+  renderTopSellingProducts = () => {
+    return (
+      <Row className='mt-7'>
+        <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+        </Col>
+        <div className="col">
+          <Card className="shadow">
+            <CardHeader className="border-0">
+              <Row>
+                <Col lg={5}>
+                  <h3 className="mb-0">Reports</h3>
+                </Col>
+                <Col lg={7}>
+                  <div className="pagination justify-content-end mb-0">
+                    <span>
+                      <Button size={'md'} value={'1'} color={this.state.activeButtonProduct === '1' ? 'primary' : 'secondary'}
+                              onClick={this.onClickProduct}>Last Month</Button>
+                      <Button size={'md'} value={'2'} color={this.state.activeButtonProduct === '2' ? 'primary' : 'secondary'}
+                              onClick={this.onClickProduct}>Last Year</Button>
+                    </span>
+                  </div>
+                </Col>
+              </Row>
+            </CardHeader>
+            <Table className="align-items-center table-flush" responsive>
+              <thead className="thead-light">
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Revenue</th>
+              </tr>
+              </thead>
+              <tbody>
+              {this.state[this.state.products].map((item, index) => (
+                <tr key={index.toString()}>
+                  <td>{item.product_name}</td>
+                  <td>
+                    {item.total_revenue}
+                  </td>
+                </tr>
+              ))}
+              </tbody>
+            </Table>
+            <CardFooter className="py-4">
+              <div className="pagination justify-content-end mb-0">
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+      </Row>
+    )
+  };
 
   renderTableRows = () => {
     const {pageSize, activePage,data} = this.state;
@@ -185,6 +262,7 @@ class MyReports extends React.Component {
               </div>
             </Row> : null
           }
+          {this.renderTopSellingProducts()}
         </Container>
       </>
     );

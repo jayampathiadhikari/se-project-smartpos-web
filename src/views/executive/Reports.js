@@ -14,11 +14,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Nav,
-  NavItem,
-  NavLink,
   Button,
-  Input
 } from "reactstrap";
 // core components
 
@@ -166,9 +162,9 @@ class ExecReports extends React.Component {
                   <div className="pagination justify-content-end mb-0">
                     <span>
                       <Button size={'md'} value={'1'} color={this.state.activeButtonProduct === '1' ? 'primary' : 'secondary'}
-                              onClick={this.onClickProduct}>Month</Button>
+                              onClick={this.onClickProduct}>Last Month</Button>
                       <Button size={'md'} value={'2'} color={this.state.activeButtonProduct === '2' ? 'primary' : 'secondary'}
-                              onClick={this.onClickProduct}>Year</Button>
+                              onClick={this.onClickProduct}>Last Year</Button>
                     </span>
                   </div>
                 </Col>
@@ -228,9 +224,9 @@ class ExecReports extends React.Component {
                   <div className="pagination justify-content-end mb-0">
                     <span>
                       <Button size={'md'} value={'1'} color={this.state.activeButtonDistrict === '1' ? 'primary' : 'secondary'}
-                              onClick={this.onClickDistrict}>Month</Button>
+                              onClick={this.onClickDistrict}>Last Month</Button>
                       <Button size={'md'} value={'2'} color={this.state.activeButtonDistrict === '2' ? 'primary' : 'secondary'}
-                              onClick={this.onClickDistrict}>Year</Button>
+                              onClick={this.onClickDistrict}>Last Year</Button>
                     </span>
                   </div>
                 </Col>
