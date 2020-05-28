@@ -14,6 +14,8 @@ import {
 // core components
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import {connect} from "react-redux";
+import Agent from "../../models/Agent";
 
 //id,name,prod cost, selling price,, quantity
 
@@ -44,8 +46,15 @@ class MyStockAddToWarehouse extends React.Component {
     }
     if(productData.productID === "NO PRODUCT SELECTED"){
       alert("NO PRODUCT SELECTED")
+    }else{
+      this.addToWarehouse(productData);
     }
     console.log(productData);
+  };
+
+  addToWarehouse = async (productData) => {
+      const res = await Agent.addStockToWarehouse(this.props.user.uid,productData.productID,productData.quantity);
+      console.log(res);
   };
 
   render() {
@@ -144,4 +153,16 @@ class MyStockAddToWarehouse extends React.Component {
   }
 }
 
-export default MyStockAddToWarehouse;
+
+const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
+});
+
+const bindAction = () => ({
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(MyStockAddToWarehouse);
+

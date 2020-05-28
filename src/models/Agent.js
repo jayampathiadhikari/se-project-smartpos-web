@@ -46,6 +46,23 @@ class Agent{
       }
     })
   };
+
+  addStockToWarehouse = async (agent_id,product_id,new_quantity) => {
+    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/stock/addtoagentstock',{
+      agent_id,
+      product_id,
+      new_quantity
+    })
+  };
+
+  addStockToSalesperson = async (salesperson_id,product_id,quantity) => {
+    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/stock/addtosalespersonstock',{
+      salesperson_id,
+      product_id,
+      quantity
+    })
+  };
+
 }
 
 const agent = new Agent();

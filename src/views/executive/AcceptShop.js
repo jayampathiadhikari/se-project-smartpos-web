@@ -72,7 +72,7 @@ class AcceptShop extends React.Component {
     console.log(res)
   };
   onClickReject = async (prod_details) => {
-    const res = await Executive.rejectShopSiggestion(prod_details.shop_suggestion_id);
+    const res = await Executive.rejectShopSuggestion(prod_details.shop_suggestion_id);
     console.log(res)
   };
   handlePageChange(pageNumber) {

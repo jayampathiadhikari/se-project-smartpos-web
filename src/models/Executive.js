@@ -79,7 +79,7 @@ class Executive{
     })
   };
 
-  rejectShopSiggestion = async(shop_suggestion_id) => {
+  rejectShopSuggestion = async(shop_suggestion_id) => {
     return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/owner/declinesuggestion',{
       shop_suggestion_id
     })

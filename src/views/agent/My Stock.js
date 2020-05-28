@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
@@ -42,26 +25,6 @@ import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Agent from "../../models/Agent";
 import {connect} from "react-redux";
 
-
-const data = [
-  {
-    product_id: 'item001',
-    name: 'Maari',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-  {
-    product_id: 'item002',
-    name: 'Nice',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-
-];
-
-
 class MyStock extends React.Component {
   state = {
     agent_id: null,
@@ -73,7 +36,7 @@ class MyStock extends React.Component {
 
   componentDidMount = async() => {
     const res = await Agent.getStock(this.props.user.uid);
-    console.log(res.data)
+    console.log(res.data);
     if(res.data.success){
       this.setState({
         initialData:res.data.data,
@@ -188,7 +151,7 @@ class MyStock extends React.Component {
                     <Pagination
                       activePage={this.state.activePage}
                       itemsCountPerPage={5}
-                      totalItemsCount={data.length}
+                      totalItemsCount={this.state.initialData.length}
                       pageRangeDisplayed={3}
                       onChange={this.handlePageChange.bind(this)}
                       itemClass="page-item"

@@ -6,14 +6,15 @@ import AgentProfile from "views/agent/Profile.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
-import Mapbox from "./views/examples/Mapbox3";
+// import Mapbox from "./views/examples/Mapbox3";
 
 //import Icons from "views/examples/Icons.js";
 import Edit from "views/examples/Edit.js";
-import AddUser from "./views/examples/AddUser";
+// import AddUser from "./views/examples/AddUser";
 import ResetPassword from "./views/examples/ResetPassword";
 
 //agent
+import AgentIndex from "./views/agent/AgentIndex";
 import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
 import AgentMap from "./views/agent/Maps";
 import RequestStock from "./views/agent/Request Stock";
@@ -24,6 +25,7 @@ import MyStock from "./views/agent/My Stock";
 import MyStockLoad from "./views/agent/My Stock - Load";
 import MyStockAddToWarehouse from "./views/agent/My Stock - AddToWarehouse";
 //executive
+import ExecIndex from "./views/executive/ExecIndex";
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
 import ExecMap from './views/executive/Maps';
 import StockReq from "./views/executive/StockReq";
@@ -38,38 +40,6 @@ import AcceptShop from "./views/executive/AcceptShop";
 /**
  *changed tables to TestComponent
  */
-
-export var sideBarRoutes = [
-  {
-    path: "/index",
-    name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
-    component: Index,
-    layout: "/admin"
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "ni ni-pin-3 text-orange",
-    component: Mapbox,
-    layout: "/admin"
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/admin"
-  },
-  {
-    path: "/adduser",
-    name: "Add Employee",
-    icon: "ni ni-circle-08 text-pink",
-    component: AddUser,
-    layout: "/admin"
-  }
-
-];
 
 var hiddenRoutes = [
   {
@@ -207,7 +177,7 @@ export const executiveSidebar = [
     path: "/index",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
-    component: Index,
+    component: ExecIndex,
     layout: "/executive"
   },
   {
@@ -273,7 +243,7 @@ export const agentSidebar = [
     path: "/index",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
-    component: Index,
+    component: AgentIndex,
     layout: "/agent"
   },
   {
@@ -329,4 +299,4 @@ export const agentSidebar = [
 
 
 
-export default [...sideBarRoutes,...hiddenRoutes,...executiveSidebar, ...agentSidebar];
+export default [...hiddenRoutes,...executiveSidebar, ...agentSidebar];
