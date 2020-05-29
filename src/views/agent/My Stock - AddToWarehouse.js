@@ -37,7 +37,7 @@ class MyStockAddToWarehouse extends React.Component {
     }
   }
 
-  onSubmit = (e) => {
+  onSubmit = async(e) => {
     e.preventDefault();
     let productData = {};
     for(let i=0; i<3;i++){
@@ -47,7 +47,7 @@ class MyStockAddToWarehouse extends React.Component {
     if(productData.productID === "NO PRODUCT SELECTED"){
       alert("NO PRODUCT SELECTED")
     }else{
-      this.addToWarehouse(productData);
+      await this.addToWarehouse(productData);
     }
     console.log(productData);
   };
@@ -56,6 +56,8 @@ class MyStockAddToWarehouse extends React.Component {
       const res = await Agent.addStockToWarehouse(this.props.user.uid,productData.productID,productData.quantity);
       console.log(res);
   };
+
+
 
   render() {
     return (

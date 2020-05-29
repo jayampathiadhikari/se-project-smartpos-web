@@ -20,20 +20,10 @@ import UserHeader from "components/Headers/UserHeader.js";
 import {createUserWithEmail} from "../../Utils";
 import CustomDropdown from "../../components/Dropdown";
 import {getAgentsByRegion} from "../../Utils";
+import {regions} from "../../constants";
 
+const data = regions;
 
-const data = [
-  {name:'Kegalle',id:'1'},
-  {name:'Colombo',id:'2'},
-  {name:'abcd',id:'3'},
-  {name:'abcd',id:'4'},
-];
-const agentData = [
-  {name:'abcd',id:'1'},
-  {name:'abcd',id:'2'},
-  {name:'abcd',id:'3'},
-  {name:'abcd',id:'4'},
-];
 class AddEmployeeEx extends React.Component {
   state = {
     region:null,

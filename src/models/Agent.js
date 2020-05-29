@@ -56,11 +56,12 @@ class Agent{
   };
 
   addStockToSalesperson = async (salesperson_id,product_id,quantity) => {
-    return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/stock/addtosalespersonstock',{
+    const res =  await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/stock/addtosalespersonstock',{
       salesperson_id,
       product_id,
       quantity
-    })
+    });
+    return res.data;
   };
 
   getLineGraphData = async (agent_id) => {
@@ -131,7 +132,8 @@ class Agent{
       contact_num_land: shopData.land,
       residence_lattitude: shopData.reslat,
       residence_longitude:shopData.reslng,
-      email: shopData.email
+      email: shopData.email,
+      district_id : shopData.districtID
     });
     return res.data
   };

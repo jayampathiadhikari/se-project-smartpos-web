@@ -57,22 +57,31 @@ class AcceptShop extends React.Component {
   };
 
   componentDidMount = async () => {
+    await this.getShops()
+  };
+
+  getShops = async () => {
     const res = await Executive.getShopSuggestion();
-    console.log(res)
     if(res.data.success){
       this.setState({
         data:res.data.data
-      })
+      });
       console.log(res.data.data)
     }
   };
 
   onClickAccept = async (prod_details) => {
     const res = await Executive.acceptShopSuggestion(prod_details.shop_suggestion_id);
+    if(res.data.success){
+      await this.getShops()
+    }
     console.log(res)
   };
   onClickReject = async (prod_details) => {
     const res = await Executive.rejectShopSuggestion(prod_details.shop_suggestion_id);
+    if(res.data.success){
+      await this.getShops()
+    }
     console.log(res)
   };
   handlePageChange(pageNumber) {

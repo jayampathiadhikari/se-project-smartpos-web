@@ -12,6 +12,7 @@ import {
 } from "reactstrap";
 // core components
 
+import Executive from '../../models/Executive';
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 
 //id,name,prod cost, selling price,, quantity
@@ -34,7 +35,7 @@ class StockAddToWarehouse extends React.Component {
     }
   }
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault();
     let productData = {};
     for(let i=0; i<3;i++){
@@ -43,8 +44,11 @@ class StockAddToWarehouse extends React.Component {
     }
     if(productData.productID === "NO PRODUCT SELECTED"){
       alert("NO PRODUCT SELECTED")
+    }else{
+      const res = await Executive.addToWarehouse(productData);
+      console.log(res)
     }
-    console.log(productData);
+
   };
 
   render() {

@@ -126,7 +126,7 @@ class StockSendToAgent extends React.Component {
                     this.seeStock(item.uid, item.firstName)
                   }}
                 >
-                  See Reports
+                  Send Stock
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

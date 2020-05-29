@@ -71,9 +71,7 @@ class MyStockLoad extends React.Component {
   componentDidMount = async() => {
     const uid = this.props.user.uid;
     const result = await getSalespersonByAgent(uid);
-    console.log(result);
     const res = await Agent.getStock(uid);
-    console.log(res.data);
     if(res.data.success){
       this.setState({
         initialData:res.data.data,
@@ -86,6 +84,17 @@ class MyStockLoad extends React.Component {
   onClick = async (product) => {
     if(this.state.salesperson_id){
       const res = await Agent.addStockToSalesperson(this.state.salesperson_id,product.product_id,this.state.loadAmount);
+      console.log(res);
+      if(res.success){
+        const uid = this.props.user.uid;
+        const res = await Agent.getStock(uid);
+        if(res.data.success){
+          this.setState({
+            initialData:res.data.data,
+            data:res.data.data,
+          })
+        }
+      }
       console.log(res)
     }else{
       alert('SELECT SP')

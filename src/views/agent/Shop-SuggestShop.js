@@ -2,7 +2,6 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardBody,
@@ -17,6 +16,8 @@ import Pagination from "react-js-pagination";
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Agent from '../../models/Agent'
+import {getDistrictId} from "../../Utils";
+import {connect} from "react-redux";
 
 //id,name,prod cost, selling price,, quantity
 
@@ -40,6 +41,10 @@ class ShopSuggestShop extends React.Component {
       const attri = e.target[i].id;
       productData[attri] = e.target[i].value
     }
+    const region = this.props.user.region;
+    const districtID = getDistrictId(region);
+    productData.districtID = districtID;
+
     const res = await Agent.suggestShop(productData);
     console.log(res);
 
@@ -255,4 +260,15 @@ class ShopSuggestShop extends React.Component {
   }
 }
 
-export default ShopSuggestShop;
+const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
+});
+
+const bindAction = () => ({
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(ShopSuggestShop);
+
