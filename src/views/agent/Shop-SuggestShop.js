@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
@@ -33,8 +16,14 @@ import {
 import Pagination from "react-js-pagination";
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import Agent from '../../models/Agent'
 
 //id,name,prod cost, selling price,, quantity
+
+// 'name','route_id','latitude','longitude','shop_contact_num','name_with_initial','contact_num_cell','contact_num_land',
+// 'email'
+// 'residence_lattitude',
+// 'residence_longitude',
 
 class ShopSuggestShop extends React.Component {
   state = {
@@ -44,14 +33,16 @@ class ShopSuggestShop extends React.Component {
     activePage:1
   };
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault();
     let productData = {};
-    for(let i=0; i<5;i++){
+    for(let i=0; i<10 ;i++){
       const attri = e.target[i].id;
       productData[attri] = e.target[i].value
     }
-    console.log(productData);
+    const res = await Agent.suggestShop(productData);
+    console.log(res);
+
   };
 
   render() {
@@ -188,6 +179,56 @@ class ShopSuggestShop extends React.Component {
                               id="mobile"
                               type="text"
                               required={true}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="land"
+                            >
+                              Land Phone
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="land"
+                              type="text"
+                              required={false}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="reslat"
+                            >
+                              Residence Latitude
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="reslat"
+                              type="text"
+                              required={true}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="reslng"
+                            >
+                              Residence Longitude
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="reslng"
+                              type="text"
+                              required={false}
                             />
                           </FormGroup>
                         </Col>

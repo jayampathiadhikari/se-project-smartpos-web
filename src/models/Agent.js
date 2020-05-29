@@ -118,6 +118,25 @@ class Agent{
     });
     return res.data;
   };
+
+  suggestShop = async (shopData) => {
+    const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/agent/suggest',{
+      name : shopData.shopName,
+      route_id : null,
+      latitude : shopData.latitude,
+      longitude : shopData.longitude,
+      shop_contact_num : shopData.shopNo,
+      name_with_initial: shopData.owner,
+      contact_num_cell: shopData.mobile,
+      contact_num_land: shopData.land,
+      residence_lattitude: shopData.reslat,
+      residence_longitude:shopData.reslng,
+      email: shopData.email
+    });
+    return res.data
+  };
+
+
 }
 
 const agent = new Agent();
