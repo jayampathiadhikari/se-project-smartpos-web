@@ -53,6 +53,7 @@ class AgentIndex extends React.Component {
   }
 
   componentDidMount = async () => {
+    console.log(this.props.user)
     const lineData = await Agent.getLineGraphData(this.props.user.uid);
     const res = await Agent.getStock(this.props.user.uid);
     const stock = [];
