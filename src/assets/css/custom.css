@@ -24,3 +24,11 @@
     font-family: Open Sans, sans-serif;
     font-weight: bold;
 }
+
+.navbar-collapse .navbar-nav .nav-item:hover{
+    background-color: rgba(0, 185, 247, 0.5);
+}
+
+.navbar-collapse .navbar-nav .nav-item .active{
+    background-color: rgba(0, 185, 247, 0.6);
+}
