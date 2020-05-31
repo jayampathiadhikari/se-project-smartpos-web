@@ -33,6 +33,7 @@ import requiresAuthAgent from './components/RequiresAuthAgent'
 import AgentLayout from "layouts/Agent"
 import AuthLayout from "layouts/Auth.js";
 import ExecutiveLayout from "layouts/Executive";
+import ErrorLayout from "./layouts/Error";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -43,8 +44,9 @@ ReactDOM.render(
           <Route path="/executive" component={requiresAuthExecutive(ExecutiveLayout)} />
           <Route path="/agent" component={requiresAuthAgent(AgentLayout)} />
           <Route path="/auth" render={props => <AuthLayout {...props} />} />
+          <Route path="/error/404" render={props => <ErrorLayout {...props} />} />
           <Redirect from="/" exact to="/auth/login" />
-          <Redirect from="*" to="/auth/register" />
+          <Redirect from="*" to="/error/404" />
         </Switch>
       </BrowserRouter>
     </PersistGate>
