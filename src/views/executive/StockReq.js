@@ -141,6 +141,8 @@ class StockReq extends React.Component {
           invoiceData: newInvoiceData
         })
       }
+    }else{
+
     }
     console.log(res,'SEND');
   };
