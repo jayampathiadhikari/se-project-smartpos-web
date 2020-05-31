@@ -10,7 +10,7 @@ import {
   Container,
   Row,
   Col,
-  Button, Input
+  Button, Input, Spinner, Alert
 } from "reactstrap";
 // core components
 import Pagination from "react-js-pagination";
@@ -21,9 +21,15 @@ import Executive from "../../models/Executive";
 
 class Stock extends React.Component {
   state = {
+    alert:'info',
+    visible: true,
+    processing:true,
+    msg:null,
+
     agent_id: null,
     activePage : 1,
     initialData:[],
+    pageSize:5,
     data: []
   };
 
@@ -33,13 +39,15 @@ class Stock extends React.Component {
     if(res.success){
       this.setState({
         initialData:res.data,
-        data:res.data
+        data:res.data,
+        visible: false,
       })
     }
     else {
       this.setState({
         initialData:[],
-        data:[]
+        data:[],
+        visible: false,
       })
     }
   };
@@ -57,7 +65,9 @@ class Stock extends React.Component {
   }
 
   renderTableRows = () => {
-    return this.state.data.map((item,i) => (
+    const {pageSize, activePage, data} = this.state;
+    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item,i) => (
         <tr key={i.toString()}>
           <th scope="row">
             <Media className="align-items-center">
@@ -97,10 +107,16 @@ class Stock extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
+
           <Row>
             <div className="col">
               <span>
                 <Button size={'lg'} onClick={()=>{this.props.history.push('/executive/my-stock/add-new-product')}}>Add New Product</Button>
+                <Button size={'lg'} onClick={()=>{this.props.history.push('/executive/my-stock/send-to-agent')}}>Send To Agent</Button>
             </span>
             </div>
           </Row>

@@ -2,18 +2,13 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
   Media,
   Table,
   Container,
-  Row,
+  Row, Spinner, Alert,
 } from "reactstrap";
 // core components
 import Pagination from "react-js-pagination";
@@ -24,6 +19,11 @@ import executive from "../../models/Executive";
 
 class MyAgents extends React.Component {
   state = {
+    alert:'info',
+    visible: true,
+    processing:true,
+    msg:null,
+
     agent_id: null,
     current_data: [],
     pageSize: 5,
@@ -35,7 +35,8 @@ class MyAgents extends React.Component {
     const res =  await executive.getAllAgents();
     console.log(res)
     this.setState({
-      agents:res
+      agents:res,
+      visible: false,
     })
   };
 
@@ -78,6 +79,9 @@ class MyAgents extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
           {/* Table */}
           <Row>
             <div className="col">

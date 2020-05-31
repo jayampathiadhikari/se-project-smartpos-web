@@ -18,32 +18,6 @@ import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Executive from "../../models/Executive";
 
 
-const data = [
-  {
-    name: 'agent1',
-    region: 'kegalle',
-    id: 'agent1_id'
-  },
-  {
-    name: 'agent1',
-    region: 'kegalle',
-    id: 'agent1_id'
-  },
-];
-
-const reqData = [
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  },
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  }
-];
-
 class AcceptShop extends React.Component {
   state = {
     data:[],
@@ -57,22 +31,31 @@ class AcceptShop extends React.Component {
   };
 
   componentDidMount = async () => {
+    await this.getShops()
+  };
+
+  getShops = async () => {
     const res = await Executive.getShopSuggestion();
-    console.log(res)
     if(res.data.success){
       this.setState({
         data:res.data.data
-      })
+      });
       console.log(res.data.data)
     }
   };
 
   onClickAccept = async (prod_details) => {
     const res = await Executive.acceptShopSuggestion(prod_details.shop_suggestion_id);
+    if(res.data.success){
+      await this.getShops()
+    }
     console.log(res)
   };
   onClickReject = async (prod_details) => {
-    const res = await Executive.rejectShopSiggestion(prod_details.shop_suggestion_id);
+    const res = await Executive.rejectShopSuggestion(prod_details.shop_suggestion_id);
+    if(res.data.success){
+      await this.getShops()
+    }
     console.log(res)
   };
   handlePageChange(pageNumber) {

@@ -1,16 +1,4 @@
-/*!
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-* Coded by Creative Tim
-=========================================================
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 import React from "react";
-import FIREBASE from "../../firebase";
 // reactstrap components
 import {
   Button,
@@ -24,30 +12,14 @@ import {
   Row,
   Col,
   Spinner,
-  DropdownItem,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu, Alert
+  Alert
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import {createUserWithEmail, getCurrentAgentData} from "../../Utils";
-import CustomDropdown from "../../components/Dropdown";
-import {getCurrentExecData,getAgentsByRegion} from "../../Utils";
+import {connect} from "react-redux";
 
 
-const data = [
-  {name:'Kegalle',id:'1'},
-  {name:'Colombo',id:'2'},
-  {name:'abcd',id:'3'},
-  {name:'abcd',id:'4'},
-];
-const agentData = [
-  {name:'abcd',id:'1'},
-  {name:'abcd',id:'2'},
-  {name:'abcd',id:'3'},
-  {name:'abcd',id:'4'},
-];
 class AddEmployeeAgent extends React.Component {
   state = {
     alert:'info',
@@ -73,7 +45,7 @@ class AddEmployeeAgent extends React.Component {
         break
       }
     }
-    const {uid,region} = await getCurrentAgentData();
+    const {uid,region} = this.props.user;
     userData['region'] = region;
     userData['type'] = 'salesperson';
     userData['supervisorUid'] = uid;
@@ -268,4 +240,14 @@ class AddEmployeeAgent extends React.Component {
   }
 }
 
-export default AddEmployeeAgent;
+
+const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
+});
+
+const bindAction = (dispatch) => ({});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(AddEmployeeAgent);

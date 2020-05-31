@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 const Chart = require("chart.js");
 //
 // Chart extension for making the bars rounded
@@ -115,7 +98,7 @@ Chart.elements.Rectangle.prototype.draw = function() {
     let x = corners[1][0];
     let y = corners[1][1];
     // eslint-disable-next-line
-    var radius: any = cornerRadius;
+    var radius = cornerRadius;
 
     // Fix radius being too large
     if (radius > height / 2) {
@@ -313,8 +296,8 @@ let chartExample1 = {
           },
           ticks: {
             callback: function(value) {
-              if (!(value % 10)) {
-                return "$" + value + "k";
+              if (!((value/1000) % 10)) {
+                return "Rs " + value/1000 + "k";
               }
             }
           }
@@ -332,7 +315,7 @@ let chartExample1 = {
             content += label;
           }
 
-          content += "$" + yLabel + "k";
+          content += "Rs " + yLabel/1000 + "k";
           return content;
         }
       }
@@ -344,7 +327,7 @@ let chartExample1 = {
       datasets: [
         {
           label: "Performance",
-          data: [0, 20, 10, 30, 15, 40, 20, 60, 60]
+          data: [0, 20, 10.5, 30, 15, 43.25, 20, 60, 60]
         }
       ]
     };
@@ -359,7 +342,8 @@ let chartExample1 = {
         }
       ]
     };
-  }
+  },
+
 };
 
 // Example 2 of Chart inside src/views/Index.js (Total orders - Card)
@@ -372,7 +356,7 @@ let chartExample2 = {
             callback: function(value) {
               if (!(value % 10)) {
                 //return '$' + value + 'k'
-                return value;
+                return value ;
               }
             }
           }
@@ -394,15 +378,49 @@ let chartExample2 = {
       }
     }
   },
-  data: {
+  data1: {
+    labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Sales",
+        data: [100, 70, 90, 12, 67, 29],
+        maxBarThickness: 10
+      }
+    ]
+  },
+  data2:{
     labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
       {
         label: "Sales",
         data: [25, 20, 30, 22, 17, 29],
-        maxBarThickness: 10
+        maxBarThickness: 20
       }
     ]
+  },
+  data3: canvas => {
+    return {
+      labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      datasets: [
+        {
+          label: "Performance",
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          maxBarThickness: 20
+        }
+      ]
+    };
+  },
+  data4: canvas => {
+    return {
+      labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      datasets: [
+        {
+          label: "Performance",
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          maxBarThickness: 20
+        }
+      ]
+    };
   }
 };
 

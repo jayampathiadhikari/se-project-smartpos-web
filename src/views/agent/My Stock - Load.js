@@ -40,26 +40,9 @@ import Datepicker from "../../components/DateTime";
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import CustomDropdown from "../../components/Dropdown";
-
-
-
-const data = [
-  {
-    product_id: 'item001',
-    name: 'Maari',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-  {
-    product_id: 'item002',
-    name: 'Nice',
-    quantity: 1000,
-    pr_cost: 10,
-    selling_price: 30
-  },
-
-];
+import Agent from "../../models/Agent";
+import {connect} from "react-redux";
+import {getSalespersonByAgent} from "../../Utils";
 
 const salesperson =  [
   {
@@ -78,21 +61,45 @@ class MyStockLoad extends React.Component {
     agent_id: null,
     activePage : 1,
     initialData:[],
-    data: []
+    pageSize:5,
+    data: [],
+    salesperson:[],
+    loadAmount:null,
+    salesperson_id:null
   };
 
-  componentDidMount() {
-    this.setState({
-      initialData:data,
-      data:data
-    })
-  }
+  componentDidMount = async() => {
+    const uid = this.props.user.uid;
+    const result = await getSalespersonByAgent(uid);
+    const res = await Agent.getStock(uid);
+    if(res.data.success){
+      this.setState({
+        initialData:res.data.data,
+        data:res.data.data,
+        salesperson:result
+      })
+    }
+  };
 
-  onClick = (product) => {
-    this.props.history.push({
-      pathname: '/executive/my-stock/add-to-warehouse',
-      state: {product:product}
-    })
+  onClick = async (product) => {
+    if(this.state.salesperson_id){
+      const res = await Agent.addStockToSalesperson(this.state.salesperson_id,product.product_id,this.state.loadAmount);
+      console.log(res);
+      if(res.success){
+        const uid = this.props.user.uid;
+        const res = await Agent.getStock(uid);
+        if(res.data.success){
+          this.setState({
+            initialData:res.data.data,
+            data:res.data.data,
+          })
+        }
+      }
+      console.log(res)
+    }else{
+      alert('SELECT SP')
+    }
+
   };
 
   handlePageChange(pageNumber) {
@@ -100,9 +107,17 @@ class MyStockLoad extends React.Component {
     this.setState({activePage: pageNumber});
   }
 
+  onChange = (e) => {
+    this.setState({
+      loadAmount:e.target.value
+    })
+  };
+
   renderTableRows = () => {
-    return this.state.data.map((item) => (
-        <tr>
+    const {pageSize, activePage,data} = this.state;
+    const pagedArray = data.slice(pageSize*(activePage-1),pageSize*activePage);
+    return pagedArray.map((item,index) => (
+        <tr key={index.toString()}>
           <th scope="row">
             <Media className="align-items-center">
               <Media>
@@ -121,12 +136,12 @@ class MyStockLoad extends React.Component {
               type="text"
               required={true}
               style={{maxWidth:90}}
+              onChange = {this.onChange}
             />
           </td>
-
           <td className="text-right">
             <Button color="primary" size={'md'} onClick={()=>{this.onClick(item)}}>
-              +
+              Load
             </Button>
           </td>
         </tr>
@@ -144,6 +159,9 @@ class MyStockLoad extends React.Component {
   };
 
   onSelect = (sp) => {
+    this.setState({
+      salesperson_id: sp.id
+    });
     console.log(sp.name,sp.id)
   };
 
@@ -155,7 +173,7 @@ class MyStockLoad extends React.Component {
         <Container className="mt--7" fluid>
           <Row>
             <div className="col">
-              <CustomDropdown data = {salesperson} initial={"SELECT SALESPERSON"} onSelect={this.onSelect}/>
+              <CustomDropdown data = {this.state.salesperson} initial={"SELECT SALESPERSON"} onSelect={this.onSelect}/>
             </div>
 
           </Row>
@@ -175,7 +193,7 @@ class MyStockLoad extends React.Component {
                           id="firstName"
                           type="text"
                           placeholder={"Filter by product name..."}
-                          autocomplete = "false"
+                          autoComplete = "false"
                           onChange = {this.filter}
                         />
                       </div>
@@ -201,7 +219,7 @@ class MyStockLoad extends React.Component {
                     <Pagination
                       activePage={this.state.activePage}
                       itemsCountPerPage={5}
-                      totalItemsCount={data.length}
+                      totalItemsCount={this.state.initialData.length}
                       pageRangeDisplayed={3}
                       onChange={this.handlePageChange.bind(this)}
                       itemClass="page-item"
@@ -218,4 +236,15 @@ class MyStockLoad extends React.Component {
   }
 }
 
-export default MyStockLoad;
+const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
+});
+
+const bindAction = () => ({
+});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(MyStockLoad);
+

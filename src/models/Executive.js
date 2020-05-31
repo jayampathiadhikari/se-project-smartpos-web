@@ -58,7 +58,7 @@ class Executive{
       product_id,
       quantity
     })
-  }
+  };
 
   getReports = async (agent_id,sold_date) => {
     return await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/viewreport',{
@@ -79,11 +79,186 @@ class Executive{
     })
   };
 
-  rejectShopSiggestion = async(shop_suggestion_id) => {
+  rejectShopSuggestion = async(shop_suggestion_id) => {
     return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/owner/declinesuggestion',{
       shop_suggestion_id
     })
-  }
+  };
+
+  getLineGraphData = async (owner_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/ownerlinegraph',{
+      params:{
+        owner_id
+      }
+    });
+    if(res.data.success){
+      return {
+        labels: res.data.data[1].reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: res.data.data[0].reverse()
+          }
+        ]
+      };
+    }
+  };
+
+  getBarGraphData = async (owner_id,product_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/ownerbargraph',{
+      params:{
+        owner_id,
+        product_id
+      }
+    });
+    if(res.data.success){
+      return {
+        labels: res.data.data[1].reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: res.data.data[0].reverse()
+          }
+        ]
+      };
+    }
+  };
+
+  getDistrictMonthLineData = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-month-graph');
+    if(res.data.success){
+      const dataSet = res.data.data;
+      const labels = [];
+      const dataArray = [];
+      dataSet.forEach(data => {
+        labels.push(data.district_name);
+        dataArray.push(data.total_revenue);
+      });
+      return {
+        labels: labels,
+        datasets: [
+          {
+            label: "Performance",
+            data: dataArray
+          }
+        ]
+      };
+    }
+  };
+
+  getDistrictYearLineData = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-yr-graph');
+    if(res.data.success){
+      const dataSet = res.data.data;
+      const labels = [];
+      const dataArray = [];
+      dataSet.forEach(data => {
+        labels.push(data.district_name);
+        dataArray.push(data.total_revenue);
+      });
+      return {
+        labels: labels,
+        datasets: [
+          {
+            label: "Performance",
+            data: dataArray
+          }
+        ]
+      };
+    }
+  };
+
+  getDistrictMonthBarData = async (product_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-month-bar-graph',{
+      params:{
+        product_id
+      }
+    });
+    if(res.data.success){
+      const dataSet = res.data.data;
+      const labels = [];
+      const dataArray = [];
+      dataSet.forEach(data => {
+        labels.push(data.district_name);
+        dataArray.push(data.total_quantity);
+      });
+      return {
+        labels: labels.reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: dataArray.reverse()
+          }
+        ]
+      };
+    }
+  };
+
+  getDistrictYearBarData = async (product_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/graph/dis-yr-bar-graph',{
+      params:{
+        product_id
+      }
+    });
+    if(res.data.success){
+      const dataSet = res.data.data;
+      const labels = [];
+      const dataArray = [];
+      dataSet.forEach(data => {
+        labels.push(data.district_name);
+        dataArray.push(data.total_quantity);
+      });
+      return {
+        labels: labels.reverse(),
+        datasets: [
+          {
+            label: "Performance",
+            data: dataArray.reverse()
+          }
+        ]
+      };
+    }
+  };
+
+  getTopProductsByMonth = async (owner_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-pr-owner-month',{
+      params: {
+        owner_id
+      }
+    });
+    return res.data;
+  };
+
+  getTopProductsByYear = async (owner_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-pr-owner-year',{
+      params: {
+        owner_id
+      }
+    });
+    return res.data;
+  };
+
+  getTopDistrictsByYear = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-dis-year');
+    return res.data;
+  };
+
+  getTopDistrictsByMonth = async () => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/report/top-dis-month');
+    return res.data;
+  };
+
+  addToWarehouse = async (productData) => {
+    //quantity, product_id
+    const res =  await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/product/additems',{
+      quantity: productData.quantity,
+      product_id: productData.productID
+    });
+    return res.data;
+  };
+
+
+
 }
 
 const executive = new Executive();

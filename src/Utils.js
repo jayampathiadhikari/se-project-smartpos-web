@@ -4,22 +4,6 @@ import 'firebase/functions';
 import {MAPBOX_TOKEN} from "./config";
 import {regions, Regions} from './constants';
 
-import User from './models/User';
-
-// export const createUserWithEmail2 = async (email,password,json) => {
-//   try{
-//     await FIREBASE_SEC.auth().createUserWithEmailAndPassword(email, password);
-//     json.uid = FIREBASE_SEC.auth().currentUser.uid;
-//     FIREBASE_SEC.auth().signOut();
-//     await FIREBASE.firestore().collection('users').add(json);
-//     return {success:true}
-//   }catch (e) {
-//     console.log(e,'ERROR');
-//     console.log(e.response,'ERROR RESPONSE');
-//     return {success:false, error:e}
-//   }
-// };
-
 export const createUserWithEmail = async (data) => {
   try {
     const addClient = FIREBASE.functions().httpsCallable('addUser');
@@ -30,23 +14,18 @@ export const createUserWithEmail = async (data) => {
             const type = result.data.data.type;
             const district_id = getDistrictId(result.data.data.region);
             if (type === 'agent'){
-              await axios.post('https://se-smartpos-backend.herokuapp.com/employee/registeragent', {
+              await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/employee/registeragent', {
                 owner_id: result.data.data.supervisorUid,
                 employee_id: result.data.data.uid,
                 district_id: district_id
               });
             }else if(type === 'salesperson'){
-              await axios.post('https://se-smartpos-backend.herokuapp.com/employee/registersalesperson', {
+              await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/employee/registersalesperson', {
                 agent_id: result.data.data.supervisorUid,
                 employee_id: result.data.data.uid,
                 district_id: district_id
               });
             }
-            // await axios.post('https://se-smartpos-backend.herokuapp.com/employee/register', {
-            //   type: result.data.data.type,
-            //   employee_id: result.data.data.uid,
-            //   district_id: district_id
-            // });
             await FIREBASE.auth().sendPasswordResetEmail(data.email);
             return {success: true}
           } catch (e) {
@@ -288,6 +267,13 @@ export const getDistrictId = (name) => {
   });
   console.log(districtA, 'GET DISTRICT ID');
   return districtA.id;
+};
+
+export const graphs = {
+
+  getData: (data) => {
+    return data
+  }
 };
 
 //'#f40005'
