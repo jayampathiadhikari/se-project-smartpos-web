@@ -19,38 +19,56 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col
+  Col, Spinner, Container
 } from "reactstrap";
 
 import {setAgentLogin, setExecutiveLogin, setSignInStatus, setUser} from "../../redux/reducers/authentication/action";
+import {toast, ToastContainer} from "react-toastify";
 
 
 class Login extends React.Component {
   state = {
+    alert:'info',
+    visible: false,
+    processing:true,
+    msg:null,
+
     email:'',
     password:'',
     remember: true,
-    visible:false
+
   };
 
   login = async() => {
+    this.setState({
+      visible:true
+    });
     const res = await checkAuthentication(this.state.email,this.state.password);
-    console.log(res);
     if(res.success){
       this.props.setUser(res.user);
       if(res.type === 'exec'){
+        this.setState({
+          visible:false
+        });
         this.props.setIsExecutive(true);
-        setTimeout(()=>{this.props.history.push('/executive/dashboard')},100);
+        setTimeout(()=>{this.props.history.push('/executive/dashboard')},10);
       }else if(res.type === 'agent'){
-        console.log('AGENT');
+        this.setState({
+          visible:false
+        });
         this.props.setIsAgent(true);
-        setTimeout(()=>{this.props.history.push('/agent/index');},100);
+        setTimeout(()=>{this.props.history.push('/agent/index');},10);
       }
-      console.log(res.type);
+
     }else{
-      this.showAlert()
+      toast.error(` Login Failed, Check email or password`,{
+        position:"bottom-left"
+      });
+      this.setState({
+        visible:false
+      });
     }
-    // this.checkForAuthentication(this.state.email,this.state.password)
+
   };
 
   onChange = (e) => {
@@ -62,29 +80,22 @@ class Login extends React.Component {
     })
   };
 
-  checkForAuthentication = (email,password) => {
-    console.log('inside');
-    if(email==='jayampathiadhikari@gmail.com' && password==='Windows8#'){
-      this.props.setLogin(true);
-      setTimeout(()=>{this.props.history.push('/admin/dashboard');},500);
-    }else{
-      this.showAlert()
-    }
-  };
-
-  showAlert = ()=>{
-    this.setState({visible:true},()=>{
-      window.setTimeout(()=>{
-        this.setState({visible:false})
-      },2000)
-    });
-  };
 
   render() {
     return (
       <>
-        <Alert color="warning" isOpen={this.state.visible} style={{position:'absolute',left:'43%',top:500,zIndex:999}}>
-          Wrong Email or Password !
+        <ToastContainer
+          position="top-right"
+          autoClose={10000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover/>
+        <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+          {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
         </Alert>
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0 ">

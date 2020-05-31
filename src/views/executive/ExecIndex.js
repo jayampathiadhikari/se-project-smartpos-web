@@ -105,9 +105,6 @@ class ExecIndex extends React.Component {
     return (
       <Col className="mb-5 mb-xl-0" xl="12">
 
-        <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
-          {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
-        </Alert>
 
         <Card className="bg-gradient-default shadow">
           <CardHeader className="bg-transparent">
@@ -245,6 +242,9 @@ class ExecIndex extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
           <Row>
             <Col className="mb-5 mb-xl-0" xl="12">
               <Card className="bg-gradient-default shadow">
