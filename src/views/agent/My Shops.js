@@ -16,7 +16,7 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledTooltip, Button, Input
+  UncontrolledTooltip, Button, Input, Spinner, Alert
 } from "reactstrap";
 // core components
 import Pagination from "react-js-pagination";
@@ -24,10 +24,14 @@ import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import {getDistrictId} from "../../Utils";
 import {connect} from "react-redux";
 import Agent from '../../models/Agent'
+import {toast, ToastContainer} from "react-toastify";
 
 //need to implement filter
 class MyShops extends React.Component {
   state = {
+    alert:'info',
+    visible: true,
+
     agent_id: null,
     activePage : 1,
     pageSize:5,
@@ -38,10 +42,22 @@ class MyShops extends React.Component {
   componentDidMount = async () => {
     const res = await Agent.getShops(getDistrictId(this.props.user.region));
     if(res.data.success){
+      if(res.data.data.length === 0){
+        toast.warn(` You have no shops`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
+      }
       this.setState({
         initialData:res.data.data,
-        data:res.data.data
+        data:res.data.data,
+        visible: false
       })
+    }else{
+      toast.error(` Something went wrong`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
   };
 
@@ -89,6 +105,19 @@ class MyShops extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={10000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={'info'} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            <Spinner style={{ width: '3rem', height: '3rem' }} />
+          </Alert>
           <Row>
             <div className="col">
               <span>

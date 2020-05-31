@@ -58,8 +58,6 @@ class RequestStock extends React.Component {
   state = {
     alert:'info',
     visible: true,
-    processing:true,
-    msg:null,
 
     agent_id: null,
     activePage: 1,
@@ -217,7 +215,7 @@ class RequestStock extends React.Component {
         <Container className="mt--7" fluid>
           <ToastContainer
             position="top-right"
-            autoClose={10000}
+            autoClose={3000}
             hideProgressBar={true}
             newestOnTop={false}
             closeOnClick
@@ -225,8 +223,8 @@ class RequestStock extends React.Component {
             pauseOnFocusLoss
             draggable
             pauseOnHover/>
-          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
-            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          <Alert color={'info'} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            <Spinner style={{ width: '3rem', height: '3rem' }} />
           </Alert>
           {/* Table */}
           {this.state.data.length > 0 ? this.renderInvoiceTable() : null}
