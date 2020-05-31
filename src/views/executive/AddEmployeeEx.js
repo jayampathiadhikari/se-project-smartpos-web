@@ -56,7 +56,6 @@ class AddEmployeeEx extends React.Component {
       userData['type'] = 'salesperson';
       userData['supervisorUid'] = this.state.agent;
     }
-    console.log(userData);
     const res = await createUserWithEmail(userData);
     if(res.success){
       this.setState({

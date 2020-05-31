@@ -10,7 +10,7 @@ import {
   Container,
   Row,
   Col,
-  Button, Input
+  Button, Input, Alert, Spinner
 } from "reactstrap";
 // core components
 import Datepicker from "../../components/DateTime";
@@ -18,7 +18,7 @@ import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Agent from "../../models/Agent";
 import {connect} from "react-redux";
-import Executive from "../../models/Executive";
+import {toast, ToastContainer} from "react-toastify";
 
 // "2020-04-30"
 // "2019-05-22"
@@ -50,6 +50,8 @@ import Executive from "../../models/Executive";
 
 class MyReports extends React.Component {
   state = {
+    visible: true,
+
     selectedDate:null,
     activePage : 1,
     pageSize: 5,
@@ -68,13 +70,18 @@ class MyReports extends React.Component {
     if (productsByYear.success && productsByMonth.success) {
       this.setState({
         productsByMonth: productsByMonth.data,
-        productsByYear: productsByYear.data
+        productsByYear: productsByYear.data,
+        visible:false
       })
+    }else{
+      toast.error(` Something went wrong`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
   };
 
   handlePageChange(pageNumber) {
-    console.log(`active page is ${pageNumber}`);
     this.setState({activePage: pageNumber});
   }
 
@@ -193,22 +200,45 @@ class MyReports extends React.Component {
             showReports:true
           })
         }else{
-          alert('NO REPORTS FOR GIVEN DATE')
+          toast.error(` No reports for selected date`,{
+            autoClose:false,
+            position:"bottom-left"
+          });
         }
       }else{
-        alert('FETCHING ERROR')
+        toast.error(` Something went wrong`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
       }
-      console.log(res.data)
+
+    }else{
+      toast.error(` No date selected`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
   };
 
   render() {
-    console.log(this.props.user.uid)
     return (
       <>
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={'info'} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            <Spinner style={{ width: '3rem', height: '3rem' }} />
+          </Alert>
           <Row>
             <Col lg={4}>
               <Datepicker onChange = {this.onSelectDate}/>

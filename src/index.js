@@ -24,7 +24,8 @@ import { PersistGate } from 'redux-persist/es/integration/react';
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
-
+import 'react-toastify/dist/ReactToastify.css';
+import "assets/css/custom.css"
 // import requiresAuth from './components/RequiresAuth';
 import requiresAuthExecutive from './components/RequiresAuthExecutive';
 import requiresAuthAgent from './components/RequiresAuthAgent'
@@ -32,6 +33,7 @@ import requiresAuthAgent from './components/RequiresAuthAgent'
 import AgentLayout from "layouts/Agent"
 import AuthLayout from "layouts/Auth.js";
 import ExecutiveLayout from "layouts/Executive";
+import ErrorLayout from "./layouts/Error";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -42,8 +44,9 @@ ReactDOM.render(
           <Route path="/executive" component={requiresAuthExecutive(ExecutiveLayout)} />
           <Route path="/agent" component={requiresAuthAgent(AgentLayout)} />
           <Route path="/auth" render={props => <AuthLayout {...props} />} />
-          <Redirect from="/" to="/auth/login" />
-
+          <Route path="/error/404" render={props => <ErrorLayout {...props} />} />
+          <Redirect from="/" exact to="/auth/login" />
+          <Redirect from="*" to="/error/404" />
         </Switch>
       </BrowserRouter>
     </PersistGate>

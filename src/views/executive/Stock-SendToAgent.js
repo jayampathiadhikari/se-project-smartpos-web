@@ -14,6 +14,7 @@ import {
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Pagination from "react-js-pagination";
 import Executive from "../../models/Executive";
+import {toast, ToastContainer} from "react-toastify";
 
 //id,name,prod cost, selling price,, quantity
 
@@ -35,7 +36,7 @@ class StockSendToAgent extends React.Component {
     amount: null,
     filter: null
   };
-
+  target = null;
   componentDidMount = async () => {
     const res = await Executive.getAllAgents();
     this.setState({
@@ -46,18 +47,23 @@ class StockSendToAgent extends React.Component {
   };
 
   seeStock = async (agent_id, agent_name) => {
+    this.setState({
+      visible: true
+    });
     const res = await Executive.getStock();
     if (res.success) {
       this.setState({
         agentID: agent_id,
         agentName: agent_name,
         initialData: res.data,
-        data: res.data
+        data: res.data,
+        visible: false
       })
     } else {
       this.setState({
         initialData: [],
-        data: []
+        data: [],
+        visible: false
       })
     }
   };
@@ -66,7 +72,12 @@ class StockSendToAgent extends React.Component {
     const {agentID, amount} = this.state;
     if (item.quantity >= amount) {
       const res = await Executive.sendStock(agentID, item.product_id, amount);
+      console.log(res);
       if (res.data.success) {
+
+        toast.success(` ${item.name} Sending Successful`,{toastId:item.product_id});
+        this.target.value = null;
+
         const res = await Executive.getStock();
         if (res.success) {
           if(this.state.filter){
@@ -85,13 +96,21 @@ class StockSendToAgent extends React.Component {
               data:res.data
             })
           }
-
         }
-
+      }else{
+        this.target.value = null;
+        toast.error(` Already sent for today`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
       }
-      console.log(res);
     } else {
-      alert('NO STOCK')
+      this.target.value = null;
+      toast.error(` Sending Process Failed, Stock has low amount than selected amount`,{
+        toastId:item.product_id,
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
 
 
@@ -143,6 +162,7 @@ class StockSendToAgent extends React.Component {
   };
 
   onChange = (e) => {
+    this.target = e.target;
     this.setState({
       amount: e.target.value
     })
@@ -268,6 +288,17 @@ class StockSendToAgent extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
 
           <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
             {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}

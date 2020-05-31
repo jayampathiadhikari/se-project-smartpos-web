@@ -16,7 +16,7 @@ import {
   Nav,
   Container,
   Row,
-  Col
+  Col, Spinner, Alert
 } from "reactstrap";
 
 // core components
@@ -31,12 +31,18 @@ import {connect} from "react-redux";
 import Agent from "../../models/Agent";
 import CustomDropdown from "../../components/Dropdown";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import {toast} from "react-toastify";
 
 
 class AgentIndex extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      alert:'info',
+      visible: true,
+      processing:true,
+      msg:null,
+
       productID: null,
       lineData: {},
       stock: [],
@@ -53,7 +59,6 @@ class AgentIndex extends React.Component {
   }
 
   componentDidMount = async () => {
-    console.log(this.props.user)
     const lineData = await Agent.getLineGraphData(this.props.user.uid);
     const res = await Agent.getStock(this.props.user.uid);
     const stock = [];
@@ -64,10 +69,15 @@ class AgentIndex extends React.Component {
           id: data.product_id
         })
       })
+    }else {
+      toast.error(` Something went wrong`,{
+        position:"bottom-left"
+      });
     }
     this.setState({
       lineData,
-      stock
+      stock,
+      visible:false
     });
   };
 
@@ -87,6 +97,9 @@ class AgentIndex extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
           <Row>
             <Col className="mb-5 mb-xl-0" xl="12">
               <Card className="bg-gradient-default shadow">

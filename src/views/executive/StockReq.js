@@ -20,7 +20,7 @@ import {
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Executive from "../../models/Executive";
-
+import { ToastContainer, toast } from 'react-toastify';
 
 
 class StockReq extends React.Component {
@@ -117,6 +117,7 @@ class StockReq extends React.Component {
     const {invoiceData,agentID} = this.state;
     const res = await Executive.sendRequest(agentID,prod_details.product_id,prod_details.quantity);
     if(res.data.success){
+      toast.success(` ${prod_details.product_id} Sending Successful`,{toastId:prod_details.product_id});
       const index = invoiceData.indexOf(prod_details);
       const newInvoiceData = invoiceData;
       newInvoiceData.splice(index,1);
@@ -125,14 +126,22 @@ class StockReq extends React.Component {
           invoiceData: newInvoiceData
         })
       }
+    }else{
+      toast.error(` ${prod_details.product_id} Process Failed`,{
+        toastId:prod_details.product_id,
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
-    console.log(res,'SEND');
+
   };
 
   onClickReject = async(prod_details) => {
     const {invoiceData} = this.state;
-    const res = await Executive.rejectRequest(prod_details.requesting_invoice_items_id)
+    const res = await Executive.rejectRequest(prod_details.requesting_invoice_items_id);
+    console.log(res);
     if(res.data.success){
+      toast.warn(` Request Rejected Successfully`,{toastId:prod_details.product_id});
       const index = invoiceData.indexOf(prod_details);
       const newInvoiceData = invoiceData;
       newInvoiceData.splice(index,1);
@@ -141,8 +150,14 @@ class StockReq extends React.Component {
           invoiceData: newInvoiceData
         })
       }
+    }else{
+      toast.error(` ${prod_details.product_id} Process Failed`,{
+        toastId:prod_details.product_id,
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
-    console.log(res,'SEND');
+
   };
 
   handlePageChange(pageNumber) {
@@ -232,6 +247,16 @@ class StockReq extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
           <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
             {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
           </Alert>

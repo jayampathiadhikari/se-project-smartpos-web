@@ -14,7 +14,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Button,
+  Button, Spinner, Alert,
 } from "reactstrap";
 // core components
 
@@ -28,6 +28,11 @@ import {connect} from "react-redux";
 
 class ExecReports extends React.Component {
   state = {
+    alert:'info',
+    visible: true,
+    processing:true,
+    msg:null,
+
     agent_id: null,
     agentData: [],
     pageSize: 5,
@@ -44,11 +49,12 @@ class ExecReports extends React.Component {
   };
 
   componentDidMount = async () => {
-    const res = await Executive.getAllAgents()
+    const res = await Executive.getAllAgents();
     this.setState({
-      agentData: res
+      agentData: res,
+      visible: false
     });
-    console.log(res)
+
   };
 
   seeReports = (agent_id) => {
@@ -114,25 +120,32 @@ class ExecReports extends React.Component {
       activeButton: button
     });
     if (button === '2' && this.state.productsByMonth.length === 0) {
+      this.setState({
+        visible:true
+      });
       const productsByMonth = await Executive.getTopProductsByMonth(this.props.user.uid);
       const productsByYear = await Executive.getTopProductsByYear(this.props.user.uid);
       if (productsByYear.success && productsByMonth.success) {
         this.setState({
           productsByMonth: productsByMonth.data,
-          productsByYear: productsByYear.data
+          productsByYear: productsByYear.data,
+          visible:false
         })
       }
-      console.log(productsByMonth, productsByYear, 'data first')
+
     } else if (button === '3' && this.state.districtsByMonth.length === 0) {
+      this.setState({
+        visible:true
+      });
       const districtsByMonth = await Executive.getTopDistrictsByMonth();
       const districtsByYear = await Executive.getTopDistrictsByYear();
       if (districtsByMonth.success && districtsByYear.success) {
         this.setState({
           districtsByMonth: districtsByMonth.data,
-          districtsByYear: districtsByYear.data
+          districtsByYear: districtsByYear.data,
+          visible: false
         })
       }
-      console.log(districtsByMonth, districtsByYear, 'data first d')
     }
 
   };
@@ -319,6 +332,9 @@ class ExecReports extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
           <Row>
             <div className="col">
               <span>

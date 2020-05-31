@@ -16,7 +16,7 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledTooltip, Button, Input
+  UncontrolledTooltip, Button, Input, Alert, Spinner
 } from "reactstrap";
 // core components
 
@@ -24,9 +24,11 @@ import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Agent from "../../models/Agent";
 import {connect} from "react-redux";
+import {toast, ToastContainer} from "react-toastify";
 
 class MyStock extends React.Component {
   state = {
+    visible:true,
     agent_id: null,
     activePage : 1,
     pageSize:5,
@@ -36,11 +38,19 @@ class MyStock extends React.Component {
 
   componentDidMount = async() => {
     const res = await Agent.getStock(this.props.user.uid);
-    console.log(res.data);
     if(res.data.success){
       this.setState({
         initialData:res.data.data,
-        data:res.data.data
+        data:res.data.data,
+        visible: false
+      })
+    }else{
+      toast.error(` Something went wrong`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
+      this.setState({
+        visible: false
       })
     }
   };
@@ -100,6 +110,19 @@ class MyStock extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={'info'} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            <Spinner style={{ width: '3rem', height: '3rem' }} />
+          </Alert>
           <Row>
             <div className="col">
               <span>
