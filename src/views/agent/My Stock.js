@@ -2,21 +2,15 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
   Media,
   Table,
   Container,
   Row,
   Col,
-  UncontrolledTooltip, Button, Input, Alert, Spinner
+  Button, Input, Alert, Spinner
 } from "reactstrap";
 // core components
 

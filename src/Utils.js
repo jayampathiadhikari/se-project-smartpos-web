@@ -2,7 +2,7 @@ import axios from 'axios';
 import FIREBASE from "./firebase";
 import 'firebase/functions';
 import {MAPBOX_TOKEN} from "./config";
-import {regions, Regions} from './constants';
+import {regions} from './constants';
 
 export const createUserWithEmail = async (data) => {
   try {
@@ -155,7 +155,7 @@ export const getShopsWithNoRouteByDistrict = async (id) => {
     console.log('success')
     let shopData = res.data.data.map((shop, index) => {
       var shop_id = shop["shop_id"];
-      var name = shop ["name"];
+      var name = shop["name"];
       var coords = [shop.longitude, shop.latitude];
       return ({shop_id, name, coords})
     });
@@ -181,7 +181,7 @@ export const getShopsWithRouteByDistrict = async (id) => {
     console.log('success');
     let shopData = res.data.data.map((shop, index) => {
       var shop_id = shop["shop_id"];
-      var name = shop ["name"];
+      var name = shop["name"];
       var coords = [shop.longitude, shop.latitude];
       return ({shop_id, name, coords})
     });

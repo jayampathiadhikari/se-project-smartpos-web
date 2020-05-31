@@ -8,8 +8,6 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Col,
-  Row
 } from "reactstrap";
 
 class Datepicker extends React.Component {

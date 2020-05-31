@@ -31,7 +31,7 @@ class MyStockAddToWarehouse extends React.Component {
   };
 
   componentDidMount() {
-    if(this.props.location.state != undefined){
+    if(this.props.location.state !== undefined){
       this.setState({
         product : this.props.location.state.product
       });

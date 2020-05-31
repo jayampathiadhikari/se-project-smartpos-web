@@ -19,7 +19,7 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col, Spinner, Container
+  Col, Spinner
 } from "reactstrap";
 
 import {setAgentLogin, setExecutiveLogin, setSignInStatus, setUser} from "../../redux/reducers/authentication/action";

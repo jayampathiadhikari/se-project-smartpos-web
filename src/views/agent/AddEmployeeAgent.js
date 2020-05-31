@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import {createUserWithEmail, getCurrentAgentData} from "../../Utils";
+import {createUserWithEmail} from "../../Utils";
 import {connect} from "react-redux";
 
 
