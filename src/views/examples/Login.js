@@ -58,8 +58,14 @@ class Login extends React.Component {
         });
         this.props.setIsAgent(true);
         setTimeout(()=>{this.props.history.push('/agent/index');},10);
+      }else{
+        this.setState({
+          visible:false
+        });
+        toast.error(` Login Failed, Check email or password`,{
+          position:"bottom-left"
+        });
       }
-
     }else{
       toast.error(` Login Failed, Check email or password`,{
         position:"bottom-left"

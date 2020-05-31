@@ -32,3 +32,8 @@
 .navbar-collapse .navbar-nav .nav-item .active{
     background-color: rgba(0, 185, 247, 0.6);
 }
+
+.navbar-vertical .navbar-nav .nav-link > i {
+    opacity: 1
+}
+

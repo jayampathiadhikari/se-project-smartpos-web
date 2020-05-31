@@ -15,7 +15,7 @@ class Login extends React.Component {
                   © 2020{" "}
                   <a
                     className="font-weight-bold ml-1"
-                    href="https://www.creative-tim.com?ref=adr-auth-footer"
+                    href="/"
                     target="_blank"
                   >
                     Zenarus
