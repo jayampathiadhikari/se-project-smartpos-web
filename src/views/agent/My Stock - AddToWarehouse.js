@@ -9,18 +9,20 @@ import {
   Form,
   Container,
   Row,
-  Button, Col, FormGroup, Input
+  Button, Col, FormGroup, Input, Alert, Spinner
 } from "reactstrap";
 // core components
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import {connect} from "react-redux";
 import Agent from "../../models/Agent";
+import {toast, ToastContainer} from "react-toastify";
 
 //id,name,prod cost, selling price,, quantity
 
 class MyStockAddToWarehouse extends React.Component {
   state = {
+    visible: false,
     agent_id: null,
     current_data: [],
     pageSize: 5,
@@ -33,28 +35,43 @@ class MyStockAddToWarehouse extends React.Component {
       this.setState({
         product : this.props.location.state.product
       });
-      console.log(this.props.location.state.product)
     }
   }
 
   onSubmit = async(e) => {
     e.preventDefault();
+    this.setState({
+      visible: true
+    });
     let productData = {};
     for(let i=0; i<3;i++){
       const attri = e.target[i].id;
       productData[attri] = e.target[i].value
     }
     if(productData.productID === "NO PRODUCT SELECTED"){
-      alert("NO PRODUCT SELECTED")
+      toast.error(` No product is selected`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }else{
       await this.addToWarehouse(productData);
     }
-    console.log(productData);
+
   };
 
   addToWarehouse = async (productData) => {
       const res = await Agent.addStockToWarehouse(this.props.user.uid,productData.productID,productData.quantity);
-      console.log(res);
+      if(res.data.success){
+        toast.success(` Successfully added to warehouse`)
+      }else{
+        toast.error(` Something went wrong`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
+      }
+      this.setState({
+        visible: false
+      })
   };
 
 
@@ -65,6 +82,19 @@ class MyStockAddToWarehouse extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={'info'} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            <Spinner style={{ width: '3rem', height: '3rem' }} />
+          </Alert>
           {/* Table */}
           <Row>
             <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
