@@ -18,32 +18,6 @@ import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Executive from "../../models/Executive";
 
 
-const data = [
-  {
-    name: 'agent1',
-    region: 'kegalle',
-    id: 'agent1_id'
-  },
-  {
-    name: 'agent1',
-    region: 'kegalle',
-    id: 'agent1_id'
-  },
-];
-
-const reqData = [
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  },
-  {
-    product_name:'Mari',
-    request_amount:500,
-    in_stock:1000,
-  }
-];
-
 class AcceptShop extends React.Component {
   state = {
     data:[],

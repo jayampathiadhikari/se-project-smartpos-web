@@ -7,7 +7,7 @@ import {
   CardFooter,
   Container,
   Row,
-  Col, Table, Media, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, Input
+  Col, Table, Media, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, Input, Spinner, Alert
 } from "reactstrap";
 // core components
 
@@ -19,6 +19,11 @@ import Executive from "../../models/Executive";
 
 class StockSendToAgent extends React.Component {
   state = {
+    alert:'info',
+    visible: true,
+    processing:true,
+    msg:null,
+
     agentID: null,
     agentName: null,
     agentData: [],
@@ -34,7 +39,8 @@ class StockSendToAgent extends React.Component {
   componentDidMount = async () => {
     const res = await Executive.getAllAgents();
     this.setState({
-      agentData: res
+      agentData: res,
+      visible: false,
     });
     console.log(res)
   };
@@ -262,6 +268,11 @@ class StockSendToAgent extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
+
           {/* Table */}
           <Row>
             <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">

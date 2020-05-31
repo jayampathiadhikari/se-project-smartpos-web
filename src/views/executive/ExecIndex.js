@@ -16,7 +16,7 @@ import {
   Nav,
   Container,
   Row,
-  Col
+  Col, Spinner, Alert
 } from "reactstrap";
 
 // core components
@@ -37,6 +37,11 @@ class ExecIndex extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      alert:'info',
+      visible: true,
+      processing:true,
+      msg:null,
+
       productID: null,
       lineData: {},
       stock: [],
@@ -69,6 +74,7 @@ class ExecIndex extends React.Component {
     chartExample1.data1 = (canvas) => (districtMonthLineData);
     chartExample1.data2 = (canvas) => (districtYearLineData);
     this.setState({
+      visible: false,
       lineData,
       stock
     });
@@ -95,10 +101,14 @@ class ExecIndex extends React.Component {
 
 
   renderLineGraph = (data) => {
-    // const graphData = data;
-    // console.log(graphData,'GRAPH DATA')
+
     return (
       <Col className="mb-5 mb-xl-0" xl="12">
+
+        <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+          {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+        </Alert>
+
         <Card className="bg-gradient-default shadow">
           <CardHeader className="bg-transparent">
             <Row className="align-items-center">

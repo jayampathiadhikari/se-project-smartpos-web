@@ -13,7 +13,7 @@ import {
   Table,
   Container,
   Row,
-  Button
+  Button, Spinner, Alert
 } from "reactstrap";
 // core components
 
@@ -25,6 +25,11 @@ import Executive from "../../models/Executive";
 
 class StockReq extends React.Component {
   state = {
+    alert:'info',
+    visible: true,
+    processing:true,
+    msg:null,
+
     agents:[],
     activePage: 1,
     activePageReq:1,
@@ -36,11 +41,11 @@ class StockReq extends React.Component {
   componentDidMount = async() => {
     const result = await Executive.getAllAgents();
     const res = await Executive.getAgentsWithRequests();
-    console.log(res.data.data,'AGENTS WITH REQUESTS')
     if(res.data.success){
       const agents = this.filterData(result,res.data.data);
       this.setState({
-        agents:agents
+        agents:agents,
+        visible: false,
       })
     }
   };
@@ -49,7 +54,6 @@ class StockReq extends React.Component {
     var agentsWithReq =  filter.filter(function(agent) {
       return container.includes(agent.uid);
     });
-    console.log(agentsWithReq);
     return agentsWithReq;
   };
 
@@ -62,7 +66,6 @@ class StockReq extends React.Component {
         invoiceData:res.data.data
       })
     }
-    console.log(res.data);
   };
 
   renderTableRows = () => {
@@ -229,6 +232,9 @@ class StockReq extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
           {/* Table */}
           <Row>
             <div className="col">
