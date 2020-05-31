@@ -139,6 +139,7 @@ class StockReq extends React.Component {
   onClickReject = async(prod_details) => {
     const {invoiceData} = this.state;
     const res = await Executive.rejectRequest(prod_details.requesting_invoice_items_id);
+    console.log(res);
     if(res.data.success){
       toast.warn(` Request Rejected Successfully`,{toastId:prod_details.product_id});
       const index = invoiceData.indexOf(prod_details);

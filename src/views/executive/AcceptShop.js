@@ -9,17 +9,23 @@ import {
   Table,
   Container,
   Row,
-  Button
+  Button, Alert, Spinner
 } from "reactstrap";
 // core components
 
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Executive from "../../models/Executive";
+import {toast, ToastContainer} from "react-toastify";
 
 
 class AcceptShop extends React.Component {
   state = {
+    alert:'info',
+    visible: true,
+    processing:true,
+    msg:null,
+
     data:[],
     activePage: 1,
     activePageReq:1,
@@ -37,10 +43,21 @@ class AcceptShop extends React.Component {
   getShops = async () => {
     const res = await Executive.getShopSuggestion();
     if(res.data.success){
+      if(res.data.data.length === 0){
+        toast.warn(` No new suggestions`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
+      }
       this.setState({
-        data:res.data.data
+        data:res.data.data,
+        visible:false
       });
-      console.log(res.data.data)
+    }else{
+      toast.error(` Something went wrong :( `,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
   };
 
@@ -154,6 +171,19 @@ class AcceptShop extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
           {/* Table */}
           {this.renderInvoiceTable()}
         </Container>

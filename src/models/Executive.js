@@ -257,6 +257,17 @@ class Executive{
     return res.data;
   };
 
+  addNewProduct = async (productData) => {
+    const res =  await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/product/addnewproduct',{
+      name: productData.productName,
+      quantity: productData.quantity,
+      product_id: productData.productID,
+      production_cost:productData.productCost,
+      selling_price: productData.sellingPrice,
+    });
+    return res.data;
+  }
+
 
 
 }

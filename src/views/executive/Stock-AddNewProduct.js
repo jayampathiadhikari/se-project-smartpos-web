@@ -8,31 +8,46 @@ import {
   Form,
   Container,
   Row,
-  Button, Col, FormGroup, Input
+  Button, Col, FormGroup, Input, Alert, Spinner
 } from "reactstrap";
 // core components
-
+import Executive from "../../models/Executive";
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import {toast, ToastContainer} from "react-toastify";
 
 //id,name,prod cost, selling price,, quantity
 
 class StockAddNewProduct extends React.Component {
   state = {
-    agent_id: null,
-    current_data: [],
-    pageSize: 5,
-    activePage:1
+    alert:'info',
+    visible: false,
+    processing:true,
+    msg:null,
   };
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
+    this.setState({
+      visible:true
+    })
     e.preventDefault();
     let productData = {};
     for(let i=0; i<5;i++){
       const attri = e.target[i].id;
       productData[attri] = e.target[i].value
     }
-    console.log(productData);
+    const res = await Executive.addNewProduct(productData);
+    if(res.success){
+      toast.success(` New product added successfully!`,);
+    }else {
+      toast.error(` Adding failed. Something went wrong`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
+    }
+    this.setState({
+      visible:false
+    })
   };
 
   render() {
@@ -41,6 +56,19 @@ class StockAddNewProduct extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
           {/* Table */}
           <Row>
             <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">

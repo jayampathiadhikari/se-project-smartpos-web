@@ -10,13 +10,14 @@ import {
   Container,
   Row,
   Col,
-  Button, Input
+  Button, Input, Spinner, Alert
 } from "reactstrap";
 // core components
 import Datepicker from "../../components/DateTime";
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Executive from "../../models/Executive";
+import {toast, ToastContainer} from "react-toastify";
 
 // "2020-04-30"
 // "2019-05-22"
@@ -34,20 +35,15 @@ import Executive from "../../models/Executive";
 // "2019-04-24"
 // "2020-04-24"
 
-//agent_id: "ySRNCA8E4hacmi9ZNsofSki5Uyv1"
-// name: "chilly powder"
-// product_id: "1"
-// production_cost: 90
-// quantity: 600
-// sales_id: 24
-// salesperson_id: "W9FfmzqWI6QZjGWpRnZOpBhwGM02"
-// selling_price: 100
-// shop_id: 8
-// sold_date: "2020-04-24T00:00:00.000Z"
 
 
 class ViewReports extends React.Component {
   state = {
+    alert:'info',
+    visible: false,
+    processing:true,
+    msg:null,
+
     selectedDate:null,
     agent_id: null,
     activePage : 1,
@@ -109,22 +105,42 @@ class ViewReports extends React.Component {
   formatDate = (date) => (date.split('T')[0]);
 
   getReports = async() => {
+    this.setState({
+      visible:true
+    });
     const {agent_id,selectedDate} = this.state;
     if(this.state.selectedDate){
       const res = await Executive.getReports(agent_id,selectedDate);
       if(res.data.success){
+        this.setState({
+          visible:false
+        });
         if(res.data.data.length > 0){
           this.setState({
             data:res.data.data,
             showReports:true
           })
         }else{
-          alert('NO REPORTS FOR GIVEN DATE')
+          toast.error(` No reports for selected date`,{
+            autoClose:false,
+            position:"bottom-left"
+          });
         }
       }else{
-        alert('FETCHING ERROR')
+        this.setState({
+          visible:false
+        });
+        toast.error(` Something went wrong`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
       }
-      console.log(res.data)
+
+    }else{
+      toast.error(` No date selected`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
   };
 
@@ -134,6 +150,19 @@ class ViewReports extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
           <Row>
             <Col lg={4}>
               <Datepicker onChange = {this.onSelectDate}/>
