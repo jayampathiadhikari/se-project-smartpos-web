@@ -43,8 +43,8 @@ ReactDOM.render(
           <Route path="/executive" component={requiresAuthExecutive(ExecutiveLayout)} />
           <Route path="/agent" component={requiresAuthAgent(AgentLayout)} />
           <Route path="/auth" render={props => <AuthLayout {...props} />} />
-          <Redirect from="/" to="/auth/login" />
-
+          <Redirect from="/" exact to="/auth/login" />
+          <Redirect from="*" to="/auth/register" />
         </Switch>
       </BrowserRouter>
     </PersistGate>

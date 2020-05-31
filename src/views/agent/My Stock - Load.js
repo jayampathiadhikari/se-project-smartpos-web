@@ -103,12 +103,11 @@ class MyStockLoad extends React.Component {
           });
         }
       }else{
-        toast.error(` No salesperson is selected`,{
+        toast.error(` Already loaded today`,{
           autoClose:false,
           position:"bottom-left"
         });
       }
-
     }else{
       toast.error(` No salesperson is selected`,{
         autoClose:false,

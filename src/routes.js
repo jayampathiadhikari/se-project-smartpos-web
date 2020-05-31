@@ -1,16 +1,8 @@
-
-import Index from "views/Index.js";
 import OwnerProfile from "views/examples/Profile.js";
 import AgentProfile from "views/agent/Profile.js";
-//import Maps from "views/examples/Maps.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
-import Tables from "views/examples/Tables.js";
-// import Mapbox from "./views/examples/Mapbox3";
-
-//import Icons from "views/examples/Icons.js";
 import Edit from "views/examples/Edit.js";
-// import AddUser from "./views/examples/AddUser";
 import ResetPassword from "./views/examples/ResetPassword";
 
 //agent
@@ -24,6 +16,7 @@ import MyReports from "./views/agent/My Reports";
 import MyStock from "./views/agent/My Stock";
 import MyStockLoad from "./views/agent/My Stock - Load";
 import MyStockAddToWarehouse from "./views/agent/My Stock - AddToWarehouse";
+
 //executive
 import ExecIndex from "./views/executive/ExecIndex";
 import AddEmployeeEx from "./views/executive/AddEmployeeEx";
@@ -188,13 +181,6 @@ export const executiveSidebar = [
     layout: "/executive"
   },
   {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/executive"
-  },
-  {
     path: "/add-employee",
     name: "Add Employee",
     icon: "ni ni-circle-08 text-primary",
@@ -242,56 +228,49 @@ export const agentSidebar = [
   {
     path: "/index",
     name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
+    icon: "ni ni-tv-2 text-default",
     component: AgentIndex,
     layout: "/agent"
   },
   {
     path: "/maps",
     name: "Maps",
-    icon: "ni ni-pin-3 text-orange",
+    icon: "ni ni-pin-3 text-default",
     component: AgentMap,
-    layout: "/agent"
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
     layout: "/agent"
   },
   {
     path: "/adduser",
     name: "Add Employee",
-    icon: "ni ni-circle-08 text-pink",
+    icon: "ni ni-circle-08 text-default",
     component: AddEmployeeAgent,
     layout: "/agent"
   },
   {
     path: "/request-stock",
     name: "Request Stock",
-    icon: "ni ni-delivery-fast text-red",
+    icon: "ni ni-delivery-fast text-default",
     component: RequestStock,
     layout: "/agent"
   },
   {
     path: "/my-shops",
     name: "My Shops",
-    icon: "ni ni-shop text-primary",
+    icon: "ni ni-shop text-default",
     component: MyShops,
     layout: "/agent"
   },
   {
     path: "/my-reports",
     name: "My Reports",
-    icon: "ni ni-collection text-primary",
+    icon: "ni ni-collection text-default",
     component: MyReports,
     layout: "/agent"
   },
   {
     path: "/my-stock",
     name: "My Stock",
-    icon: "ni ni-box-2 text-primary",
+    icon: "ni ni-box-2 text-default",
     component: MyStock,
     layout: "/agent"
   },
