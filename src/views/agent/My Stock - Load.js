@@ -33,31 +33,23 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledTooltip, Button, Input
+  UncontrolledTooltip, Button, Input, Alert, Spinner
 } from "reactstrap";
 // core components
-import Datepicker from "../../components/DateTime";
+
 import Pagination from "react-js-pagination";
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import CustomDropdown from "../../components/Dropdown";
 import Agent from "../../models/Agent";
 import {connect} from "react-redux";
 import {getSalespersonByAgent} from "../../Utils";
+import {toast, ToastContainer} from "react-toastify";
 
-const salesperson =  [
-  {
-    id: 'sp01',
-    name: 'SP1',
-  },
-  {
-    id: 'item002',
-    name: 'SP2',
-  },
 
-];
 
 class MyStockLoad extends React.Component {
   state = {
+    visible: true,
     agent_id: null,
     activePage : 1,
     initialData:[],
@@ -67,6 +59,7 @@ class MyStockLoad extends React.Component {
     loadAmount:null,
     salesperson_id:null
   };
+  target = null;
 
   componentDidMount = async() => {
     const uid = this.props.user.uid;
@@ -74,18 +67,28 @@ class MyStockLoad extends React.Component {
     const res = await Agent.getStock(uid);
     if(res.data.success){
       this.setState({
+        visible: false,
         initialData:res.data.data,
         data:res.data.data,
         salesperson:result
       })
+    }else{
+      this.setState({
+        visible: false
+      });
+      toast.error(` Something went wrong`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
   };
 
   onClick = async (product) => {
     if(this.state.salesperson_id){
+      this.target.value = null;
       const res = await Agent.addStockToSalesperson(this.state.salesperson_id,product.product_id,this.state.loadAmount);
-      console.log(res);
       if(res.success){
+        toast.success(`Stock added successfully`)
         const uid = this.props.user.uid;
         const res = await Agent.getStock(uid);
         if(res.data.success){
@@ -93,11 +96,24 @@ class MyStockLoad extends React.Component {
             initialData:res.data.data,
             data:res.data.data,
           })
+        }else{
+          toast.error(` Something went wrong`,{
+            autoClose:false,
+            position:"bottom-left"
+          });
         }
+      }else{
+        toast.error(` No salesperson is selected`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
       }
-      console.log(res)
+
     }else{
-      alert('SELECT SP')
+      toast.error(` No salesperson is selected`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
 
   };
@@ -108,6 +124,7 @@ class MyStockLoad extends React.Component {
   }
 
   onChange = (e) => {
+    this.target = e.target;
     this.setState({
       loadAmount:e.target.value
     })
@@ -171,6 +188,19 @@ class MyStockLoad extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={'info'} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            <Spinner style={{ width: '3rem', height: '3rem' }} />
+          </Alert>
           <Row>
             <div className="col">
               <CustomDropdown data = {this.state.salesperson} initial={"SELECT SALESPERSON"} onSelect={this.onSelect}/>
