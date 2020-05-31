@@ -32,7 +32,7 @@ import {
   Table,
   Container,
   Row,
-  UncontrolledTooltip, Button
+  UncontrolledTooltip, Button, Alert, Spinner
 } from "reactstrap";
 // core components
 
@@ -41,6 +41,7 @@ import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Agent from '../../models/Agent'
 
 import {connect} from "react-redux";
+import {toast, ToastContainer} from "react-toastify";
 
 
 // employee_id: "vsotjU8PuSUm5HxEmDbJ5zWvbgy2"
@@ -55,6 +56,11 @@ import {connect} from "react-redux";
 
 class RequestStock extends React.Component {
   state = {
+    alert:'info',
+    visible: true,
+    processing:true,
+    msg:null,
+
     agent_id: null,
     activePage: 1,
     activePageReq:1,
@@ -66,48 +72,69 @@ class RequestStock extends React.Component {
   componentDidMount =async () => {
     const res = await Agent.viewSuggestedList(this.props.user.uid);
     if(res.data.success){
+      if(res.data.data.length === 0 ){
+        toast.warn(` No new requests`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
+      }
       this.setState({
-        data:res.data.data
+        data:res.data.data,
+        visible: false
       })
+    }else{
+      this.setState({
+        visible: false
+      });
+      toast.error(` Something went wrong`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
-    console.log(res);
+
   };
 
   onClickSend = async(prod_details) => {
     const res = await Agent.acceptSuggestion(prod_details.requesting_invoice_items_id);
-    console.log(res,'Accept');
     if(res.data.success){
+      toast.success(` Request sent successfully`);
       const res = await Agent.viewSuggestedList(this.props.user.uid);
-      console.log(res,'new suggestions');
       if(res.data.success){
         this.setState({
           data:res.data.data
         })
       }
+    }else{
+      toast.error(` Something went wrong`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
     }
   };
 
   onClickDecline = async (prod_details) => {
     const res = await Agent.declineSuggestion(prod_details.requesting_invoice_items_id);
-    console.log(res,'Decline');
     if(res.data.success){
       const res = await Agent.viewSuggestedList(this.props.user.uid);
-      console.log(res,'new suggestions');
       if(res.data.success){
+        toast.warn(` Request declined `);
         this.setState({
           data:res.data.data
         })
+      }else{
+        toast.error(` Something went wrong`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
       }
     }
   };
 
   handlePageChange(pageNumber) {
-    console.log(`active page is ${pageNumber}`);
     this.setState({activePage: pageNumber});
   }
 
   handlePageChangeInvoiceTable(pageNumber) {
-    console.log(`active page invoice table is ${pageNumber}`);
     this.setState({activePageReq: pageNumber});
   }
 
@@ -188,6 +215,19 @@ class RequestStock extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={10000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          </Alert>
           {/* Table */}
           {this.state.data.length > 0 ? this.renderInvoiceTable() : null}
         </Container>
