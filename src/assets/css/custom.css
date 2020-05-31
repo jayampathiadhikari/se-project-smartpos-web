@@ -9,9 +9,14 @@
     border-color: #11cdef;
 }
 
-.Toastify__toast--warning {
+.Toastify__toast--error {
     background-color: #f5365c;
     border-color: #f5365c;
+}
+
+.Toastify__toast--warning {
+    background-color: #fb6340;
+    border-color: #fb6340;
 }
 
 .Toastify__toast-body {
