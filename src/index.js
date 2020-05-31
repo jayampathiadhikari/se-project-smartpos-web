@@ -24,7 +24,8 @@ import { PersistGate } from 'redux-persist/es/integration/react';
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
-
+import 'react-toastify/dist/ReactToastify.css';
+import "assets/css/custom.css"
 // import requiresAuth from './components/RequiresAuth';
 import requiresAuthExecutive from './components/RequiresAuthExecutive';
 import requiresAuthAgent from './components/RequiresAuthAgent'
