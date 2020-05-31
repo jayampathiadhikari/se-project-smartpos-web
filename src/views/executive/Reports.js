@@ -21,7 +21,6 @@ import {
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Pagination from "react-js-pagination";
 import Executive from "../../models/Executive";
-import classnames from "classnames";
 import {connect} from "react-redux";
 
 //id,name,prod cost, selling price,, quantity
