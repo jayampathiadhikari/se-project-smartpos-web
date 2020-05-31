@@ -107,7 +107,7 @@ class MyShops extends React.Component {
         <Container className="mt--7" fluid>
           <ToastContainer
             position="top-right"
-            autoClose={10000}
+            autoClose={3000}
             hideProgressBar={true}
             newestOnTop={false}
             closeOnClick

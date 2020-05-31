@@ -9,7 +9,7 @@ import {
   Form,
   Container,
   Row,
-  Button, Col, FormGroup, Input
+  Button, Col, FormGroup, Input, Alert, Spinner
 } from "reactstrap";
 // core components
 import Pagination from "react-js-pagination";
@@ -18,6 +18,7 @@ import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Agent from '../../models/Agent'
 import {getDistrictId} from "../../Utils";
 import {connect} from "react-redux";
+import {toast, ToastContainer} from "react-toastify";
 
 //id,name,prod cost, selling price,, quantity
 
@@ -28,6 +29,8 @@ import {connect} from "react-redux";
 
 class ShopSuggestShop extends React.Component {
   state = {
+    visible: false,
+
     agent_id: null,
     current_data: [],
     pageSize: 5,
@@ -36,6 +39,9 @@ class ShopSuggestShop extends React.Component {
 
   onSubmit = async (e) => {
     e.preventDefault();
+    this.setState({
+      visible: true
+    });
     let productData = {};
     for(let i=0; i<10 ;i++){
       const attri = e.target[i].id;
@@ -46,7 +52,17 @@ class ShopSuggestShop extends React.Component {
     productData.districtID = districtID;
 
     const res = await Agent.suggestShop(productData);
-    console.log(res);
+    if(res.success){
+      toast.success(` Shop suggested successfully`)
+    }else{
+      toast.error(` Something went wrong`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
+    }
+    this.setState({
+      visible: false
+    });
 
   };
 
@@ -56,6 +72,19 @@ class ShopSuggestShop extends React.Component {
         <HeaderNoCards/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover/>
+          <Alert color={'info'} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
+            <Spinner style={{ width: '3rem', height: '3rem' }} />
+          </Alert>
           {/* Table */}
           <Row>
             <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
