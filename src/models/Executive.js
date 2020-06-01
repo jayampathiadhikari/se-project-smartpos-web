@@ -267,8 +267,19 @@ class Executive{
       selling_price: productData.sellingPrice,
     });
     return res.data;
-  }
+  };
 
+  getMonthlyTarget = async () => {
+    const res = await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/owner/viewmonthlytarget');
+    return res.data
+  };
+
+  setTarget = async (target_value) => {
+    const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/owner/sendtarget',{
+      target_value
+    });
+    return res.data;
+  };
 
 
 }

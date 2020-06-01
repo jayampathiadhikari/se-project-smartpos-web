@@ -42,6 +42,11 @@ class StockReq extends React.Component {
     const result = await Executive.getAllAgents();
     const res = await Executive.getAgentsWithRequests();
     if(res.data.success){
+      if(res.data.data.length === 0){
+        toast.warn(` No requests`,{
+          position:"bottom-left"
+        });
+      }
       const agents = this.filterData(result,res.data.data);
       this.setState({
         agents:agents,

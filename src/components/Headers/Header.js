@@ -1,35 +1,119 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
-import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+import {Card, CardBody, CardTitle, Container, Row, Col, Button, Modal, ModalBody, Input, ModalFooter} from "reactstrap";
+import {connect} from "react-redux";
+import Executive from "../../models/Executive";
+import {toast, ToastContainer} from "react-toastify";
 
 class Header extends React.Component {
+  state ={
+    target: null,
+    modal: false,
+    targetVal: null,
+  };
+
+  componentDidMount = async () => {
+    const res = await Executive.getMonthlyTarget();
+    console.log(res,'TARGET')
+    if(res.success){
+      if(res.data.length === 0){
+        toast.warn(` You haven't set a Monthly Target`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
+      }else{
+        this.setState({
+          target: res.data[0].target_value
+        })
+      }
+    }else{
+      toast.error(` Something went wrong when getting Monthly target`,{
+        autoClose:false,
+        position:"bottom-left"
+      });
+    }
+
+  };
+
+  toggle = ()=> {
+    this.setState({
+      modal: !this.state.modal
+    })
+  };
+
+  setTarget = async () => {
+    const target_value = this.state.targetVal;
+    if(!isNaN(target_value)){
+      const res = await Executive.setTarget(target_value);
+      console.log(res);
+      if(res.success){
+        this.setState({
+          target: target_value,
+        });
+        this.toggle();
+      }else{
+        toast.error(` Something went wrong when setting Monthly target`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
+      }
+    }else{
+      toast.warn(' Target should be a value')
+    }
+
+  };
+
   render() {
+    const {modal} = this.state;
+    const {toggle} = this.toggle;
     return (
       <>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover/>
         <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
+          <div>
+            <Modal isOpen={modal} toggle={toggle}>
+              <ModalBody>
+                <Row>
+                  <Col lg="6" xl="3">
+                    <label
+                      className="form-control-label"
+                      htmlFor="target"
+                    >
+                      Target
+                    </label>
+                  </Col>
+                  <Col lg="6" xl="9">
+                    <Input
+                      className="form-control-alternative"
+                      id="target"
+                      type="text"
+                      required={true}
+                      onChange ={(e)=>{this.setState({targetVal : e.target.value})}}
+                    />
+                  </Col>
+                </Row>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={this.setTarget}>Set</Button>{' '}
+                <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
+          </div>
           <Container fluid>
             <div className="header-body">
               {/* Card stats */}
               <Row>
-                <Col lg="6" xl="3">
+                <Col lg="6" xl="6">
                   <Card className="card-stats mb-4 mb-xl-0">
                     <CardBody>
                       <Row>
@@ -38,112 +122,31 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Sales
+                            Monthly Target
                           </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">
-                            350,897
+                          {this.state.target === null ? <span className="h2 font-weight-bold mb-0">
+                            No target is set for this month
+                          </span> : <span className="h2 font-weight-bold mb-0">
+                            {this.state.target}
                           </span>
+                          }
+
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                            <i className="fas fa-chart-bar" />
+                            <i className="fas fa-bullseye" />
                           </div>
                         </Col>
                       </Row>
-                      <p className="mt-3 mb-0 text-muted text-sm">
-                        <span className="text-success mr-2">
-                          <i className="fa fa-arrow-up" /> 3.48%
-                        </span>{" "}
-                        <span className="text-nowrap">Since last month</span>
-                      </p>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col lg="6" xl="3">
-                  <Card className="card-stats mb-4 mb-xl-0">
-                    <CardBody>
-                      <Row>
-                        <div className="col">
-                          <CardTitle
-                            tag="h5"
-                            className="text-uppercase text-muted mb-0"
-                          >
-                            Sales
-                          </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">
-                            2,356
-                          </span>
-                        </div>
-                        <Col className="col-auto">
-                          <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                            <i className="fas fa-chart-pie" />
-                          </div>
-                        </Col>
-                      </Row>
-                      <p className="mt-3 mb-0 text-muted text-sm">
-                        <span className="text-danger mr-2">
-                          <i className="fas fa-arrow-down" /> 3.48%
-                        </span>{" "}
-                        <span className="text-nowrap">Since last week</span>
-                      </p>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col lg="6" xl="3">
-                  <Card className="card-stats mb-4 mb-xl-0">
-                    <CardBody>
-                      <Row>
-                        <div className="col">
-                          <CardTitle
-                            tag="h5"
-                            className="text-uppercase text-muted mb-0"
-                          >
-                            Sales
-                          </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">924</span>
-                        </div>
-                        <Col className="col-auto">
-                          <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                            <i className="fas fa-users" />
-                          </div>
-                        </Col>
-                      </Row>
-                      <p className="mt-3 mb-0 text-muted text-sm">
-                        <span className="text-warning mr-2">
-                          <i className="fas fa-arrow-down" /> 1.10%
-                        </span>{" "}
-                        <span className="text-nowrap">Since yesterday</span>
-                      </p>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col lg="6" xl="3">
-                  <Card className="card-stats mb-4 mb-xl-0">
-                    <CardBody>
-                      <Row>
-                        <div className="col">
-                          <CardTitle
-                            tag="h5"
-                            className="text-uppercase text-muted mb-0"
-                          >
-                            Performance
-                          </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">
-                            49,65%
-                          </span>
-                        </div>
-                        <Col className="col-auto">
-                          <div className="icon icon-shape bg-info text-white rounded-circle shadow">
-                            <i className="fas fa-percent" />
-                          </div>
-                        </Col>
-                      </Row>
-                      <p className="mt-3 mb-0 text-muted text-sm">
-                        <span className="text-success mr-2">
-                          <i className="fas fa-arrow-up" /> 12%
-                        </span>{" "}
-                        <span className="text-nowrap">Since last month</span>
-                      </p>
+                      {this.state.target === null ?
+                        <p className="mt-3 mb-0 text-muted text-sm">
+                          <Button color="danger" size={'sm'} outline type="button" onClick={()=>{this.toggle()}}>
+                            Set a target
+                          </Button>
+                        </p> : <p className="mt-3 mb-0 text-muted text-sm">
+                          {' '}
+                        </p>
+                      }
                     </CardBody>
                   </Card>
                 </Col>
@@ -156,4 +159,15 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+
+const mapStateToProps = (state) => ({
+  user: state.AuthenticationReducer.user,
+});
+
+const bindAction = (dispatch) => ({});
+
+export default connect(
+  mapStateToProps,
+  bindAction
+)(Header);
+

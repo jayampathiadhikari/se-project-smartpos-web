@@ -64,7 +64,7 @@ class MyStockLoad extends React.Component {
   onClick = async (product) => {
     if(this.state.salesperson_id){
       this.target.value = null;
-      const res = await Agent.addStockToSalesperson(this.state.salesperson_id,product.product_id,this.state.loadAmount);
+      const res = await Agent.addStockToSalesperson(this.props.user.uid,this.state.salesperson_id,product.product_id,this.state.loadAmount);
       console.log(res);
       if(res.success){
         toast.success(`Stock added successfully`)

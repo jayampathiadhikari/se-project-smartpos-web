@@ -26,7 +26,7 @@ import {
 import {connect} from "react-redux";
 import Executive from "../../models/Executive";
 import CustomDropdown from "../../components/Dropdown";
-import HeaderNoCards from "../../components/Headers/HeaderNoCards";
+import Header from "../../components/Headers/Header";
 
 class ExecIndex extends React.Component {
   constructor(props) {
@@ -234,7 +234,7 @@ class ExecIndex extends React.Component {
   render() {
     return (
       <>
-        <HeaderNoCards/>
+        <Header/>
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
