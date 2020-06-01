@@ -115,7 +115,8 @@ class StockReq extends React.Component {
 
   onClickSend = async (prod_details) => {
     const {invoiceData,agentID} = this.state;
-    const res = await Executive.sendRequest(agentID,prod_details.product_id,prod_details.quantity);
+    const res = await Executive.sendRequest(agentID,prod_details.product_id,prod_details.quantity,prod_details.requesting_invoice_items_id);
+    console.log(res.data)
     if(res.data.success){
       toast.success(` ${prod_details.product_id} Sending Successful`,{toastId:prod_details.product_id});
       const index = invoiceData.indexOf(prod_details);

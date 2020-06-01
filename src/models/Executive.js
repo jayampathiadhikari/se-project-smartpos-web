@@ -38,11 +38,12 @@ class Executive{
     })
   };
 
-  sendRequest = async (agent_id,product_id,quantity) => {
+  sendRequest = async (agent_id,product_id,quantity,requesting_invoice_items_id) => {
     return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/product/send-agent-requested',{
       agent_id,
       product_id,
-      quantity
+      quantity,
+      requesting_invoice_items_id
     })
   };
 

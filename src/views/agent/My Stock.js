@@ -121,6 +121,7 @@ class MyStock extends React.Component {
             <div className="col">
               <span>
                 <Button size={'lg'} onClick={()=>{this.props.history.push('/agent/my-stock/load')}}>Load</Button>
+                <Button size={'lg'} onClick={()=>{this.props.history.push('/agent/my-stock/add-to-warehouse')}}>Add new product</Button>
               </span>
             </div>
 
