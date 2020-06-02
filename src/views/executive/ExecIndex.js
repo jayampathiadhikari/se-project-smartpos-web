@@ -99,8 +99,6 @@ class ExecIndex extends React.Component {
 
     return (
       <Col className="mb-5 mb-xl-0" xl="12">
-
-
         <Card className="bg-gradient-default shadow">
           <CardHeader className="bg-transparent">
             <Row className="align-items-center">
@@ -144,9 +142,9 @@ class ExecIndex extends React.Component {
           <CardBody>
             {/* Chart */}
             <div className="chart">
-              <Line
+              <Bar
                 data={data}
-                options={chartExample1.options}
+                options={chartExample2.options}
                 getDatasetAtEvent={e => console.log(e)}
               />
             </div>

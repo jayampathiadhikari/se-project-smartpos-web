@@ -30,6 +30,7 @@ import StockSendToAgent from "./views/executive/Stock-SendToAgent";
 import ExecReports from "./views/executive/Reports";
 import ViewReports from "./views/executive/ViewReports";
 import AcceptShop from "./views/executive/AcceptShop";
+import ReportsProductwise from "./views/executive/Reports - Productwise"
 /**
  *changed tables to TestComponent
  */
@@ -216,10 +217,17 @@ export const executiveSidebar = [
     layout: "/executive"
   },
   {
-    path: "/reports",
+    path: "/repo",
     name: "Reports",
     icon: "ni ni-collection text-primary",
     component: ExecReports,
+    layout: "/executive"
+  },
+  {
+    path: "/reports/products",
+    name: "Test",
+    icon: "ni ni-collection text-primary",
+    component: ReportsProductwise,
     layout: "/executive"
   },
   {

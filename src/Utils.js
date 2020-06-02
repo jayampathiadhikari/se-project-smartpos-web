@@ -269,11 +269,24 @@ export const getDistrictId = (name) => {
   return districtA.id;
 };
 
-export const graphs = {
-
-  getData: (data) => {
-    return data
+export const getGraphDataProducts = (dataGraph) => {
+  //product_name, total_revenue
+  var labels = [];
+  var data = [];
+  const topData = dataGraph.slice(0,dataGraph.length > 11 ? 10 : dataGraph.length);
+  for (let i = 0; i < topData.length; i++) {
+    labels.push(topData[i].product_name);
+    data.push(topData[i].total_revenue);
   }
+  return {
+    labels: labels,
+    datasets: [
+      {
+        label: "Performance",
+        data: data
+      }
+    ]
+  };
 };
 
 //'#f40005'

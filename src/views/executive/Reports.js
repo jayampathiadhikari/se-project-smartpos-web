@@ -14,7 +14,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Button, Spinner, Alert,
+  Button, Spinner, Alert, Nav, NavItem, NavLink, CardBody,
 } from "reactstrap";
 // core components
 
@@ -22,6 +22,15 @@ import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Pagination from "react-js-pagination";
 import Executive from "../../models/Executive";
 import {connect} from "react-redux";
+import classnames from "classnames";
+import {Bar} from "react-chartjs-2";
+import {getGraphDataProducts} from '../../Utils'
+import {
+  chartOptions,
+  parseOptions,
+  chartExample1,
+  chartExample2
+} from "variables/charts.js";
 
 //id,name,prod cost, selling price,, quantity
 
@@ -125,6 +134,10 @@ class ExecReports extends React.Component {
       const productsByMonth = await Executive.getTopProductsByMonth(this.props.user.uid);
       const productsByYear = await Executive.getTopProductsByYear(this.props.user.uid);
       if (productsByYear.success && productsByMonth.success) {
+        console.log(productsByMonth);
+
+        chartExample1.bestSellingProductsMonth = (canvas) => (getGraphDataProducts(productsByMonth.data));
+        chartExample1.bestSellingProductsYear = (canvas) => (getGraphDataProducts(productsByYear.data));
         this.setState({
           productsByMonth: productsByMonth.data,
           productsByYear: productsByYear.data,
@@ -158,10 +171,68 @@ class ExecReports extends React.Component {
     })
   };
 
+  renderBarGraph = (data) => {
+    return (
+      <Col className="mb-5 mb-xl-0" xl="12">
+        <Card className="bg-gradient-default shadow">
+          <CardHeader className="bg-transparent">
+            <Row className="align-items-center">
+              <div className="col">
+                <h6 className="text-uppercase text-light ls-1 mb-1">
+                  Districtwise
+                </h6>
+                <h2 className="text-white mb-0">Sales value</h2>
+              </div>
+              <div className="col">
+                <Nav className="justify-content-end" pills>
+                  <NavItem>
+                    <NavLink
+                      className={classnames("py-2 px-3", {
+                        active: this.state.activeNav === 1
+                      })}
+                      href="#pablo"
+                      onClick={e => this.toggleNavs(e, 1)}
+                    >
+                      <span className="d-none d-md-block">Month</span>
+                      <span className="d-md-none">M</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames("py-2 px-3", {
+                        active: this.state.activeNav === 2
+                      })}
+                      data-toggle="tab"
+                      href="#pablo"
+                      onClick={e => this.toggleNavs(e, 2)}
+                    >
+                      <span className="d-none d-md-block">Year</span>
+                      <span className="d-md-none">W</span>
+                    </NavLink>
+                  </NavItem>
+                </Nav>
+              </div>
+            </Row>
+          </CardHeader>
+          <CardBody>
+            {/* Chart */}
+            <div className="chart">
+              <Bar
+                data={chartExample1.data1}
+                options={chartExample2.options}
+                getDatasetAtEvent={e => console.log(e)}
+              />
+            </div>
+          </CardBody>
+        </Card>
+      </Col>
+    )
+  };
+
   renderTopSellingProducts = () => {
     return (
       <Row className='mt-7'>
-        <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+        <Col className="mb-5 mb-xl-0" xl="12">
         </Col>
         <div className="col">
           <Card className="shadow">
@@ -340,7 +411,7 @@ class ExecReports extends React.Component {
                 <Button size={'lg'} value={'1'} color={this.state.activeButton === '1' ? 'primary' : 'secondary'}
                         onClick={this.onClick}>Agentwise Sales</Button>
                 <Button size={'lg'} value={'2'} color={this.state.activeButton === '2' ? 'primary' : 'secondary'}
-                        onClick={this.onClick}>Top Selling Products</Button>
+                        onClick={this.onClick}>Productwise Sales</Button>
                 <Button size={'lg'} value={'3'} color={this.state.activeButton === '3' ? 'primary' : 'secondary'}
                         onClick={this.onClick}>Top Selling Districts</Button>
             </span>
