@@ -388,19 +388,15 @@ class ReportsProductwise extends React.Component {
                 <Row className="align-items-center">
                   <div className="col">
                     <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Top Trending
+                      product specific details
                     </h6>
-                    <h2 className="text-white mb-0">Products</h2>
-                  </div>
-                  <div className="col">
-                    <Nav className="justify-content-end" pills>
-                    </Nav>
+                    <h2 className="text-white mb-0">Select a product from the dropdown to view overall details</h2>
                   </div>
                 </Row>
               </CardHeader>
               <CardBody>
                 {/* dropdown */}
-                <Row className="mt-5">
+                <Row>
                   <Col xl="4">
                     <CustomDropdown data={this.state.stock} initial="Select a product"
                                     disabled={this.state.stock.length === 0} onSelect={this.onSelect}/>
