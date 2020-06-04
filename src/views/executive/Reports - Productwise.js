@@ -294,7 +294,6 @@ class ReportsProductwise extends React.Component {
   renderTopSellingProducts = () => {
     const {pageSize, activePage, dataFiltered} = this.state;
     const pagedArray = dataFiltered.slice(pageSize*(activePage-1),pageSize*activePage);
-    console.log(pagedArray);
     return (
       <Col className="mb-5 mb-xl-0" xl="12">
           <Card className="shadow">
@@ -392,36 +391,36 @@ class ReportsProductwise extends React.Component {
             {this.renderHorizontalBarGraph(horizontalGraph[this.state.horizontalGraphData])}
           </Row>
           {/*pie graph*/}
-          <Row className={'mt-5'}>
-            <Col className="mb-5 mb-xl-0" xl="12">
-              <Card className="bg-gradient-default shadow">
-                <CardHeader className="bg-transparent">
-                  <Row className="align-items-center">
-                    <div className="col">
-                      <h6 className="text-uppercase text-light ls-1 mb-1">
-                        Top Trending
-                      </h6>
-                      <h2 className="text-white mb-0">Products</h2>
-                    </div>
-                    <div className="col">
-                      <Nav className="justify-content-end" pills>
-                      </Nav>
-                    </div>
-                  </Row>
-                </CardHeader>
-                <CardBody>
-                  {/* Chart */}
-                  <div className="chart">
-                    <Pie
-                      data={pieGraph.data1}
-                      options={pieGraph.options}
-                      getDatasetAtEvent={e => console.log(e)}
-                    />
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+          {/*<Row className={'mt-5'}>*/}
+          {/*  <Col className="mb-5 mb-xl-0" xl="12">*/}
+          {/*    <Card className="bg-gradient-default shadow">*/}
+          {/*      <CardHeader className="bg-transparent">*/}
+          {/*        <Row className="align-items-center">*/}
+          {/*          <div className="col">*/}
+          {/*            <h6 className="text-uppercase text-light ls-1 mb-1">*/}
+          {/*              Top Trending*/}
+          {/*            </h6>*/}
+          {/*            <h2 className="text-white mb-0">Products</h2>*/}
+          {/*          </div>*/}
+          {/*          <div className="col">*/}
+          {/*            <Nav className="justify-content-end" pills>*/}
+          {/*            </Nav>*/}
+          {/*          </div>*/}
+          {/*        </Row>*/}
+          {/*      </CardHeader>*/}
+          {/*      <CardBody>*/}
+          {/*        /!* Chart *!/*/}
+          {/*        <div className="chart">*/}
+          {/*          <Pie*/}
+          {/*            data={pieGraph.data1}*/}
+          {/*            options={pieGraph.options}*/}
+          {/*            getDatasetAtEvent={e => console.log(e)}*/}
+          {/*          />*/}
+          {/*        </div>*/}
+          {/*      </CardBody>*/}
+          {/*    </Card>*/}
+          {/*  </Col>*/}
+          {/*</Row>*/}
 
         {/*  single product */}
         <Row className={'mt-5'}>
