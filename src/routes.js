@@ -31,6 +31,9 @@ import ExecReports from "./views/executive/Reports";
 import ViewReports from "./views/executive/ViewReports";
 import AcceptShop from "./views/executive/AcceptShop";
 import ReportsProductwise from "./views/executive/Reports - Productwise"
+import ReportsAgentwise from "./views/executive/Reports - Agentwise";
+import ReportsDistrictwise from "./views/executive/Reports - Districtwise";
+
 /**
  *changed tables to TestComponent
  */
@@ -170,6 +173,20 @@ var hiddenRoutes = [
     component: MyStockAddToWarehouse,
     layout: "/agent"
   },
+  {
+    path: "/reports/daily",
+    name: "Reports",
+    icon: "ni ni-collection text-primary",
+    component: ReportsAgentwise,
+    layout: "/executive"
+  },
+  {
+    path: "/reports/districts",
+    name: "Reports",
+    icon: "ni ni-collection text-primary",
+    component: ReportsDistrictwise,
+    layout: "/executive"
+  },
 
 ];
 
@@ -217,15 +234,8 @@ export const executiveSidebar = [
     layout: "/executive"
   },
   {
-    path: "/repo",
-    name: "Reports",
-    icon: "ni ni-collection text-primary",
-    component: ExecReports,
-    layout: "/executive"
-  },
-  {
     path: "/reports/products",
-    name: "Test",
+    name: "Reports",
     icon: "ni ni-collection text-primary",
     component: ReportsProductwise,
     layout: "/executive"

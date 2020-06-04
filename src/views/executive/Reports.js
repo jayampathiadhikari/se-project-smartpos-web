@@ -1,6 +1,5 @@
 import React from "react";
 
-// reactstrap components
 import {
   Card,
   CardHeader,
@@ -16,7 +15,6 @@ import {
   DropdownItem,
   Button, Spinner, Alert, Nav, NavItem, NavLink, CardBody,
 } from "reactstrap";
-// core components
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Pagination from "react-js-pagination";
@@ -26,13 +24,10 @@ import classnames from "classnames";
 import {Bar} from "react-chartjs-2";
 import {getGraphDataProducts} from '../../Utils'
 import {
-  chartOptions,
-  parseOptions,
   chartExample1,
   chartExample2
 } from "variables/charts.js";
 
-//id,name,prod cost, selling price,, quantity
 
 class ExecReports extends React.Component {
   state = {

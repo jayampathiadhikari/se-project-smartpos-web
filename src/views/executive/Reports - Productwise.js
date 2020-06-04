@@ -23,7 +23,6 @@ import {getGraphDataProducts} from '../../Utils'
 import {
   chartOptions,
   parseOptions,
-  chartExample1,
   chartExample2,
   horizontalGraph,
   pieGraph
@@ -52,7 +51,7 @@ class ReportsProductwise extends React.Component {
     activeButtonProduct: '1',
     horizontalGraphData:'bestSellingProductsMonth',
     agent_id: null,
-    pageSize: 5,
+    pageSize: 10,
     activePage: 1,
     productsByMonth: [],
     productsByYear: [],
@@ -119,11 +118,11 @@ class ReportsProductwise extends React.Component {
   onClick = (e) => {
     const button = e.target.value;
     if(button === '1'){
-      this.props.history.push()
+      this.props.history.push('/executive/reports/products')
     }else if (button === '2'){
-      this.props.history.push()
+      this.props.history.push('/executive/reports/districts')
     }else{
-      this.props.history.push()
+      this.props.history.push('/executive/reports/daily')
     }
   };
 
@@ -336,10 +335,11 @@ class ReportsProductwise extends React.Component {
               </thead>
               <tbody>
               {pagedArray.map((item, index) => (
+
                 <tr key={index.toString()}>
-                  <td>{item.product_name}</td>
-                  <td>
-                    {item.total_revenue}
+                  <td style={index === 0 || index ===1 || index ===2 ? {color:'#f5365c'} : null}><b>{item.product_name}</b></td>
+                  <td style={index === 0 || index ===1 || index ===2 ? {color:'#f5365c'} : null}>
+                    <b>{item.total_revenue}</b>
                   </td>
                 </tr>
               ))}
@@ -380,9 +380,9 @@ class ReportsProductwise extends React.Component {
                 <Button size={'lg'} value={'1'} color={'primary'}
                         onClick={this.onClick}>Productwise Sales</Button>
                 <Button size={'lg'} value={'2'} color={'secondary'}
-                        onClick={this.onClick}>Top Selling Districts</Button>
+                        onClick={this.onClick}>Districtwise Sales</Button>
                 <Button size={'lg'} value={'3'} color={ 'secondary'}
-                        onClick={this.onClick}>Agentwise Sales</Button>
+                        onClick={this.onClick}>Daily Reports</Button>
 
             </span>
             </div>
