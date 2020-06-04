@@ -278,9 +278,9 @@ class ReportsDistrictwise extends React.Component {
                   <Row className="align-items-center">
                     <div className="col">
                       <h6 className="text-uppercase text-light ls-1 mb-1">
-                        Daily Reports
+                        Districtwise Sales
                       </h6>
-                      <h2 className="text-white mb-0">Select an agent to see his/her reports</h2>
+                      <h2 className="text-white mb-0">Toggle between last month and year to view corresponding reports</h2>
                     </div>
                     <div className="col">
                       <Nav className="justify-content-end" pills>
