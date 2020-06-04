@@ -4,7 +4,7 @@ const authReducerDefaultState = {
   signedIn: false,
   isExecutive:false,
   isAgent:false,
-  user:null
+  user: null
 };
 
 export function AuthenticationReducer(state = authReducerDefaultState, action) {
@@ -22,12 +22,14 @@ export function AuthenticationReducer(state = authReducerDefaultState, action) {
     case SET_EXECUTIVE:
       return {
         ...state,
-        isExecutive: action.payload
+        isExecutive: action.payload,
+        signedIn: true
       };
     case SET_AGENT:
       return {
         ...state,
-        isAgent: action.payload
+        isAgent: action.payload,
+        signedIn: true
       };
     case SET_USER:
       return {
@@ -37,7 +39,10 @@ export function AuthenticationReducer(state = authReducerDefaultState, action) {
     case SIGNOUT_USER:
       return {
         ...state,
-        user: null
+        user: null,
+        signedIn: false,
+        isExecutive: false,
+        isAgent: false
       };
     default:
       return state;

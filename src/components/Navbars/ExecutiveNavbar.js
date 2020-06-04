@@ -11,7 +11,7 @@ import {
   Container,
   Media
 } from "reactstrap";
-import {setExecutiveLogin} from "../../redux/reducers/authentication/action";
+import {setExecutiveLogin, signOut} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
 
 class ExecutiveNavbar extends React.Component {
@@ -28,7 +28,7 @@ class ExecutiveNavbar extends React.Component {
 
   onSignOut = () => {
     console.log('SIGN OUT');
-    this.props.setLogin(false);
+    this.props.signOut();
   };
 
   render() {
@@ -103,7 +103,7 @@ const mapStateToProps = (state) => ({
 });
 
 const bindAction = (dispatch) => ({
-  setLogin: (status) => dispatch(setExecutiveLogin(status)),
+  signOut : () => dispatch(signOut())
 });
 
 export default connect(

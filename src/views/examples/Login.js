@@ -1,9 +1,9 @@
 import React from "react";
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   withRouter
 } from "react-router-dom";
-import {checkAuthentication } from '../../Utils'
+import {checkAuthentication} from '../../Utils'
 
 // reactstrap components
 import {
@@ -22,58 +22,97 @@ import {
   Col, Spinner
 } from "reactstrap";
 
-import {setAgentLogin, setExecutiveLogin, setSignInStatus, setUser} from "../../redux/reducers/authentication/action";
+import {
+  setAgentLogin,
+  setExecutiveLogin,
+  setSignInStatus,
+  setUser,
+  signOut
+} from "../../redux/reducers/authentication/action";
 import {toast, ToastContainer} from "react-toastify";
 
 
 class Login extends React.Component {
   state = {
-    alert:'info',
+    alert: 'info',
     visible: false,
-    processing:true,
-    msg:null,
+    processing: true,
+    msg: null,
 
-    email:'',
-    password:'',
+    email: '',
+    password: '',
     remember: true,
+    emailTest: 'jayamathiadhikari@gmail.com'
 
   };
 
-  login = async() => {
-    this.setState({
-      visible:true
-    });
-    const res = await checkAuthentication(this.state.email,this.state.password);
-    if(res.success){
-      this.props.setUser(res.user);
-      if(res.type === 'exec'){
-        this.setState({
-          visible:false
+  login = async () => {
+    if (this.props.loggedIn) {
+      const alreadyLoggedIn = <div>
+        <span> Already logged in as {this.state.emailTest} </span>
+        <span>
+        <p className="mt-3 mb-0 text-muted text-sm">
+        <Button color="secondary" size={'sm'} type="button" onClick={() => {
+          this.toggle()
+        }}>
+          Continue
+        </Button>
+          <Button color="primary" size={'sm'} type="button" onClick={() => {
+            this.props.signOut()
+            
+          }}>
+          SignOut
+        </Button>
+      </p>
+      </span>
+
+      </div>;
+      toast.warn(alreadyLoggedIn, {
+        autoClose: false,
+        position: "bottom-left"
+      });
+
+    } else {
+      this.setState({
+        visible: true
+      });
+      const res = await checkAuthentication(this.state.email, this.state.password);
+      if (res.success) {
+        this.props.setUser(res.user);
+        if (res.type === 'exec') {
+          this.setState({
+            visible: false
+          });
+          this.props.setIsExecutive(true);
+          setTimeout(() => {
+            this.props.history.push('/executive/dashboard')
+          }, 10);
+        } else if (res.type === 'agent') {
+          this.setState({
+            visible: false
+          });
+          this.props.setIsAgent(true);
+          setTimeout(() => {
+            this.props.history.push('/agent/index');
+          }, 10);
+        } else {
+          this.setState({
+            visible: false
+          });
+          toast.error(` Login Failed, Check email or password`, {
+            position: "bottom-left"
+          });
+        }
+      } else {
+        toast.error(` Login Failed, Check email or password`, {
+          position: "bottom-left"
         });
-        this.props.setIsExecutive(true);
-        setTimeout(()=>{this.props.history.push('/executive/dashboard')},10);
-      }else if(res.type === 'agent'){
         this.setState({
-          visible:false
-        });
-        this.props.setIsAgent(true);
-        setTimeout(()=>{this.props.history.push('/agent/index');},10);
-      }else{
-        this.setState({
-          visible:false
-        });
-        toast.error(` Login Failed, Check email or password`,{
-          position:"bottom-left"
+          visible: false
         });
       }
-    }else{
-      toast.error(` Login Failed, Check email or password`,{
-        position:"bottom-left"
-      });
-      this.setState({
-        visible:false
-      });
     }
+
 
   };
 
@@ -82,7 +121,7 @@ class Login extends React.Component {
     const value = target.name === 'remember' ? target.checked : target.value;
     console.log(value);
     this.setState({
-      [target.name]:value
+      [target.name]: value
     })
   };
 
@@ -100,8 +139,9 @@ class Login extends React.Component {
           pauseOnFocusLoss
           draggable
           pauseOnHover/>
-        <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'50%',top:'50%',zIndex:999}}>
-          {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+        <Alert color={this.state.alert} isOpen={this.state.visible}
+               style={{position: 'fixed', left: '50%', top: '50%', zIndex: 999}}>
+          {this.state.processing ? <Spinner style={{width: '3rem', height: '3rem'}}/> : this.state.msg}
         </Alert>
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0 ">
@@ -110,7 +150,7 @@ class Login extends React.Component {
                 <img
                   alt="..."
                   src={require("assets/img/brand/logo-pos-600.png")}
-                  style={{width:'60%',height:'10%',margin: '0 auto',display:'block'}}
+                  style={{width: '60%', height: '10%', margin: '0 auto', display: 'block'}}
                 />
               </div>
 
@@ -124,20 +164,22 @@ class Login extends React.Component {
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
-                        <i className="ni ni-email-83" />
+                        <i className="ni ni-email-83"/>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" name="email" type="email" autoComplete="new-email" onChange={this.onChange}/>
+                    <Input placeholder="Email" name="email" type="email" autoComplete="new-email"
+                           onChange={this.onChange}/>
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
-                        <i className="ni ni-lock-circle-open" />
+                        <i className="ni ni-lock-circle-open"/>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" name={"password"} type="password" autoComplete="new-password" onChange={this.onChange} />
+                    <Input placeholder="Password" name={"password"} type="password" autoComplete="new-password"
+                           onChange={this.onChange}/>
                   </InputGroup>
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">
@@ -192,13 +234,14 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => ({
   loggedIn: state.AuthenticationReducer.signedIn,
+  user: state.AuthenticationReducer.user
 });
 
 const bindAction = (dispatch) => ({
-  setUser:(user) => dispatch(setUser(user)),
-  setLogin: (status) => dispatch(setSignInStatus(status)),
+  setUser: (user) => dispatch(setUser(user)),
   setIsExecutive: (status) => dispatch(setExecutiveLogin(status)),
   setIsAgent: (status) => dispatch(setAgentLogin(status)),
+  signOut: () => dispatch(signOut())
 });
 
 export default connect(

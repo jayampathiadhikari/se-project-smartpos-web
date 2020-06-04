@@ -12,7 +12,7 @@ import {
   Container,
   Media
 } from "reactstrap";
-import {setAgentLogin} from "../../redux/reducers/authentication/action";
+import {setAgentLogin, signOut} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
 
 class AgentNavbar extends React.Component {
@@ -30,7 +30,7 @@ class AgentNavbar extends React.Component {
 
   onSignOut = () => {
     console.log('SIGN OUT')
-    this.props.setLogin(false);
+    this.props.signOut()
   };
 
   render() {
@@ -103,7 +103,7 @@ const mapStateToProps = (state) => ({
 });
 
 const bindAction = (dispatch) => ({
-  setLogin: (status) => dispatch(setAgentLogin(status)),
+  signOut : () => dispatch(signOut())
 });
 
 export default connect(
