@@ -9,12 +9,7 @@ import {
   Row,
   Col,
   Table,
-  Media,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Button, Spinner, Alert, Nav, NavItem, NavLink, CardBody,
+  Button, Spinner, Alert, Nav, NavItem, NavLink, CardBody, Input,
 } from "reactstrap";
 // core components
 
@@ -57,13 +52,15 @@ class ReportsProductwise extends React.Component {
     activeButtonProduct: '1',
     horizontalGraphData:'bestSellingProductsMonth',
     agent_id: null,
-    pageSize: 10,
+    pageSize: 5,
     activePage: 1,
     productsByMonth: [],
     productsByYear: [],
     products: 'productsByMonth',
+    dataFiltered: [],
     chartExample2Data: "data3",
   };
+  target = '';
 
   componentDidMount = async () => {
 
@@ -76,6 +73,7 @@ class ReportsProductwise extends React.Component {
       this.setState({
         productsByMonth: productsByMonth.data,
         productsByYear: productsByYear.data,
+        dataFiltered: productsByMonth.data,
         visible:false
       })
     }
@@ -90,7 +88,8 @@ class ReportsProductwise extends React.Component {
       })
     }
     this.setState({
-      stock
+      stock,
+      stockFiltered: stock
     })
   };
 
@@ -134,7 +133,9 @@ class ReportsProductwise extends React.Component {
       activeButtonProduct : button,
       products :
         button === '1' ? 'productsByMonth' : 'productsByYear'
-    })
+    },this.filter);
+
+
   };
 
   onSelect = async (product) => {
@@ -270,18 +271,52 @@ class ReportsProductwise extends React.Component {
     )
   };
 
-  renderTopSellingProducts = () => {
+  filter = (e) => {
+    if(e != undefined){
+      this.target = e.target;
+      const filteredArray = this.state[this.state.products].filter(
+        data => {return (data.product_name.toLowerCase().includes(e.target.value.toLowerCase())) }
+      );
+      this.setState({
+        dataFiltered:filteredArray
+      });
+    }else{
+      console.log('filter works')
+      const filteredArray = this.state[this.state.products].filter(
+        data => {return (data.product_name.toLowerCase().includes(this.target.value === undefined ? '' : this.target.value.toLowerCase())) }
+      );
+      this.setState({
+        dataFiltered:filteredArray
+      });
+    }
 
+  };
+
+  renderTopSellingProducts = () => {
+    const {pageSize, activePage, dataFiltered} = this.state;
+    const pagedArray = dataFiltered.slice(pageSize*(activePage-1),pageSize*activePage);
+    console.log(pagedArray);
     return (
       <Col className="mb-5 mb-xl-0" xl="12">
           <Card className="shadow">
             <CardHeader className="border-0">
               <Row>
-                <Col lg={5}>
+                <Col lg={3}>
                   <h3 className="mb-0">Reports</h3>
                 </Col>
-                <Col lg={7}>
-                  <div className="pagination justify-content-end mb-0">
+                <Col>
+                  <Input
+                    className="form-control-alternative"
+                    id="filterProduct"
+                    type="text"
+                    placeholder={"Filter by product name..."}
+                    autoComplete = "false"
+                    onChange = {this.filter}
+                  />
+                </Col>
+                <Col lg={3}>
+                  <div className="justify-content-end mb-0">
+
                     <span>
                       <Button size={'md'} value={'1'} color={this.state.activeButtonProduct === '1' ? 'primary' : 'secondary'}
                               onClick={this.onClickProduct}>Last Month</Button>
@@ -300,7 +335,7 @@ class ReportsProductwise extends React.Component {
               </tr>
               </thead>
               <tbody>
-              {this.state[this.state.products].map((item, index) => (
+              {pagedArray.map((item, index) => (
                 <tr key={index.toString()}>
                   <td>{item.product_name}</td>
                   <td>
@@ -312,6 +347,15 @@ class ReportsProductwise extends React.Component {
             </Table>
             <CardFooter className="py-4">
               <div className="pagination justify-content-end mb-0">
+                <Pagination
+                  activePage={this.state.activePage}
+                  itemsCountPerPage={this.state.pageSize}
+                  totalItemsCount={this.state.dataFiltered.length}
+                  pageRangeDisplayed={3}
+                  onChange={this.handlePageChange.bind(this)}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
               </div>
             </CardFooter>
           </Card>
