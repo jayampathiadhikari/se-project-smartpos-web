@@ -23,7 +23,7 @@ import Pagination from "react-js-pagination";
 import Executive from "../../models/Executive";
 import {connect} from "react-redux";
 import classnames from "classnames";
-import {Bar, Line, HorizontalBar, Doughnut, Pie} from "react-chartjs-2";
+import {Bar, Line, HorizontalBar , Pie} from "react-chartjs-2";
 import {getGraphDataProducts} from '../../Utils'
 import {
   chartOptions,
@@ -54,6 +54,7 @@ class ReportsProductwise extends React.Component {
     stock:[],
     activeNav: 1,
     activeNavBar: 1,
+    activeButtonProduct: '1',
     horizontalGraphData:'bestSellingProductsMonth',
     agent_id: null,
     pageSize: 10,
@@ -270,11 +271,9 @@ class ReportsProductwise extends React.Component {
   };
 
   renderTopSellingProducts = () => {
+
     return (
-      <Row className='mt-7'>
-        <Col className="mb-5 mb-xl-0" xl="12">
-        </Col>
-        <div className="col">
+      <Col className="mb-5 mb-xl-0" xl="12">
           <Card className="shadow">
             <CardHeader className="border-0">
               <Row>
@@ -316,8 +315,8 @@ class ReportsProductwise extends React.Component {
               </div>
             </CardFooter>
           </Card>
-        </div>
-      </Row>
+      </Col>
+
     )
   };
 
@@ -425,7 +424,7 @@ class ReportsProductwise extends React.Component {
                         <CardBody>
                           {/* Chart */}
                           <div className="chart">
-                            <Bar
+                            <Line
                               data={this.state.barData}
                               options={chartExample2.options}
                             />
@@ -443,7 +442,26 @@ class ReportsProductwise extends React.Component {
             </Card>
           </Col>
         </Row>
-
+          {/* final table black container*/}
+          <Row className={'mt-5'}>
+            <Col className="mb-5 mb-xl-0" xl="12">
+              <Card className="bg-gradient-default shadow">
+                <CardHeader className="bg-transparent">
+                  <Row className="align-items-center">
+                    <div className="col">
+                      <h6 className="text-uppercase text-light ls-1 mb-1">
+                        product specific details
+                      </h6>
+                      <h2 className="text-white mb-0">Select a product from the dropdown to view overall details</h2>
+                    </div>
+                  </Row>
+                </CardHeader>
+                <CardBody>
+                  {this.renderTopSellingProducts()}
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
         </Container>
       </>
     );
