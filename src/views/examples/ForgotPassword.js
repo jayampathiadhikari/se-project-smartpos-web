@@ -30,9 +30,10 @@ import {
   signOut
 } from "../../redux/reducers/authentication/action";
 import {toast, ToastContainer} from "react-toastify";
+import FIREBASE from "../../firebase";
 
 
-class Login extends React.Component {
+class ForgotPassword extends React.Component {
   state = {
     alert: 'info',
     visible: false,
@@ -40,51 +41,8 @@ class Login extends React.Component {
     msg: null,
 
     email: '',
-    password: '',
-    remember: true,
-    emailTest: 'jayamathiadhikari@gmail.com'
 
-  };
 
-  login = async () => {
-    this.setState({
-      visible: true
-    });
-    const res = await checkAuthentication(this.state.email, this.state.password);
-    if (res.success) {
-      this.props.setUser(res.user);
-      if (res.type === 'exec') {
-        this.setState({
-          visible: false
-        });
-        this.props.setIsExecutive(true);
-        setTimeout(() => {
-          this.props.history.push('/executive/dashboard')
-        }, 10);
-      } else if (res.type === 'agent') {
-        this.setState({
-          visible: false
-        });
-        this.props.setIsAgent(true);
-        setTimeout(() => {
-          this.props.history.push('/agent/index');
-        }, 10);
-      } else {
-        this.setState({
-          visible: false
-        });
-        toast.error(` Login Failed, Check email or password`, {
-          position: "bottom-left"
-        });
-      }
-    } else {
-      toast.error(` Login Failed, Check email or password`, {
-        position: "bottom-left"
-      });
-      this.setState({
-        visible: false
-      });
-    }
   };
 
   onChange = (e) => {
@@ -95,6 +53,17 @@ class Login extends React.Component {
     })
   };
 
+  resend = () => {
+    FIREBASE.auth().sendPasswordResetEmail(this.state.email).then(() => {
+      toast.success(' Password reset email sent. Check your email')
+    }).catch(()=>{
+      toast.error(` Something went wrong`, {
+        position: "bottom-left",
+        autoClose: false
+      });
+    })
+
+  };
 
   render() {
     return (
@@ -115,19 +84,9 @@ class Login extends React.Component {
         </Alert>
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0 ">
-            <CardHeader className="bg-transparent card-header">
-              <div>
-                <img
-                  alt="..."
-                  src={require("assets/img/brand/logo-pos-600.png")}
-                  style={{width: '60%', height: '10%', margin: '0 auto', display: 'block'}}
-                />
-              </div>
-
-            </CardHeader>
             <CardBody className="px-lg-5">
               <div className="text-center text-muted mb-4">
-                <small>sign in with credentials</small>
+                <small>Enter your email</small>
               </div>
               <Form role="form">
                 <FormGroup className="mb-3">
@@ -141,35 +100,9 @@ class Login extends React.Component {
                            onChange={this.onChange}/>
                   </InputGroup>
                 </FormGroup>
-                <FormGroup>
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-lock-circle-open"/>
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Password" name={"password"} type="password" autoComplete="new-password"
-                           onChange={this.onChange}/>
-                  </InputGroup>
-                </FormGroup>
-                <div className="custom-control custom-control-alternative custom-checkbox">
-                  <input
-                    className="custom-control-input"
-                    name={"remember"}
-                    id=" customCheckLogin"
-                    type="checkbox"
-                    onChange={this.onChange}
-                  />
-                  <label
-                    className="custom-control-label"
-                    htmlFor=" customCheckLogin"
-                  >
-                    <span className="text-muted">Remember me</span>
-                  </label>
-                </div>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" onClick={this.login}>
-                    Sign in
+                  <Button className="my-4" color="primary" onClick={this.resend}>
+                    Reset Password
                   </Button>
                 </div>
               </Form>
@@ -183,9 +116,9 @@ class Login extends React.Component {
               <a
                 className="text-light"
                 href="#pablo"
-                onClick={e => {e.preventDefault(); this.props.history.push('/auth/forgotpassword')}}
+                onClick={e => {e.preventDefault(); this.props.history.push('auth/login')}}
               >
-                <small>Forgot Password ?</small>
+                <small>Go to Login</small>
               </a>
             </Col>
           </Row>
@@ -211,6 +144,6 @@ const bindAction = (dispatch) => ({
 export default connect(
   mapStateToProps,
   bindAction
-)(withRouter(Login));
+)(withRouter(ForgotPassword));
 
 

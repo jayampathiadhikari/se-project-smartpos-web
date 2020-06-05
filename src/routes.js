@@ -33,6 +33,7 @@ import AcceptShop from "./views/executive/AcceptShop";
 import ReportsProductwise from "./views/executive/Reports - Productwise"
 import ReportsAgentwise from "./views/executive/Reports - Agentwise";
 import ReportsDistrictwise from "./views/executive/Reports - Districtwise";
+import ForgotPassword from "./views/examples/ForgotPassword";
 
 /**
  *changed tables to TestComponent
@@ -108,6 +109,13 @@ var hiddenRoutes = [
     name: "Login",
     icon: "ni ni-key-25 text-info",
     component: Login,
+    layout: "/auth"
+  },
+  {
+    path: "/forgotpassword",
+    name: "ForgotPassword",
+    icon: "ni ni-key-25 text-info",
+    component: ForgotPassword,
     layout: "/auth"
   },
   {
