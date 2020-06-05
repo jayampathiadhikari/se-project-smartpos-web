@@ -45,6 +45,16 @@ class Login extends React.Component {
 
   };
 
+  componentDidMount() {
+    if(this.props.remember){
+      if(this.props.isExecutive){
+        this.props.history.push('/executive/dashboard')
+      }else{
+        this.props.history.push('/agent/dashboard')
+      }
+    }
+  }
+
   login = async () => {
     this.setState({
       visible: true
@@ -89,6 +99,13 @@ class Login extends React.Component {
   onChange = (e) => {
     const target = e.target;
     const value = target.name === 'remember' ? target.checked : target.value;
+    if(target.name === 'remember'){
+      if(target.checked){
+        this.props.rememberMe(true)
+      }else{
+        this.props.rememberMe(false)
+      }
+    }
     this.setState({
       [target.name]: value
     })
@@ -198,6 +215,8 @@ const mapStateToProps = (state) => ({
   loggedIn: state.AuthenticationReducer.signedIn,
   user: state.AuthenticationReducer.user,
   remember: state.AuthenticationReducer.remember,
+  isExecutive: state.AuthenticationReducer.isExecutive,
+  isAgent: state.AuthenticationReducer.isAgent
 });
 
 const bindAction = (dispatch) => ({
@@ -205,7 +224,7 @@ const bindAction = (dispatch) => ({
   setIsExecutive: (status) => dispatch(setExecutiveLogin(status)),
   setIsAgent: (status) => dispatch(setAgentLogin(status)),
   signOut: () => dispatch(signOut()),
-  rememberMe: () => dispatch(rememberMe()),
+  rememberMe: (status) => dispatch(rememberMe(status)),
 });
 
 export default connect(

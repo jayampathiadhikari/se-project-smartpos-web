@@ -44,10 +44,11 @@ export function signOut() {
   };
 };
 
-export function rememberMe() {
+export function rememberMe(payload) {
   return (dispatch) => {
     dispatch({
       type: REMEMBER_ME,
+      payload
     });
   };
 };

@@ -49,7 +49,7 @@ export function AuthenticationReducer(state = authReducerDefaultState, action) {
     case REMEMBER_ME:
       return {
         ...state,
-        remember: true
+        remember: action.payload
       };
     default:
       return state;
