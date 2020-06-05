@@ -1,4 +1,4 @@
-import { SET_SIGNIN_STATUS, SET_EXECUTIVE, SET_AGENT, SET_USER, SIGNOUT_USER } from "../../actionTypes";
+import {SET_SIGNIN_STATUS, SET_EXECUTIVE, SET_AGENT, SET_USER, SIGNOUT_USER, REMEMBER_ME} from "../../actionTypes";
 
 export function setSignInStatus(status) {
   return (dispatch) => {
@@ -40,6 +40,14 @@ export function signOut() {
   return (dispatch) => {
     dispatch({
       type: SIGNOUT_USER,
+    });
+  };
+};
+
+export function rememberMe() {
+  return (dispatch) => {
+    dispatch({
+      type: REMEMBER_ME,
     });
   };
 };

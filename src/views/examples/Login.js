@@ -23,9 +23,9 @@ import {
 } from "reactstrap";
 
 import {
+  rememberMe,
   setAgentLogin,
   setExecutiveLogin,
-  setSignInStatus,
   setUser,
   signOut
 } from "../../redux/reducers/authentication/action";
@@ -42,7 +42,6 @@ class Login extends React.Component {
     email: '',
     password: '',
     remember: true,
-    emailTest: 'jayamathiadhikari@gmail.com'
 
   };
 
@@ -177,7 +176,6 @@ class Login extends React.Component {
           </Card>
           <Row className="mt-3">
             <Col xs="6">
-
             </Col>
             <Col className="text-right" xs="6">
               <a
@@ -198,14 +196,16 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => ({
   loggedIn: state.AuthenticationReducer.signedIn,
-  user: state.AuthenticationReducer.user
+  user: state.AuthenticationReducer.user,
+  remember: state.AuthenticationReducer.remember,
 });
 
 const bindAction = (dispatch) => ({
   setUser: (user) => dispatch(setUser(user)),
   setIsExecutive: (status) => dispatch(setExecutiveLogin(status)),
   setIsAgent: (status) => dispatch(setAgentLogin(status)),
-  signOut: () => dispatch(signOut())
+  signOut: () => dispatch(signOut()),
+  rememberMe: () => dispatch(rememberMe()),
 });
 
 export default connect(
