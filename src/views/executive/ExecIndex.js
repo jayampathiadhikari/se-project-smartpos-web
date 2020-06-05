@@ -25,7 +25,6 @@ import {
 
 import {connect} from "react-redux";
 import Executive from "../../models/Executive";
-import CustomDropdown from "../../components/Dropdown";
 import Header from "../../components/Headers/Header";
 
 class ExecIndex extends React.Component {
@@ -84,16 +83,6 @@ class ExecIndex extends React.Component {
         this.state.chartExample1Data === "data1" ? "data2" : "data1",
     });
   };
-
-  toggleNavsBar = (e, index) => {
-    e.preventDefault();
-    this.setState({
-      activeNavBar: index,
-      chartExample2Data:
-        this.state.chartExample2Data === "data3" ? "data4" : "data3",
-    });
-  };
-
 
   renderLineGraph = (data) => {
 
@@ -168,67 +157,6 @@ class ExecIndex extends React.Component {
     })
   };
 
-  renderBarGraph = (data) => {
-    return (
-      <Col className="xl-12">
-        <Card className="shadow">
-          <CardHeader className="bg-transparent">
-            <Row className="align-items-center">
-              <div className="col">
-                <h6 className="text-uppercase text-muted ls-1 mb-1">
-                  District wise Performance
-                </h6>
-                {this.state.productID ?
-                  <h2 className="mb-0">Total orders of {this.state.productName}</h2> :
-                  <h2 className="mb-0">No product selected</h2>
-                }
-              </div>
-              <div className="col">
-                <Nav className="justify-content-end" pills>
-                  <NavItem>
-                    <NavLink
-                      className={classnames("py-2 px-3", {
-                        active: this.state.activeNavBar === 1
-                      })}
-                      href="#pablo"
-                      onClick={e => this.toggleNavsBar(e, 1)}
-                    >
-                      <span className="d-none d-md-block">Month</span>
-                      <span className="d-md-none">M</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames("py-2 px-3", {
-                        active: this.state.activeNavBar === 2
-                      })}
-                      data-toggle="tab"
-                      href="#pablo"
-                      onClick={e => this.toggleNavsBar(e, 2)}
-                    >
-                      <span className="d-none d-md-block">Year</span>
-                      <span className="d-md-none">W</span>
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-              </div>
-            </Row>
-          </CardHeader>
-          <CardBody>
-            {/* Chart */}
-            <div className="chart">
-              <Bar
-                data={data}
-                options={chartExample2.options}
-                getDatasetAtEvent={e => console.log(e)}
-              />
-            </div>
-          </CardBody>
-        </Card>
-      </Col>
-    )
-  };
-
   render() {
     return (
       <>
@@ -271,49 +199,6 @@ class ExecIndex extends React.Component {
           {/*second graph*/}
           <Row className="mt-5">
             {this.renderLineGraph(chartExample1[this.state.chartExample1Data])}
-          </Row>
-
-          <Row className="mt-5">
-            <Col xl="4">
-              <CustomDropdown data={this.state.stock} initial="Select a product"
-                              disabled={this.state.stock.length === 0} onSelect={this.onSelect}/>
-            </Col>
-          </Row>
-          {/*bar 1*/}
-          <Row className="mt-5">
-            {
-              <Col xl="12">
-                <Card className="shadow">
-                  <CardHeader className="bg-transparent">
-                    <Row className="align-items-center">
-                      <div className="col">
-                        <h6 className="text-uppercase text-muted ls-1 mb-1">
-                          Annual Performance
-                        </h6>
-                        {this.state.productID ?
-                          <h2 className="mb-0">Total orders of {this.state.productName}</h2> :
-                          <h2 className="mb-0">No product selected</h2>
-                        }
-                      </div>
-                    </Row>
-                  </CardHeader>
-                  <CardBody>
-                    {/* Chart */}
-                    <div className="chart">
-                      <Bar
-                        data={this.state.barData}
-                        options={chartExample2.options}
-                      />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            }
-          </Row>
-
-          {/*second graph*/}
-          <Row className="mt-5">
-            {this.renderBarGraph(chartExample2[this.state.chartExample2Data])}
           </Row>
         </Container>
       </>
