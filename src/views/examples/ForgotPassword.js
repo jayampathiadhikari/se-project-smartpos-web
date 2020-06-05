@@ -3,14 +3,13 @@ import {connect} from 'react-redux';
 import {
   withRouter
 } from "react-router-dom";
-import {checkAuthentication} from '../../Utils'
+
 
 // reactstrap components
 import {
   Alert,
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -22,13 +21,6 @@ import {
   Col, Spinner
 } from "reactstrap";
 
-import {
-  setAgentLogin,
-  setExecutiveLogin,
-  setSignInStatus,
-  setUser,
-  signOut
-} from "../../redux/reducers/authentication/action";
 import {toast, ToastContainer} from "react-toastify";
 import FIREBASE from "../../firebase";
 
@@ -135,10 +127,6 @@ const mapStateToProps = (state) => ({
 });
 
 const bindAction = (dispatch) => ({
-  setUser: (user) => dispatch(setUser(user)),
-  setIsExecutive: (status) => dispatch(setExecutiveLogin(status)),
-  setIsAgent: (status) => dispatch(setAgentLogin(status)),
-  signOut: () => dispatch(signOut())
 });
 
 export default connect(
