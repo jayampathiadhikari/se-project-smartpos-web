@@ -51,10 +51,11 @@ class ExecutiveNavbar extends React.Component {
                 <UncontrolledDropdown nav>
                   <DropdownToggle className="pr-0" nav>
                     <Media className="align-items-center">
-                    <span className="avatar avatar-sm rounded-circle">
+                    <span >
                       <img
                         alt="..."
-                        src={require("assets/img/theme/team-1-800x800.jpg")}
+                        src={require("assets/img/theme/user3.png")}
+                        style={{width:50, height:50}}
                       />
                     </span>
                       {profile && (profile).map((profileObj) => {
@@ -78,11 +79,8 @@ class ExecutiveNavbar extends React.Component {
                   </DropdownMenu>
                 </UncontrolledDropdown>
               </Nav>
-
             </Container>
           </Navbar>
-
-
         </>
       );
     }
