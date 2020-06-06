@@ -60,6 +60,7 @@ class Login extends React.Component {
       visible: true
     });
     const res = await checkAuthentication(this.state.email, this.state.password);
+    console.log(res,'login response');
     if (res.success) {
       this.props.setUser(res.user);
       if (res.type === 'exec') {

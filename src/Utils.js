@@ -101,6 +101,7 @@ export const checkAuthentication = (email, password) => {
       }
     )
     .catch(function (error) {
+      console.log(error, "UTILS AUTH ERROR");
       var errorMessage = error.message;
       return {success: false, message: errorMessage}
     });
