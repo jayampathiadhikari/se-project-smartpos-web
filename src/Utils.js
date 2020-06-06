@@ -95,13 +95,11 @@ export const checkAuthentication = (email, password) => {
       async () => {
         const userQueryRef = FIREBASE.firestore().collection('users').where('email', '==', email);
         const userQuerySnapshot = await userQueryRef.get();
-        const type = userQuerySnapshot.docs[0].data().type;
-        console.log(userQuerySnapshot.docs[0].data(), 'USER DATA');
+        const type = await userQuerySnapshot.docs[0].data().type;
         return {success: true, type: type, user: userQuerySnapshot.docs[0].data()}
       }
     )
     .catch(function (error) {
-      console.log(error, "UTILS AUTH ERROR");
       var errorMessage = error.message;
       return {success: false, message: errorMessage}
     });

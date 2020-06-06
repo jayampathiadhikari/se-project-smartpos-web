@@ -53,14 +53,20 @@ class Login extends React.Component {
         this.props.history.push('/agent/dashboard')
       }
     }
-  }
+  };
 
-  login = async () => {
+  login = async (e) => {
+    console.log('hello')
     this.setState({
       visible: true
     });
-    const res = await checkAuthentication(this.state.email, this.state.password);
-    console.log(res,'login response');
+    e.preventDefault();
+    let userData = {};
+    for(let i=0; i<2;i++){
+      const attri = e.target[i].id;
+      userData[attri] = e.target[i].value
+    }
+    const res = await checkAuthentication(userData.email, userData.password);
     if (res.success) {
       this.props.setUser(res.user);
       if (res.type === 'exec') {
@@ -100,6 +106,7 @@ class Login extends React.Component {
   onChange = (e) => {
     const target = e.target;
     const value = target.name === 'remember' ? target.checked : target.value;
+    console.log(value)
     if(target.name === 'remember'){
       if(target.checked){
         this.props.rememberMe(true)
@@ -146,27 +153,27 @@ class Login extends React.Component {
               <div className="text-center text-muted mb-4">
                 <small>sign in with credentials</small>
               </div>
-              <Form role="form">
-                <FormGroup className="mb-3">
+              <Form role="form" onSubmit={this.login}>
+                <FormGroup className="mb-3" >
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
                         <i className="ni ni-email-83"/>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" name="email" type="email" autoComplete="new-email"
-                           onChange={this.onChange}/>
+                    <Input placeholder="Email" id="email" type="email"
+                           />
                   </InputGroup>
                 </FormGroup>
-                <FormGroup>
+                <FormGroup >
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
                         <i className="ni ni-lock-circle-open"/>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" name={"password"} type="password" autoComplete="new-password"
-                           onChange={this.onChange}/>
+                    <Input placeholder="Password" id="password" type="password"
+                            />
                   </InputGroup>
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">
@@ -185,7 +192,7 @@ class Login extends React.Component {
                   </label>
                 </div>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" onClick={this.login}>
+                  <Button className="my-4" color="primary" type="submit">
                     Sign in
                   </Button>
                 </div>
