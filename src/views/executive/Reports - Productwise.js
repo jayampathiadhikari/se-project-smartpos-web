@@ -329,7 +329,7 @@ class ReportsProductwise extends React.Component {
               <thead className="thead-light">
               <tr>
                 <th scope="col">Product</th>
-                <th scope="col">Revenue</th>
+                <th scope="col">Revenue (Rs.)</th>
               </tr>
               </thead>
               <tbody>
@@ -491,12 +491,7 @@ class ReportsProductwise extends React.Component {
               <Card className="bg-gradient-default shadow">
                 <CardHeader className="bg-transparent">
                   <Row className="align-items-center">
-                    <div className="col">
-                      <h6 className="text-uppercase text-light ls-1 mb-1">
-                        product specific details
-                      </h6>
-                      <h2 className="text-white mb-0">Select a product from the dropdown to view overall details</h2>
-                    </div>
+
                   </Row>
                 </CardHeader>
                 <CardBody>
