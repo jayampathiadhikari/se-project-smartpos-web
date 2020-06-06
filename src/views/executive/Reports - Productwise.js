@@ -18,14 +18,13 @@ import Pagination from "react-js-pagination";
 import Executive from "../../models/Executive";
 import {connect} from "react-redux";
 import classnames from "classnames";
-import {Bar, Line, HorizontalBar , Pie} from "react-chartjs-2";
+import {Bar, Line, HorizontalBar} from "react-chartjs-2";
 import {getGraphDataProducts} from '../../Utils'
 import {
   chartOptions,
   parseOptions,
   chartExample2,
   horizontalGraph,
-  pieGraph
 } from "variables/charts.js";
 import Chart from "chart.js";
 import CustomDropdown from "../../components/Dropdown";
@@ -271,7 +270,7 @@ class ReportsProductwise extends React.Component {
   };
 
   filter = (e) => {
-    if(e != undefined){
+    if(e !== undefined){
       this.target = e.target;
       const filteredArray = this.state[this.state.products].filter(
         data => {return (data.product_name.toLowerCase().includes(e.target.value.toLowerCase())) }

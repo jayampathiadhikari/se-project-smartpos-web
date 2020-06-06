@@ -27,7 +27,6 @@ import Stock from "./views/executive/Stock";
 import StockAddNewProduct from "./views/executive/Stock-AddNewProduct";
 import StockAddToWarehouse from "./views/executive/Stock-AddToWarehouse";
 import StockSendToAgent from "./views/executive/Stock-SendToAgent";
-import ExecReports from "./views/executive/Reports";
 import ViewReports from "./views/executive/ViewReports";
 import AcceptShop from "./views/executive/AcceptShop";
 import ReportsProductwise from "./views/executive/Reports - Productwise"

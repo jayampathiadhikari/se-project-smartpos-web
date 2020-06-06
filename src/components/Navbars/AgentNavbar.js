@@ -1,6 +1,5 @@
 import React from "react";
 
-import {Link} from "react-router-dom";
 // reactstrap components
 import {
   DropdownMenu,
@@ -12,7 +11,7 @@ import {
   Container,
   Media
 } from "reactstrap";
-import {setAgentLogin, signOut} from "../../redux/reducers/authentication/action";
+import {signOut} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
 
 class AgentNavbar extends React.Component {

@@ -11,7 +11,7 @@ import {
   Container,
   Media
 } from "reactstrap";
-import {setExecutiveLogin, signOut} from "../../redux/reducers/authentication/action";
+import {signOut} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
 
 class ExecutiveNavbar extends React.Component {

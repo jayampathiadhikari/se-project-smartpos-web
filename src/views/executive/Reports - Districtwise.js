@@ -13,10 +13,7 @@ import {
   Spinner,
   Alert,
   Nav,
-  NavItem,
-  NavLink,
   CardBody,
-  Input,
   Media,
   UncontrolledDropdown,
   DropdownToggle,
@@ -28,19 +25,11 @@ import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Pagination from "react-js-pagination";
 import Executive from "../../models/Executive";
 import {connect} from "react-redux";
-import classnames from "classnames";
-import {Bar, Line, HorizontalBar , Pie} from "react-chartjs-2";
-import {getGraphDataProducts} from '../../Utils'
 import {
   chartOptions,
   parseOptions,
-  chartExample1,
-  chartExample2,
-  horizontalGraph,
-  pieGraph
 } from "variables/charts.js";
 import Chart from "chart.js";
-import CustomDropdown from "../../components/Dropdown";
 
 //id,name,prod cost, selling price,, quantity
 
