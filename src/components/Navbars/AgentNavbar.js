@@ -70,6 +70,7 @@ class AgentNavbar extends React.Component {
                       })}
                     </Media>
                   </DropdownToggle>
+                  <DropdownMenu className="dropdown-menu-arrow" right>
                     <DropdownItem href="/auth" onClick={this.onSignOut}>
                       <i className="ni ni-user-run"/>
                       <span>Logout</span>
