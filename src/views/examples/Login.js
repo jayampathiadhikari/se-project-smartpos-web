@@ -66,6 +66,7 @@ class Login extends React.Component {
       const attri = e.target[i].id;
       userData[attri] = e.target[i].value
     }
+    console.log(userData,'userData');
     const res = await checkAuthentication(userData.email, userData.password);
     if (res.success) {
       this.props.setUser(res.user);
