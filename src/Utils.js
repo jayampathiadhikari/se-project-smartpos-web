@@ -1,6 +1,9 @@
 import axios from 'axios';
 import FIREBASE from "./firebase";
 import 'firebase/functions';
+import 'firebase/auth';
+import 'firebase/firestore';
+
 import {MAPBOX_TOKEN} from "./config";
 import {regions} from './constants';
 
