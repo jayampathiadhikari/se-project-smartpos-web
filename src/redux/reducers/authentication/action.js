@@ -1,10 +1,19 @@
-import {SET_SIGNIN_STATUS, SET_EXECUTIVE, SET_AGENT, SET_USER, SIGNOUT_USER, REMEMBER_ME} from "../../actionTypes";
+import {SET_SIGNIN_STATUS, SET_EXECUTIVE, SET_AGENT, SET_USER, SIGNOUT_USER, REMEMBER_ME, SET_TOKEN} from "../../actionTypes";
 
 export function setSignInStatus(status) {
   return (dispatch) => {
     dispatch({
       type: SET_SIGNIN_STATUS,
       payload: status
+    });
+  };
+};
+
+export function setToken(token) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_TOKEN,
+      payload: token
     });
   };
 };

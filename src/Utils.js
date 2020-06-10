@@ -7,6 +7,32 @@ import 'firebase/firestore';
 import {MAPBOX_TOKEN} from "./config";
 import {regions} from './constants';
 
+export const getToken = async(employee_id) => {
+  try{
+    const result = await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/auth/employee/gettoken',{
+      params: {
+        employee_id
+      }
+    });
+    return result;
+  }catch (e) {
+    return {success: false, error: e}
+  }
+};
+
+export const generateToken = async(employee_id) => {
+  try{
+    const result = await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/auth/employee/generatetoken',{
+      params: {
+        employee_id
+      }
+    });
+    return result;
+  }catch (e) {
+    return {success: false, error: e}
+  }
+};
+
 export const createUserWithEmail = async (data) => {
   try {
     const addClient = FIREBASE.functions().httpsCallable('addUser');

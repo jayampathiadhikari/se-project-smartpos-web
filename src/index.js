@@ -17,6 +17,17 @@ import AgentLayout from "layouts/Agent"
 import AuthLayout from "layouts/Auth.js";
 import ExecutiveLayout from "layouts/Executive";
 import ErrorLayout from "./layouts/Error";
+import axios from 'axios';
+
+axios.interceptors.request.use(function (config) {
+  console.log(config,'INTERCEPTED');
+
+  // Do something before request is sent
+  return config;
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error);
+});
 
 ReactDOM.render(
   <Provider store={store}>

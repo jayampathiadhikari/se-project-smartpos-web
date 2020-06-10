@@ -7,3 +7,4 @@ export const TOGGLE_MODAL = 'TOGGLE_MODAL';
 export const SET_USER = 'SET_USER';
 export const SIGNOUT_USER = 'SIGNOUT_USER';
 export const REMEMBER_ME = 'REMEMBER_ME';
+export const SET_TOKEN = 'SET_TOKEN';

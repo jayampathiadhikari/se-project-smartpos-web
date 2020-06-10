@@ -1,11 +1,20 @@
-import {SET_SIGNIN_STATUS, SET_AGENT, SET_EXECUTIVE, SET_USER, SIGNOUT_USER, REMEMBER_ME} from '../../actionTypes';
+import {
+  SET_SIGNIN_STATUS,
+  SET_AGENT,
+  SET_EXECUTIVE,
+  SET_USER,
+  SIGNOUT_USER,
+  REMEMBER_ME,
+  SET_TOKEN
+} from '../../actionTypes';
 const authReducerDefaultState = {
   loading: false,
   signedIn: false,
   isExecutive:false,
   isAgent:false,
   user: null,
-  remember: false
+  remember: false,
+  token: null
 };
 
 export function AuthenticationReducer(state = authReducerDefaultState, action) {
@@ -15,6 +24,11 @@ export function AuthenticationReducer(state = authReducerDefaultState, action) {
     //     ...state,
     //     signedIn: action.payload
     //   };
+    case SET_TOKEN:
+      return {
+        ...state,
+        token: action.payload
+      };
     case SET_SIGNIN_STATUS:
       return {
         ...state,

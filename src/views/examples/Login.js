@@ -69,6 +69,7 @@ class Login extends React.Component {
     console.log(userData,'userData');
     const res = await checkAuthentication(userData.email, userData.password);
     if (res.success) {
+
       this.props.setUser(res.user);
       if (res.type === 'exec') {
         this.setState({
@@ -119,7 +120,6 @@ class Login extends React.Component {
       [target.name]: value
     })
   };
-
 
   render() {
     return (
