@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {
   withRouter
 } from "react-router-dom";
-import {checkAuthentication} from '../../Utils'
+import {checkAuthentication,getToken} from '../../Utils'
 
 // reactstrap components
 import {
@@ -27,10 +27,11 @@ import {
   setAgentLogin,
   setExecutiveLogin,
   setUser,
-  signOut
+  signOut,
+  setToken
 } from "../../redux/reducers/authentication/action";
 import {toast, ToastContainer} from "react-toastify";
-
+import axios from "axios";
 
 class Login extends React.Component {
   state = {
@@ -69,32 +70,45 @@ class Login extends React.Component {
     console.log(userData,'userData');
     const res = await checkAuthentication(userData.email, userData.password);
     if (res.success) {
-
       this.props.setUser(res.user);
-      if (res.type === 'exec') {
-        this.setState({
-          visible: false
-        });
-        this.props.setIsExecutive(true);
-        setTimeout(() => {
-          this.props.history.push('/executive/dashboard')
-        }, 10);
-      } else if (res.type === 'agent') {
-        this.setState({
-          visible: false
-        });
-        this.props.setIsAgent(true);
-        setTimeout(() => {
-          this.props.history.push('/agent/index');
-        }, 10);
-      } else {
-        this.setState({
-          visible: false
-        });
-        toast.error(` Login Failed, Check email or password`, {
+      const result = await getToken(res.user.uid);
+      console.log(result,'TOKEN RESULT')
+      if(result.success){
+        this.props.setToken('Bearer '+ result.data[0].token);
+        console.log(result,'GET TOKEN');
+        if (res.type === 'exec') {
+          this.setState({
+            visible: false
+          });
+          this.props.setIsExecutive(true);
+          setTimeout(() => {
+            this.props.history.push('/executive/dashboard')
+          }, 10);
+        } else if (res.type === 'agent') {
+          this.setState({
+            visible: false
+          });
+          this.props.setIsAgent(true);
+          setTimeout(() => {
+            this.props.history.push('/agent/index');
+          }, 10);
+        } else {
+          this.setState({
+            visible: false
+          });
+          toast.error(` Login Failed, Check email or password`, {
+            position: "bottom-left"
+          });
+        }
+      }else{
+        toast.error(` Login Failed`, {
           position: "bottom-left"
         });
+        this.setState({
+          visible: false
+        });
       }
+
     } else {
       toast.error(` Login Failed, Check email or password`, {
         position: "bottom-left"
@@ -234,6 +248,7 @@ const bindAction = (dispatch) => ({
   setIsAgent: (status) => dispatch(setAgentLogin(status)),
   signOut: () => dispatch(signOut()),
   rememberMe: (status) => dispatch(rememberMe(status)),
+  setToken:(token) => dispatch(setToken(token)),
 });
 
 export default connect(

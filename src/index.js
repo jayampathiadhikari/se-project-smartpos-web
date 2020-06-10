@@ -19,11 +19,17 @@ import ExecutiveLayout from "layouts/Executive";
 import ErrorLayout from "./layouts/Error";
 import axios from 'axios';
 
-axios.interceptors.request.use(function (config) {
-  console.log(config,'INTERCEPTED');
 
+axios.interceptors.request.use(function (config) {
+  if(config.url.includes('/api/v1/auth/')){
+    return config;
+  }else{
+    const token = store.getState().AuthenticationReducer.token;
+    config.headers.Authorization = token;
+    console.log(config,'normal route')
+    return config;
+  }
   // Do something before request is sent
-  return config;
 }, function (error) {
   // Do something with request error
   return Promise.reject(error);
