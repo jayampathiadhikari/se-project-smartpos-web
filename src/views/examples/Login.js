@@ -31,9 +31,13 @@ import {
   setToken
 } from "../../redux/reducers/authentication/action";
 import {toast, ToastContainer} from "react-toastify";
-import axios from "axios";
+import SimpleReactValidator from 'simple-react-validator';
 
 class Login extends React.Component {
+  constructor(props){
+    super(props);
+    this.validator = new SimpleReactValidator();
+  }
   state = {
     alert: 'info',
     visible: false,
@@ -47,6 +51,7 @@ class Login extends React.Component {
   };
 
   componentDidMount() {
+    console.log(this.validator);
     if(this.props.remember){
       if(this.props.isExecutive){
         this.props.history.push('/executive/dashboard')
@@ -57,64 +62,73 @@ class Login extends React.Component {
   };
 
   login = async (e) => {
-    this.setState({
-      visible: true
-    });
     e.preventDefault();
-    let userData = {};
-    for(let i=0; i<2;i++){
-      const attri = e.target[i].id;
-      userData[attri] = e.target[i].value
-    }
-    const res = await checkAuthentication(userData.email, userData.password);
-    if (res.success) {
-      this.props.setUser(res.user);
-      const result = await getToken(res.user.uid);
-      if(result.success){
-        this.props.setToken('Bearer '+ result.data[0].token);
-        if (res.type === 'exec') {
-          this.setState({
-            visible: false
-          });
-          this.props.setIsExecutive(true);
-          this.props.rememberMe(this.state.remember);
-          setTimeout(() => {
-            this.props.history.push('/executive/dashboard')
-          }, 10);
-        } else if (res.type === 'agent') {
-          this.setState({
-            visible: false
-          });
-          this.props.setIsAgent(true);
-          this.props.rememberMe(this.state.remember);
-          setTimeout(() => {
-            this.props.history.push('/agent/index');
-          }, 10);
-        } else {
-          this.setState({
-            visible: false
-          });
-          toast.error(` Login Failed, Check email or password`, {
+    if (this.validator.allValid()) {
+      this.setState({
+        visible: true
+      });
+      let userData = {};
+      for(let i=0; i<2;i++){
+        const attri = e.target[i].id;
+        userData[attri] = e.target[i].value
+      }
+      const res = await checkAuthentication(userData.email, userData.password);
+      if (res.success) {
+        this.props.setUser(res.user);
+        const result = await getToken(res.user.uid);
+        if(result.success){
+          this.props.setToken('Bearer '+ result.data[0].token);
+          if (res.type === 'exec') {
+            this.setState({
+              visible: false
+            });
+            this.props.setIsExecutive(true);
+            this.props.rememberMe(this.state.remember);
+            setTimeout(() => {
+              this.props.history.push('/executive/dashboard')
+            }, 10);
+          } else if (res.type === 'agent') {
+            this.setState({
+              visible: false
+            });
+            this.props.setIsAgent(true);
+            this.props.rememberMe(this.state.remember);
+            setTimeout(() => {
+              this.props.history.push('/agent/index');
+            }, 10);
+          } else {
+            this.setState({
+              visible: false
+            });
+            toast.error(` Login Failed, Check email or password`, {
+              position: "bottom-left"
+            });
+          }
+        }else{
+          toast.error(` Login Failed`, {
             position: "bottom-left"
           });
+          this.setState({
+            visible: false
+          });
         }
-      }else{
-        toast.error(` Login Failed`, {
+      } else {
+        toast.error(` Login Failed, Check email or password`, {
           position: "bottom-left"
         });
         this.setState({
           visible: false
         });
       }
-
+      alert('You submitted the form and stuff!');
     } else {
-      toast.error(` Login Failed, Check email or password`, {
-        position: "bottom-left"
-      });
-      this.setState({
-        visible: false
-      });
+      this.validator.showMessages();
+      // rerender to show messages for the first time
+      // you can use the autoForceUpdate option to do this automatically`
+      this.forceUpdate();
     }
+
+
   };
 
   onChange = (e) => {
@@ -166,9 +180,11 @@ class Login extends React.Component {
                         <i className="ni ni-email-83"/>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" id="email" type="email"
-                           />
+                    <Input placeholder="Email" id="email" onChange={this.onChange}/>
                   </InputGroup>
+                  <div className="text-muted mb-4">
+                    <small>{this.validator.message('email', this.state.email, 'required|email')}</small>
+                  </div>
                 </FormGroup>
                 <FormGroup >
                   <InputGroup className="input-group-alternative">
