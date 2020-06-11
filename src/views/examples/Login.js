@@ -42,7 +42,7 @@ class Login extends React.Component {
 
     email: '',
     password: '',
-    remember: true,
+    remember: false,
 
   };
 
@@ -50,14 +50,13 @@ class Login extends React.Component {
     if(this.props.remember){
       if(this.props.isExecutive){
         this.props.history.push('/executive/dashboard')
-      }else{
+      }else if(this.props.isAgent){
         this.props.history.push('/agent/dashboard')
       }
     }
   };
 
   login = async (e) => {
-    console.log('hello')
     this.setState({
       visible: true
     });
@@ -67,20 +66,18 @@ class Login extends React.Component {
       const attri = e.target[i].id;
       userData[attri] = e.target[i].value
     }
-    console.log(userData,'userData');
     const res = await checkAuthentication(userData.email, userData.password);
     if (res.success) {
       this.props.setUser(res.user);
       const result = await getToken(res.user.uid);
-      console.log(result,'TOKEN RESULT')
       if(result.success){
         this.props.setToken('Bearer '+ result.data[0].token);
-        console.log(result,'GET TOKEN');
         if (res.type === 'exec') {
           this.setState({
             visible: false
           });
           this.props.setIsExecutive(true);
+          this.props.rememberMe(this.state.remember);
           setTimeout(() => {
             this.props.history.push('/executive/dashboard')
           }, 10);
@@ -89,6 +86,7 @@ class Login extends React.Component {
             visible: false
           });
           this.props.setIsAgent(true);
+          this.props.rememberMe(this.state.remember);
           setTimeout(() => {
             this.props.history.push('/agent/index');
           }, 10);
@@ -122,14 +120,6 @@ class Login extends React.Component {
   onChange = (e) => {
     const target = e.target;
     const value = target.name === 'remember' ? target.checked : target.value;
-    console.log(value)
-    if(target.name === 'remember'){
-      if(target.checked){
-        this.props.rememberMe(true)
-      }else{
-        this.props.rememberMe(false)
-      }
-    }
     this.setState({
       [target.name]: value
     })
