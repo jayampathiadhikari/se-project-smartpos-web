@@ -255,6 +255,11 @@ class AgentSidebar extends React.Component {
                 </InputGroupAddon>
               </InputGroup>
             </Form>
+            <img
+              alt="..."
+              src={require("assets/img/brand/logo2.png")}
+              style={{width:200, height:200}}
+            />
             <h6 className="navbar-heading text-muted">Navigation</h6>
             {/* Navigation */}
             <Nav navbar>{this.createLinks(routes)}</Nav>
