@@ -103,7 +103,9 @@ class ExecMap extends React.Component {
   componentWillUnmount() {
     clearTimeout(this.timeoutHandle);
     clearInterval(this.intervalHandle);
-    this.unsubscribe();
+    if(typeof (this.unsubscribe) === 'function'){
+      this.unsubscribe()
+    }
   }
 
   getCirclePaint = () => ({
