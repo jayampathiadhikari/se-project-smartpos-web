@@ -192,49 +192,49 @@ export const agentSidebar = [
   {
     path: "/index",
     name: "Dashboard",
-    icon: "ni ni-tv-2 text-default",
+    icon: "ni ni-tv-2 text-primary",
     component: AgentIndex,
     layout: "/agent"
   },
   {
     path: "/maps",
     name: "Maps",
-    icon: "ni ni-pin-3 text-default",
+    icon: "ni ni-pin-3 text-orange",
     component: AgentMap,
     layout: "/agent"
   },
   {
     path: "/adduser",
     name: "Add Employee",
-    icon: "ni ni-circle-08 text-default",
+    icon: "ni ni-circle-08 text-primary",
     component: AddEmployeeAgent,
     layout: "/agent"
   },
   {
     path: "/request-stock",
     name: "Request Stock",
-    icon: "ni ni-delivery-fast text-default",
+    icon: "ni ni-delivery-fast text-orange",
     component: RequestStock,
     layout: "/agent"
   },
   {
     path: "/my-shops",
     name: "My Shops",
-    icon: "ni ni-shop text-default",
+    icon: "ni ni-shop text-primary",
     component: MyShops,
     layout: "/agent"
   },
   {
     path: "/my-reports",
     name: "My Reports",
-    icon: "ni ni-collection text-default",
+    icon: "ni ni-collection text-primary",
     component: MyReports,
     layout: "/agent"
   },
   {
     path: "/my-stock",
     name: "My Stock",
-    icon: "ni ni-box-2 text-default",
+    icon: "ni ni-box-2 text-primary",
     component: MyStock,
     layout: "/agent"
   },

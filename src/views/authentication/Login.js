@@ -154,7 +154,7 @@ class Login extends React.Component {
           draggable
           pauseOnHover/>
         <Alert color={this.state.alert} isOpen={this.state.visible}
-               style={{position: 'fixed', left: '50%', top: '50%', zIndex: 999}}>
+               style={{position: 'fixed', left: '46.8%', top: '46.8%', zIndex: 999}}>
           {this.state.processing ? <Spinner style={{width: '3rem', height: '3rem'}}/> : this.state.msg}
         </Alert>
         <Col lg="5" md="7">
