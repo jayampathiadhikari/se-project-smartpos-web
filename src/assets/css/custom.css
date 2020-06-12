@@ -37,3 +37,7 @@
     opacity: 1
 }
 
+.navbar-vertical .navbar-collapse:before {
+    content: '';
+    display: block;
+    margin: 0 !important }
