@@ -151,7 +151,6 @@ class AddEmployeeEx extends React.Component {
       <>
         <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'43%',top:'43%',zIndex:999}}>
           {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
-
         </Alert>
         <UserHeader />
         {/* Page content */}
