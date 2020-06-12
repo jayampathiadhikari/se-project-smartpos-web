@@ -106,11 +106,26 @@ export const getCurrentExecData = () => {
 export const checkAuthentication = (email, password) => {
   return FIREBASE.auth().signInWithEmailAndPassword(email, password)
     .then(
-      async () => {
-        const userQueryRef = FIREBASE.firestore().collection('users').where('email', '==', email);
-        const userQuerySnapshot = await userQueryRef.get();
-        const type = await userQuerySnapshot.docs[0].data().type;
-        return {success: true, type: type, user: userQuerySnapshot.docs[0].data()}
+       () => {
+        return FIREBASE.firestore().collection("users").where("email", "==", email)
+          .get()
+          .then(function(querySnapshot) {
+            if(!querySnapshot.empty){
+              console.log('USER FOUND');
+              return {success: true, type: querySnapshot.docs[0].data().type, user: querySnapshot.docs[0].data()}
+            }else{
+              console.log('NO SUCH USER FOUND');
+              return {success: false, message: 'No such user'}
+            }
+          })
+          .catch(function(error) {
+            console.log("Error getting documents: ", error);
+            return {success: false, message: 'ERROR'}
+          });
+        // const userQueryRef = FIREBASE.firestore().collection('users').where('email', '==', email);
+        // const userQuerySnapshot = await userQueryRef.get();
+        // const type = await userQuerySnapshot.docs[0].data().type;
+        // return {success: true, type: type, user: userQuerySnapshot.docs[0].data()}
       }
     )
     .catch(function (error) {
