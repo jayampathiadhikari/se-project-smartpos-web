@@ -55,20 +55,6 @@ class Icons extends React.Component {
         }
     }
 
-    componentDidMount() {
-
-        axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
-            this.setState({
-                profile: result.data
-            })
-        })
-
-        axios.get(`https://se-smartpos-backend.herokuapp.com/employee/auth`).then((result) => {
-            this.setState({
-                auth: result.data
-            })
-        })
-    }
 
     onSubmitEdit = (e) => {
         console.log('this.state', this.state)

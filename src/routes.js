@@ -1,9 +1,9 @@
-import OwnerProfile from "views/examples/Profile.js";
+// import OwnerProfile from "views/examples/Profile.js";
 import AgentProfile from "views/agent/Profile.js";
-import Register from "views/examples/Register.js";
+// import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
-import Edit from "views/examples/Edit.js";
-import ResetPassword from "./views/examples/ResetPassword";
+// import Edit from "views/examples/Edit.js";
+// import ResetPassword from "./views/examples/ResetPassword";
 import PageNotFound from "./views/404"
 //agent
 import AgentIndex from "./views/agent/AgentIndex";
@@ -40,25 +40,11 @@ import ForgotPassword from "./views/examples/ForgotPassword";
 
 var hiddenRoutes = [
   {
-    path: "/agent-profile",
-    name: "Agent Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: AgentProfile,
-    layout: "/admin"
-  },
-  {
     path: "/404",
     name: "Agent Profile",
     icon: "ni ni-single-02 text-yellow",
     component: PageNotFound,
     layout: "/error"
-  },
-  {
-    path: "/owner-profile",
-    name: "Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: OwnerProfile,
-    layout: "/executive"
   },
   {
     path: "/login",
@@ -67,40 +53,12 @@ var hiddenRoutes = [
     component: Login,
     layout: "/auth"
   },
-  {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: Register,
-    layout: "/auth"
-  },
-  {
-    path: "/edit",
-    name: "Edit",
-    icon: "ni ni-circle-08 text-pink",
-    component: Edit,
-    layout: "/admin"
-  },
-  {
-    path: "/reset-password",
-    name: "Reset Password",
-    icon: "ni ni-circle-08 text-pink",
-    component: ResetPassword,
-    layout: "/executive"
-  },
 //
   {
     path: "/agent-profile",
     name: "Agent Profile",
     icon: "ni ni-single-02 text-yellow",
     component: AgentProfile,
-    layout: "/executive"
-  },
-  {
-    path: "/owner-profile",
-    name: "Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: OwnerProfile,
     layout: "/executive"
   },
   {
@@ -116,20 +74,6 @@ var hiddenRoutes = [
     icon: "ni ni-key-25 text-info",
     component: ForgotPassword,
     layout: "/auth"
-  },
-  {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: Register,
-    layout: "/executive"
-  },
-  {
-    path: "/edit",
-    name: "Edit",
-    icon: "ni ni-circle-08 text-pink",
-    component: Edit,
-    layout: "/executive"
   },
   {
     path: "/my-stock/add-new-product",
