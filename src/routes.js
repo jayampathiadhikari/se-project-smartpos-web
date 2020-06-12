@@ -1,10 +1,10 @@
 // import OwnerProfile from "views/examples/Profile.js";
 import AgentProfile from "views/agent/Profile.js";
 // import Register from "views/examples/Register.js";
-import Login from "views/examples/Login.js";
+import Login from "views/authentication/Login.js";
 // import Edit from "views/examples/Edit.js";
 // import ResetPassword from "./views/examples/ResetPassword";
-import PageNotFound from "./views/404"
+import PageNotFound from "./views/404";
 //agent
 import AgentIndex from "./views/agent/AgentIndex";
 import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
@@ -32,7 +32,7 @@ import AcceptShop from "./views/executive/AcceptShop";
 import ReportsProductwise from "./views/executive/Reports - Productwise"
 import ReportsAgentwise from "./views/executive/Reports - Agentwise";
 import ReportsDistrictwise from "./views/executive/Reports - Districtwise";
-import ForgotPassword from "./views/examples/ForgotPassword";
+import ForgotPassword from "./views/authentication/ForgotPassword";
 
 /**
  *changed tables to TestComponent
