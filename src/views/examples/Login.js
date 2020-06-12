@@ -120,7 +120,6 @@ class Login extends React.Component {
           visible: false
         });
       }
-      alert('You submitted the form and stuff!');
     } else {
       this.validator.showMessages();
       // rerender to show messages for the first time
@@ -132,8 +131,10 @@ class Login extends React.Component {
   };
 
   onChange = (e) => {
+
     const target = e.target;
     const value = target.name === 'remember' ? target.checked : target.value;
+    console.log(value);
     this.setState({
       [target.name]: value
     })
@@ -180,10 +181,10 @@ class Login extends React.Component {
                         <i className="ni ni-email-83"/>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" id="email" onChange={this.onChange}/>
+                    <Input placeholder="Email" id="email" name="email" onChange={this.onChange}/>
                   </InputGroup>
-                  <div className="text-muted mb-4">
-                    <small>{this.validator.message('email', this.state.email, 'required|email')}</small>
+                  <div className="text-warning mb-4 ml-2">
+                    <small>{this.validator.message('email', this.state.email, 'email')}</small>
                   </div>
                 </FormGroup>
                 <FormGroup >
