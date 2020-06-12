@@ -74,6 +74,7 @@ class Login extends React.Component {
       }
       console.log(userData,'USERDATA');
       const res = await checkAuthentication(userData.email, userData.password);
+      console.log(res,'RESULT');
       if (res.success) {
         this.props.setUser(res.user);
         const result = await getToken(res.user.uid);
