@@ -42,6 +42,11 @@ class StockReq extends React.Component {
     const result = await Executive.getAllAgents();
     const res = await Executive.getAgentsWithRequests();
     if(res.data.success){
+      if(res.data.data.length === 0){
+        toast.warn(` No requests`,{
+          position:"bottom-left"
+        });
+      }
       const agents = this.filterData(result,res.data.data);
       this.setState({
         agents:agents,
@@ -115,7 +120,8 @@ class StockReq extends React.Component {
 
   onClickSend = async (prod_details) => {
     const {invoiceData,agentID} = this.state;
-    const res = await Executive.sendRequest(agentID,prod_details.product_id,prod_details.quantity);
+    const res = await Executive.sendRequest(agentID,prod_details.product_id,prod_details.quantity,prod_details.requesting_invoice_items_id);
+    console.log(res.data)
     if(res.data.success){
       toast.success(` ${prod_details.product_id} Sending Successful`,{toastId:prod_details.product_id});
       const index = invoiceData.indexOf(prod_details);

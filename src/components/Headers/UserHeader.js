@@ -34,19 +34,6 @@ class UserHeader extends React.Component {
         }
     }
 
-  componentDidMount() {
-      console.log("rezult")
-      axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
-          console.log("result data", result.data.first_name)
-          this.setState({
-              profile: result.data
-
-          })
-      })
-  }
-
-
-
   render() {
     var {profile} =this.state
     return (

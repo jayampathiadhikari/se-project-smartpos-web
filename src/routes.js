@@ -1,10 +1,5 @@
-import OwnerProfile from "views/examples/Profile.js";
-import AgentProfile from "views/agent/Profile.js";
-import Register from "views/examples/Register.js";
-import Login from "views/examples/Login.js";
-import Edit from "views/examples/Edit.js";
-import ResetPassword from "./views/examples/ResetPassword";
-import PageNotFound from "./views/404"
+import Login from "views/authentication/Login.js";
+import PageNotFound from "./views/404";
 //agent
 import AgentIndex from "./views/agent/AgentIndex";
 import AddEmployeeAgent from "./views/agent/AddEmployeeAgent";
@@ -27,21 +22,18 @@ import Stock from "./views/executive/Stock";
 import StockAddNewProduct from "./views/executive/Stock-AddNewProduct";
 import StockAddToWarehouse from "./views/executive/Stock-AddToWarehouse";
 import StockSendToAgent from "./views/executive/Stock-SendToAgent";
-import ExecReports from "./views/executive/Reports";
 import ViewReports from "./views/executive/ViewReports";
 import AcceptShop from "./views/executive/AcceptShop";
+import ReportsProductwise from "./views/executive/Reports - Productwise"
+import ReportsAgentwise from "./views/executive/Reports - Agentwise";
+import ReportsDistrictwise from "./views/executive/Reports - Districtwise";
+import ForgotPassword from "./views/authentication/ForgotPassword";
+
 /**
  *changed tables to TestComponent
  */
 
 var hiddenRoutes = [
-  {
-    path: "/agent-profile",
-    name: "Agent Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: AgentProfile,
-    layout: "/admin"
-  },
   {
     path: "/404",
     name: "Agent Profile",
@@ -50,56 +42,14 @@ var hiddenRoutes = [
     layout: "/error"
   },
   {
-    path: "/owner-profile",
-    name: "Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: OwnerProfile,
-    layout: "/executive"
-  },
-  {
     path: "/login",
     name: "Login",
     icon: "ni ni-key-25 text-info",
     component: Login,
     layout: "/auth"
-  },
-  {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: Register,
-    layout: "/auth"
-  },
-  {
-    path: "/edit",
-    name: "Edit",
-    icon: "ni ni-circle-08 text-pink",
-    component: Edit,
-    layout: "/admin"
-  },
-  {
-    path: "/reset-password",
-    name: "Reset Password",
-    icon: "ni ni-circle-08 text-pink",
-    component: ResetPassword,
-    layout: "/executive"
   },
 //
   {
-    path: "/agent-profile",
-    name: "Agent Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: AgentProfile,
-    layout: "/executive"
-  },
-  {
-    path: "/owner-profile",
-    name: "Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: OwnerProfile,
-    layout: "/executive"
-  },
-  {
     path: "/login",
     name: "Login",
     icon: "ni ni-key-25 text-info",
@@ -107,18 +57,11 @@ var hiddenRoutes = [
     layout: "/auth"
   },
   {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: Register,
-    layout: "/executive"
-  },
-  {
-    path: "/edit",
-    name: "Edit",
-    icon: "ni ni-circle-08 text-pink",
-    component: Edit,
-    layout: "/executive"
+    path: "/forgotpassword",
+    name: "ForgotPassword",
+    icon: "ni ni-key-25 text-info",
+    component: ForgotPassword,
+    layout: "/auth"
   },
   {
     path: "/my-stock/add-new-product",
@@ -169,6 +112,20 @@ var hiddenRoutes = [
     component: MyStockAddToWarehouse,
     layout: "/agent"
   },
+  {
+    path: "/reports/daily",
+    name: "Reports",
+    icon: "ni ni-collection text-primary",
+    component: ReportsAgentwise,
+    layout: "/executive"
+  },
+  {
+    path: "/reports/districts",
+    name: "Reports",
+    icon: "ni ni-collection text-primary",
+    component: ReportsDistrictwise,
+    layout: "/executive"
+  },
 
 ];
 
@@ -216,10 +173,10 @@ export const executiveSidebar = [
     layout: "/executive"
   },
   {
-    path: "/reports",
+    path: "/reports/products",
     name: "Reports",
     icon: "ni ni-collection text-primary",
-    component: ExecReports,
+    component: ReportsProductwise,
     layout: "/executive"
   },
   {
@@ -235,49 +192,49 @@ export const agentSidebar = [
   {
     path: "/index",
     name: "Dashboard",
-    icon: "ni ni-tv-2 text-default",
+    icon: "ni ni-tv-2 text-primary",
     component: AgentIndex,
     layout: "/agent"
   },
   {
     path: "/maps",
     name: "Maps",
-    icon: "ni ni-pin-3 text-default",
+    icon: "ni ni-pin-3 text-orange",
     component: AgentMap,
     layout: "/agent"
   },
   {
     path: "/adduser",
     name: "Add Employee",
-    icon: "ni ni-circle-08 text-default",
+    icon: "ni ni-circle-08 text-primary",
     component: AddEmployeeAgent,
     layout: "/agent"
   },
   {
     path: "/request-stock",
     name: "Request Stock",
-    icon: "ni ni-delivery-fast text-default",
+    icon: "ni ni-delivery-fast text-orange",
     component: RequestStock,
     layout: "/agent"
   },
   {
     path: "/my-shops",
     name: "My Shops",
-    icon: "ni ni-shop text-default",
+    icon: "ni ni-shop text-primary",
     component: MyShops,
     layout: "/agent"
   },
   {
     path: "/my-reports",
     name: "My Reports",
-    icon: "ni ni-collection text-default",
+    icon: "ni ni-collection text-primary",
     component: MyReports,
     layout: "/agent"
   },
   {
     path: "/my-stock",
     name: "My Stock",
-    icon: "ni ni-box-2 text-default",
+    icon: "ni ni-box-2 text-primary",
     component: MyStock,
     layout: "/agent"
   },

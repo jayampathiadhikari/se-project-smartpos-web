@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText,Button
+  Form, FormGroup,Button
 } from 'reactstrap'
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
@@ -39,7 +39,7 @@ class TrackingOptions extends React.Component{
   };
 
   onSelectType = (type) => {
-    if (type.id = 1){
+    if (type.id === 1){
       this.setState({
         region:true
       })

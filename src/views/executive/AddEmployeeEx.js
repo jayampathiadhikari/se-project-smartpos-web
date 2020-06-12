@@ -21,10 +21,31 @@ import {createUserWithEmail} from "../../Utils";
 import CustomDropdown from "../../components/Dropdown";
 import {getAgentsByRegion} from "../../Utils";
 import {regions} from "../../constants";
+import SimpleReactValidator from "simple-react-validator";
 
 const data = regions;
 
 class AddEmployeeEx extends React.Component {
+  constructor(props){
+    super(props);
+    this.validator = new SimpleReactValidator({
+      validators: {
+        phone: {  // name the rule
+          message: 'The :attribute must be a valid phone number of type (0XXXXXXXXX) ',
+          rule: (val, params, validator) => {
+            return validator.helpers.testRegex(val,/^([0])\d{9}$/)
+          },
+        },
+        nic: {  // name the rule
+          message: 'The :attribute must be of type (XXXXXXXXXV) ',
+          rule: (val, params, validator) => {
+            return validator.helpers.testRegex(val,/^(\d{9})?([V]$)/)
+          },
+        }
+      }
+    });
+  }
+
   state = {
     region:null,
     agent:null,
@@ -34,50 +55,66 @@ class AddEmployeeEx extends React.Component {
     visible: false,
     processing:true,
     disabled: false,
-    msg:null
+    msg:null,
+
+    firstName: '',
+    lastName: '',
+    email: '',
+    nic: '',
+    phoneNumber: '',
+    address: '',
+
   };
 
   onSubmit = async(e) => {
-    this.setState({
-      visible:true,
-      disabled:true
-    });
     e.preventDefault();
-    const userData = {};
-    for(let i=0; i<8;i++){
-      const attri = e.target[i].id;
-      userData[attri] = e.target[i].value
-    }
-    userData['region'] = this.state.region;
-    if(this.state.agentSelected){
-      userData['type'] = 'agent';
-      userData['supervisorUid'] = FIREBASE.auth().currentUser.uid;
+    if(this.validator.allValid()){
+      console.log('suucc');
+      this.setState({
+        visible:true,
+        disabled:true
+      });
+      e.preventDefault();
+      const userData = {};
+      for(let i=0; i<8;i++){
+        const attri = e.target[i].id;
+        userData[attri] = e.target[i].value
+      }
+      userData['region'] = this.state.region;
+      if(this.state.agentSelected){
+        userData['type'] = 'agent';
+        userData['supervisorUid'] = FIREBASE.auth().currentUser.uid;
+      }else{
+        userData['type'] = 'salesperson';
+        userData['supervisorUid'] = this.state.agent;
+      }
+      const res = await createUserWithEmail(userData);
+      if(res.success){
+        this.setState({
+          alert:'success',
+          processing:false,
+          msg: 'SUCCESS !'
+        })
+      }else{
+        this.setState({
+          alert:'danger',
+          processing:false,
+          msg: 'FAILED ! \n'.concat(res.error)
+        })
+      }
+      window.setTimeout(()=>{
+        this.setState({
+          alert:'info',
+          visible: false,
+          disabled: false
+        })
+      },1500);
+      console.log(res);
     }else{
-      userData['type'] = 'salesperson';
-      userData['supervisorUid'] = this.state.agent;
+      this.validator.showMessages();
+      this.forceUpdate();
     }
-    const res = await createUserWithEmail(userData);
-    if(res.success){
-      this.setState({
-        alert:'success',
-        processing:false,
-        msg: 'SUCCESS !'
-      })
-    }else{
-      this.setState({
-        alert:'danger',
-        processing:false,
-        msg: 'FAILED ! \n'.concat(res.error)
-      })
-    }
-    window.setTimeout(()=>{
-      this.setState({
-        alert:'info',
-        visible: false,
-        disabled: false
-      })
-    },1500);
-    console.log(res);
+
 
   };
 
@@ -100,12 +137,20 @@ class AddEmployeeEx extends React.Component {
     })
   };
 
+  onChangeInput = (e) => {
+    const target = e.target;
+    const value = target.value;
+    console.log(value);
+    this.setState({
+      [target.id]: value
+    })
+  };
+
   render() {
     return (
       <>
         <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'43%',top:'43%',zIndex:999}}>
           {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
-
         </Alert>
         <UserHeader />
         {/* Page content */}
@@ -185,8 +230,13 @@ class AddEmployeeEx extends React.Component {
                               id="firstName"
                               type="text"
                               required={true}
+                              onChange = {this.onChangeInput}
                             />
+                            <div className="text-warning mb-4 ml-2">
+                              <small>{this.validator.message('first name', this.state.firstName, 'alpha')}</small>
+                            </div>
                           </FormGroup>
+
                         </Col>
                         <Col lg="6">
                           <FormGroup>
@@ -201,7 +251,11 @@ class AddEmployeeEx extends React.Component {
                               id="lastName"
                               type="text"
                               required={true}
+                              onChange = {this.onChangeInput}
                             />
+                            <div className="text-warning mb-4 ml-2">
+                              <small>{this.validator.message('last name', this.state.lastName, 'alpha')}</small>
+                            </div>
                           </FormGroup>
                         </Col>
                       </Row>
@@ -219,7 +273,11 @@ class AddEmployeeEx extends React.Component {
                               id="email"
                               type="email"
                               required={true}
+                              onChange = {this.onChangeInput}
                             />
+                            <div className="text-warning mb-4 ml-2">
+                              <small>{this.validator.message('email', this.state.email, 'email')}</small>
+                            </div>
                           </FormGroup>
                         </Col>
                       </Row>
@@ -237,7 +295,11 @@ class AddEmployeeEx extends React.Component {
                               id="nic"
                               type="text"
                               required={true}
+                              onChange = {this.onChangeInput}
                             />
+                            <div className="text-warning mb-4 ml-2">
+                              <small>{this.validator.message('nic', this.state.nic, 'nic')}</small>
+                            </div>
                           </FormGroup>
                         </Col>
                       </Row>
@@ -263,7 +325,11 @@ class AddEmployeeEx extends React.Component {
                               id="phoneNumber"
                               type="text"
                               required={true}
+                              onChange = {this.onChangeInput}
                             />
+                            <div className="text-warning mb-4 ml-2">
+                              <small>{this.validator.message('phone number', this.state.phoneNumber, 'phone')}</small>
+                            </div>
                           </FormGroup>
                         </Col>
                       </Row>
@@ -281,6 +347,7 @@ class AddEmployeeEx extends React.Component {
                               id="address"
                               type="text"
                               required={true}
+                              onChange = {this.onChangeInput}
                             />
                           </FormGroup>
                         </Col>

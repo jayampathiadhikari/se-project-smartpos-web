@@ -55,8 +55,9 @@ class Agent{
     })
   };
 
-  addStockToSalesperson = async (salesperson_id,product_id,quantity) => {
+  addStockToSalesperson = async (agent_id,salesperson_id,product_id,quantity) => {
     const res =  await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/stock/addtosalespersonstock',{
+      agent_id,
       salesperson_id,
       product_id,
       quantity

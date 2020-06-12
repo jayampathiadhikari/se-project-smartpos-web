@@ -38,11 +38,12 @@ class Executive{
     })
   };
 
-  sendRequest = async (agent_id,product_id,quantity) => {
+  sendRequest = async (agent_id,product_id,quantity,requesting_invoice_items_id) => {
     return await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/product/send-agent-requested',{
       agent_id,
       product_id,
-      quantity
+      quantity,
+      requesting_invoice_items_id
     })
   };
 
@@ -266,8 +267,19 @@ class Executive{
       selling_price: productData.sellingPrice,
     });
     return res.data;
-  }
+  };
 
+  getMonthlyTarget = async () => {
+    const res = await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/owner/viewmonthlytarget');
+    return res.data
+  };
+
+  setTarget = async (target_value) => {
+    const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/owner/sendtarget',{
+      target_value
+    });
+    return res.data;
+  };
 
 
 }

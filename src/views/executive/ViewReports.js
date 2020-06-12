@@ -10,7 +10,7 @@ import {
   Container,
   Row,
   Col,
-  Button, Input, Spinner, Alert
+  Button, Spinner, Alert
 } from "reactstrap";
 // core components
 import Datepicker from "../../components/DateTime";
@@ -54,7 +54,7 @@ class ViewReports extends React.Component {
   };
 
   componentDidMount() {
-    if(this.props.location.state != undefined){
+    if(this.props.location.state !== undefined){
       this.setState({
         agent_id : this.props.location.state.agent_id,
       });

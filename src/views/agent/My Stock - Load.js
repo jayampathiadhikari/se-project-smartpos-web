@@ -1,39 +1,17 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
 import {
-  Badge,
+
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
   Media,
   Table,
   Container,
   Row,
   Col,
-  UncontrolledTooltip, Button, Input, Alert, Spinner
+  Button, Input, Alert, Spinner
 } from "reactstrap";
 // core components
 
@@ -86,7 +64,8 @@ class MyStockLoad extends React.Component {
   onClick = async (product) => {
     if(this.state.salesperson_id){
       this.target.value = null;
-      const res = await Agent.addStockToSalesperson(this.state.salesperson_id,product.product_id,this.state.loadAmount);
+      const res = await Agent.addStockToSalesperson(this.props.user.uid,this.state.salesperson_id,product.product_id,this.state.loadAmount);
+      console.log(res);
       if(res.success){
         toast.success(`Stock added successfully`)
         const uid = this.props.user.uid;

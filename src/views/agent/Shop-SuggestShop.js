@@ -12,7 +12,6 @@ import {
   Button, Col, FormGroup, Input, Alert, Spinner
 } from "reactstrap";
 // core components
-import Pagination from "react-js-pagination";
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import Agent from '../../models/Agent'

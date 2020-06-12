@@ -1,41 +1,17 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-import axios from 'axios';
-import {Link} from "react-router-dom";
+
 // reactstrap components
 import {
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
   Navbar,
   Nav,
   Container,
   Media
 } from "reactstrap";
-import {setAgentLogin, setSignInStatus} from "../../redux/reducers/authentication/action";
+import {signOut} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
 
 class AgentNavbar extends React.Component {
@@ -53,7 +29,7 @@ class AgentNavbar extends React.Component {
 
   onSignOut = () => {
     console.log('SIGN OUT')
-    this.props.setLogin(false);
+    this.props.signOut()
   };
 
   render() {
@@ -77,7 +53,8 @@ class AgentNavbar extends React.Component {
                     <span className="avatar avatar-sm rounded-circle">
                       <img
                         alt="..."
-                        src={require("assets/img/theme/team-1-800x800.jpg")}
+                        src={require("assets/img/theme/user3.png")}
+                        style={{width:50, height:50}}
                       />
                     </span>
                       {profile && (profile).map((profileObj) => {
@@ -94,27 +71,7 @@ class AgentNavbar extends React.Component {
                     </Media>
                   </DropdownToggle>
                   <DropdownMenu className="dropdown-menu-arrow" right>
-                    <DropdownItem className="noti-title" header tag="div">
-                      <h6 className="text-overflow m-0">Welcome!</h6>
-                    </DropdownItem>
-                    <DropdownItem to="/admin/agent-profile" tag={Link}>
-                      <i className="ni ni-single-02"/>
-                      <span>My profile</span>
-                    </DropdownItem>
-                    <DropdownItem to="/admin/user-profile" tag={Link}>
-                      <i className="ni ni-settings-gear-65"/>
-                      <span>Settings</span>
-                    </DropdownItem>
-                    <DropdownItem to="/admin/user-profile" tag={Link}>
-                      <i className="ni ni-calendar-grid-58"/>
-                      <span>Activity</span>
-                    </DropdownItem>
-                    <DropdownItem to="/admin/user-profile" tag={Link}>
-                      <i className="ni ni-support-16"/>
-                      <span>Support</span>
-                    </DropdownItem>
-                    <DropdownItem divider/>
-                    <DropdownItem href="/login" onClick={this.onSignOut}>
+                    <DropdownItem href="/auth" onClick={this.onSignOut}>
                       <i className="ni ni-user-run"/>
                       <span>Logout</span>
                     </DropdownItem>
@@ -138,7 +95,7 @@ const mapStateToProps = (state) => ({
 });
 
 const bindAction = (dispatch) => ({
-  setLogin: (status) => dispatch(setAgentLogin(status)),
+  signOut : () => dispatch(signOut())
 });
 
 export default connect(

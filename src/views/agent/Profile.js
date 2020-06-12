@@ -44,17 +44,6 @@ class Profile extends React.Component {
         }
     }
 
-    componentDidMount() {
-
-        axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
-            this.setState({
-                profile: result.data
-            })
-        })
-    }
-
-
-
   render() {
 
     var {profile,count} =this.state

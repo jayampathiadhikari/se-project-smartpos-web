@@ -50,14 +50,6 @@ class AdminNavbar extends React.Component {
     }
   }
 
-  componentDidMount() {
-    axios.get(`https://se-smartpos-backend.herokuapp.com/employee/profile`).then((result) => {
-      this.setState({
-        profile: result.data
-      })
-    })
-  }
-
   onSignOut = () => {
     console.log('SIGN OUT')
     this.props.setLogin(false);

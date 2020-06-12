@@ -1,8 +1,25 @@
 import axios from 'axios';
 import FIREBASE from "./firebase";
 import 'firebase/functions';
+import 'firebase/auth';
+import 'firebase/firestore';
+
 import {MAPBOX_TOKEN} from "./config";
-import {regions, Regions} from './constants';
+import {regions} from './constants';
+
+export const getToken = async(employee_id) => {
+  try{
+    const result = await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/auth/employee/generatetoken',{
+      params: {
+        employee_id
+      }
+    });
+    return result.data;
+  }catch (e) {
+    return {success: false, error: e}
+  }
+};
+
 
 export const createUserWithEmail = async (data) => {
   try {
@@ -92,8 +109,7 @@ export const checkAuthentication = (email, password) => {
       async () => {
         const userQueryRef = FIREBASE.firestore().collection('users').where('email', '==', email);
         const userQuerySnapshot = await userQueryRef.get();
-        const type = userQuerySnapshot.docs[0].data().type;
-        console.log(userQuerySnapshot.docs[0].data(), 'USER DATA');
+        const type = await userQuerySnapshot.docs[0].data().type;
         return {success: true, type: type, user: userQuerySnapshot.docs[0].data()}
       }
     )
@@ -147,7 +163,7 @@ export const getOptimizedRouteByWaypoints = async (waypointsArray) => {
 };
 //for now district is hardcoded as 6
 export const getShopsWithNoRouteByDistrict = async (id) => {
-  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/shop/viewshops-withnoroutebydistrict', {
+  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/shop/viewshops-withnoroutebydistrict', {
     district_id: id
   });
   console.log(res.data)
@@ -155,7 +171,7 @@ export const getShopsWithNoRouteByDistrict = async (id) => {
     console.log('success')
     let shopData = res.data.data.map((shop, index) => {
       var shop_id = shop["shop_id"];
-      var name = shop ["name"];
+      var name = shop["name"];
       var coords = [shop.longitude, shop.latitude];
       return ({shop_id, name, coords})
     });
@@ -173,7 +189,7 @@ export const getShopsWithNoRouteByDistrict = async (id) => {
 };
 
 export const getShopsWithRouteByDistrict = async (id) => {
-  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/shop/viewshops-withroutebydistrict', {
+  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/shop/viewshops-withroutebydistrict', {
     district_id: id
   });
   console.log(res.data);
@@ -181,7 +197,7 @@ export const getShopsWithRouteByDistrict = async (id) => {
     console.log('success');
     let shopData = res.data.data.map((shop, index) => {
       var shop_id = shop["shop_id"];
-      var name = shop ["name"];
+      var name = shop["name"];
       var coords = [shop.longitude, shop.latitude];
       return ({shop_id, name, coords})
     });
@@ -227,7 +243,7 @@ export const createNewRoute = async (shop_ids, formData) => {
     shop_ids: JSON.stringify(shop_ids)
   };
   try{
-    const res = await axios.post('https://se-smartpos-backend.herokuapp.com/route/create-route', req_object);
+    const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/route/create-route', req_object);
     return res;
   }catch (e) {
     console.log(e)
@@ -236,7 +252,7 @@ export const createNewRoute = async (shop_ids, formData) => {
 };
 
 export const getUnassignedRoutes = async (salesperson_id) => {
-  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/salesperson/getunassigneddates', {
+  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/salesperson/getunassigneddates', {
     salesperson_id
   });
   if (res.data.success) {
@@ -269,11 +285,24 @@ export const getDistrictId = (name) => {
   return districtA.id;
 };
 
-export const graphs = {
-
-  getData: (data) => {
-    return data
+export const getGraphDataProducts = (dataGraph) => {
+  //product_name, total_revenue
+  var labels = [];
+  var data = [];
+  const topData = dataGraph.slice(0,dataGraph.length > 11 ? 10 : dataGraph.length);
+  for (let i = 0; i < topData.length; i++) {
+    labels.push(topData[i].product_name);
+    data.push(topData[i].total_revenue);
   }
+  return {
+    labels: labels,
+    datasets: [
+      {
+        label: "Performance",
+        data: data
+      }
+    ]
+  };
 };
 
 //'#f40005'

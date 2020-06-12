@@ -344,6 +344,7 @@ let chartExample1 = {
     };
   },
 
+
 };
 
 // Example 2 of Chart inside src/views/Index.js (Total orders - Card)
@@ -424,9 +425,92 @@ let chartExample2 = {
   }
 };
 
+let horizontalGraph = {
+  options: {
+    scales: {
+      xAxes: [
+        {
+          ticks: {
+            callback: function(value) {
+              if (!(value % 10)) {
+                //return '$' + value + 'k'
+                return value ;
+              }
+            }
+          }
+        }
+      ]
+    },
+    tooltips: {
+      callbacks: {
+        label: function(item, data) {
+          var label = data.datasets[item.datasetIndex].label || "";
+          var xLabel = item.xLabel;
+          var content = "";
+          if (data.datasets.length > 1) {
+            content += label;
+          }
+          content += xLabel;
+          return content;
+        }
+      }
+    }
+  },
+  bestSellingProductsMonth:canvas => {
+    return {
+      labels: ["Chili", "Pepper", "Marie", "Milk", "Cheese", "Bread", "Turmeric", "Soya"],
+      datasets: [
+        {
+          label: "Performance",
+          data: [0, 20, 5, 25, 10, 30, 15, 40, 40]
+        }
+      ]
+    };
+  },
+  bestSellingProductsYear:canvas => {
+    return {
+      labels: ["Chili", "Pepper", "Marie", "Milk", "Cheese", "Bread", "Turmeric", "Soya"],
+      datasets: [
+        {
+          label: "Performance",
+          data: [0, 20, 5, 25, 10, 30, 15, 40, 40]
+        }
+      ]
+    };
+  },
+};
+
+let pieGraph = {
+  options:{
+    legend: {
+      display: true
+    }
+  },
+  data1: {
+    labels: ["Jul", "Aug", "Sep", "Oct","Nov"],
+    datasets: [
+      {
+        label: "Sales",
+        data: [30, 25, 20, 15,10],
+        backgroundColor: [
+          '#f5365c',
+          '#5e72e4',
+          '#11cdef',
+          '#fb6340',
+          '#2dce89'
+        ],
+      }
+    ]
+  },
+};
+
+
+
 module.exports = {
   chartOptions, // used inside src/views/Index.js
   parseOptions, // used inside src/views/Index.js
   chartExample1, // used inside src/views/Index.js
-  chartExample2 // used inside src/views/Index.js
+  chartExample2, // used inside src/views/Index.js
+  horizontalGraph,
+  pieGraph
 };

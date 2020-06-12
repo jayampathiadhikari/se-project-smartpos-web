@@ -31,7 +31,7 @@ class MyStockAddToWarehouse extends React.Component {
   };
 
   componentDidMount() {
-    if(this.props.location.state != undefined){
+    if(this.props.location.state !== undefined){
       this.setState({
         product : this.props.location.state.product
       });
@@ -121,8 +121,8 @@ class MyStockAddToWarehouse extends React.Component {
                               id="productID"
                               type="text"
                               required={true}
-                              disabled
-                              value = {this.state.product != null ? this.state.product.product_id : 'NO PRODUCT SELECTED' }
+                              disabled = {this.state.product != null}
+                              value = {this.state.product != null ? this.state.product.product_id : null }
                             />
                           </FormGroup>
                         </Col>
@@ -139,8 +139,8 @@ class MyStockAddToWarehouse extends React.Component {
                               id="productName"
                               type="text"
                               required={true}
-                              disabled
-                              value = {this.state.product != null ? this.state.product.name : 'NO PRODUCT SELECTED' }
+                              disabled = {this.state.product != null}
+                              value = {this.state.product != null ? this.state.product.name : null }
                             />
                           </FormGroup>
                         </Col>
