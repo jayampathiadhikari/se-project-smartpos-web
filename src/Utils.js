@@ -163,7 +163,7 @@ export const getOptimizedRouteByWaypoints = async (waypointsArray) => {
 };
 //for now district is hardcoded as 6
 export const getShopsWithNoRouteByDistrict = async (id) => {
-  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/shop/viewshops-withnoroutebydistrict', {
+  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/shop/viewshops-withnoroutebydistrict', {
     district_id: id
   });
   console.log(res.data)
@@ -189,7 +189,7 @@ export const getShopsWithNoRouteByDistrict = async (id) => {
 };
 
 export const getShopsWithRouteByDistrict = async (id) => {
-  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/shop/viewshops-withroutebydistrict', {
+  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/shop/viewshops-withroutebydistrict', {
     district_id: id
   });
   console.log(res.data);
@@ -243,7 +243,7 @@ export const createNewRoute = async (shop_ids, formData) => {
     shop_ids: JSON.stringify(shop_ids)
   };
   try{
-    const res = await axios.post('https://se-smartpos-backend.herokuapp.com/route/create-route', req_object);
+    const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/route/create-route', req_object);
     return res;
   }catch (e) {
     console.log(e)
@@ -252,7 +252,7 @@ export const createNewRoute = async (shop_ids, formData) => {
 };
 
 export const getUnassignedRoutes = async (salesperson_id) => {
-  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/salesperson/getunassigneddates', {
+  const res = await axios.post('https://se-smartpos-backend.herokuapp.com/api/v1/salesperson/getunassigneddates', {
     salesperson_id
   });
   if (res.data.success) {

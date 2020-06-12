@@ -1,9 +1,4 @@
-// import OwnerProfile from "views/examples/Profile.js";
-import AgentProfile from "views/agent/Profile.js";
-// import Register from "views/examples/Register.js";
 import Login from "views/authentication/Login.js";
-// import Edit from "views/examples/Edit.js";
-// import ResetPassword from "./views/examples/ResetPassword";
 import PageNotFound from "./views/404";
 //agent
 import AgentIndex from "./views/agent/AgentIndex";
@@ -54,13 +49,6 @@ var hiddenRoutes = [
     layout: "/auth"
   },
 //
-  {
-    path: "/agent-profile",
-    name: "Agent Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: AgentProfile,
-    layout: "/executive"
-  },
   {
     path: "/login",
     name: "Login",
