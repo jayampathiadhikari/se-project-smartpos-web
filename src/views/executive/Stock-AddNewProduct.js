@@ -15,41 +15,86 @@ import Executive from "../../models/Executive";
 
 import HeaderNoCards from "../../components/Headers/HeaderNoCards";
 import {toast, ToastContainer} from "react-toastify";
-
+import SimpleReactValidator from "simple-react-validator";
+//(/^([P][R])\d{4}$/)
 //id,name,prod cost, selling price,, quantity
 
 class StockAddNewProduct extends React.Component {
+  constructor(props){
+    super(props);
+    this.validator = new SimpleReactValidator({
+      validators: {
+        productID: {  // name the rule
+          message: 'The :attribute must be of type (PRXXXX) ',
+          rule: (val, params, validator) => {
+            return validator.helpers.testRegex(val,/^([P][R])\d{4}$/)
+          },
+        },
+
+      }
+    });
+  }
+
   state = {
     alert:'info',
     visible: false,
     processing:true,
     msg:null,
+
+    productID: '',
+    productName: '',
+    productCost: '',
+    sellingPrice: '',
+    quantity: ''
+
   };
 
   onSubmit = async (e) => {
-    this.setState({
-      visible:true
-    })
     e.preventDefault();
-    let productData = {};
-    for(let i=0; i<5;i++){
-      const attri = e.target[i].id;
-      productData[attri] = e.target[i].value
-    }
-    const res = await Executive.addNewProduct(productData);
-    if(res.success){
-      toast.success(` New product added successfully!`,);
-    }else {
-      toast.error(` Adding failed. Something went wrong`,{
-        autoClose:false,
-        position:"bottom-left"
+    if(this.validator.allValid()){
+      this.setState({
+        visible:true
       });
+      let productData = {};
+      for(let i=0; i<5;i++){
+        const attri = e.target[i].id;
+        productData[attri] = e.target[i].value
+      }
+      const res = await Executive.addNewProduct(productData);
+      if(res.success){
+        toast.success(` New product added successfully!`,);
+      }else {
+        toast.error(` Adding failed. Something went wrong`,{
+          autoClose:false,
+          position:"bottom-left"
+        });
+      }
+      this.setState({
+        visible:false
+      })
+    }else{
+      toast.error(` Check the form data`, {
+        position: "bottom-left",
+        autoClose: false
+      });
+      this.validator.showMessages();
+      this.forceUpdate();
     }
+  };
+
+  onChangeInput = (e) => {
+    const target = e.target;
+    const value = target.value;
+    console.log(value);
     this.setState({
-      visible:false
+      [target.id]: value
     })
   };
 
+  onBlur = () => {
+    
+    console.log('blue')
+  };
   render() {
     return (
       <>
@@ -95,7 +140,12 @@ class StockAddNewProduct extends React.Component {
                             id="productID"
                             type="text"
                             required={true}
+                            onBlur = {this.onBlur}
+                            onChange = {this.onChangeInput}
                           />
+                          <div className="text-warning mb-4 ml-2">
+                            <small>{this.validator.message('product id', this.state.productID, 'productID')}</small>
+                          </div>
                         </FormGroup>
                       </Col>
                       <Col lg="6">
@@ -111,7 +161,11 @@ class StockAddNewProduct extends React.Component {
                             id="productName"
                             type="text"
                             required={true}
+                            onChange = {this.onChangeInput}
                           />
+                          <div className="text-warning mb-4 ml-2">
+                            <small>{this.validator.message('product id', this.state.productName, 'alpha')}</small>
+                          </div>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -129,7 +183,11 @@ class StockAddNewProduct extends React.Component {
                             id="productCost"
                             type="text"
                             required={true}
+                            onChange = {this.onChangeInput}
                           />
+                          <div className="text-warning mb-4 ml-2">
+                            <small>{this.validator.message('product id', this.state.productCost, 'currency')}</small>
+                          </div>
                         </FormGroup>
                       </Col>
                       <Col lg="6">
@@ -145,7 +203,11 @@ class StockAddNewProduct extends React.Component {
                             id="sellingPrice"
                             type="text"
                             required={true}
+                            onChange = {this.onChangeInput}
                           />
+                          <div className="text-warning mb-4 ml-2">
+                            <small>{this.validator.message('product id', this.state.sellingPrice, 'currency')}</small>
+                          </div>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -163,7 +225,11 @@ class StockAddNewProduct extends React.Component {
                             id="quantity"
                             type="text"
                             required={true}
+                            onChange = {this.onChangeInput}
                           />
+                          <div className="text-warning mb-4 ml-2">
+                            <small>{this.validator.message('product id', this.state.quantity, 'integer')}</small>
+                          </div>
                         </FormGroup>
                       </Col>
                     </Row>

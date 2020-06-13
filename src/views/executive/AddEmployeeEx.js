@@ -47,7 +47,7 @@ class AddEmployeeEx extends React.Component {
   }
 
   state = {
-    region:null,
+    region:'region',
     agent:null,
     agentSelected: true,
     agents: [],
@@ -95,6 +95,15 @@ class AddEmployeeEx extends React.Component {
           alert:'info',
           visible: false,
           disabled: false
+        });
+        this.setState({
+          firstName: '',
+          lastName: '',
+          email: '',
+          nic: '',
+          phoneNumber: '',
+          address: '',
+          region: 'region'
         })
       }else{
         toast.error(` Employee adding Failed, \n ${res.error}`, {
@@ -377,7 +386,7 @@ class AddEmployeeEx extends React.Component {
                               htmlFor="region"
                               style={{marginBottom:'10px'}}
                             >Region</div>
-                            <CustomDropdown data={data} id="region" initial={"region"} onSelect={this.onSelectRegion}/>
+                            <CustomDropdown data={data} id="region" initial={this.state.region} onSelect={this.onSelectRegion}/>
                           </FormGroup>
                         </Col>
                         {
