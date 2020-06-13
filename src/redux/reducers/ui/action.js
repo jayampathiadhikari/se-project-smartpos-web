@@ -1,4 +1,4 @@
-import {SET_SIMULATION, SET_TRACKING_USER, TOGGLE_MODAL} from "../../actionTypes";
+import {MAP_RELOAD, SET_SIMULATION, SET_TRACKING_USER, TOGGLE_MODAL} from "../../actionTypes";
 
 export function setSimulation(status) {
   return (dispatch) => {
@@ -27,3 +27,11 @@ export function toggleAddRouteModal() {
   };
 };
 
+export function mapReload() {
+  return (dispatch) => {
+    dispatch({
+      type: MAP_RELOAD,
+      payload: null
+    });
+  };
+};

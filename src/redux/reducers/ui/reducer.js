@@ -1,9 +1,10 @@
-import { SET_SIMULATION,SET_TRACKING_USER,TOGGLE_MODAL } from '../../actionTypes';
+import {MAP_RELOAD, SET_SIMULATION, SET_TRACKING_USER, TOGGLE_MODAL} from '../../actionTypes';
 
 const uiReducerDefaultState = {
   simulation:false,
   trackingUser : null,
-  modal:false
+  modal:false,
+  reload: false
 };
 
 export function uiReducer(state = uiReducerDefaultState, action) {
@@ -22,6 +23,11 @@ export function uiReducer(state = uiReducerDefaultState, action) {
       return {
         ...state,
         modal:!state.modal
+      };
+    case MAP_RELOAD:
+      return {
+        ...state,
+        reload:!state.reload
       };
     default:
       return state;

@@ -8,3 +8,4 @@ export const SET_USER = 'SET_USER';
 export const SIGNOUT_USER = 'SIGNOUT_USER';
 export const REMEMBER_ME = 'REMEMBER_ME';
 export const SET_TOKEN = 'SET_TOKEN';
+export const MAP_RELOAD = 'MAP_RELOAD';

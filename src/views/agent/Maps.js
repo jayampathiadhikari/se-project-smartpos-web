@@ -66,6 +66,10 @@ class AgentMap extends React.Component {
 
   componentDidMount = async () => {
     this.mounted = true;
+    await this.getMapData();
+  };
+
+  getMapData = async () => {
     const district_id = getDistrictId(this.props.user.region);
     const res = await getShopsWithRouteByDistrict(district_id);
     const result = await getShopsWithNoRouteByDistrict(district_id);
@@ -83,14 +87,14 @@ class AgentMap extends React.Component {
       shopsWithRouteGeoJson: shopsWithRouteGeoJson,
       shopsWithNoRouteGeoJson: shopsWithNoRouteGeoJson
     }, this.forceUpdate)
-
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if ((prevProps.simulation != this.props.simulation) && this.props.simulation) {
-      console.log("state changed", this.props.trackUserId);
-      this.watchFirestore();
-    }
+   componentDidUpdate = async (prevProps, prevState, snapshot) =>{
+    // if ((prevProps.simulation != this.props.simulation) && this.props.simulation) {
+    //   console.log("state changed", this.props.trackUserId);
+    //   this.watchFirestore();
+    // }
+
     if(prevState.shopsWithNoRouteGeoJson != this.state.shopsWithNoRouteGeoJson){
       console.log('update source')
       if(this.map!= null && this.map.getSource('shopsWithNoRoute')){
@@ -102,7 +106,11 @@ class AgentMap extends React.Component {
         this.map.getSource('shopsWithRoute').setData(this.state.shopsWithRouteGeoJson);
       }
     }
-  }
+    if(prevProps.mapReload !== this.props.mapReload){
+      await this.getMapData()
+    }
+    
+  };
 
 
   watchFirestore() {
@@ -363,7 +371,8 @@ class AgentMap extends React.Component {
 const mapStateToProps = (state) => ({
   user: state.AuthenticationReducer.user,
   simulation: state.uiReducer.simulation,
-  trackUserId: state.uiReducer.trackingUser
+  trackUserId: state.uiReducer.trackingUser,
+  mapReload: state.uiReducer.reload,
 });
 
 const bindAction = (dispatch) => ({

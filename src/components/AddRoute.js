@@ -13,7 +13,7 @@ import {
 import {connect} from "react-redux";
 
 import CustomDropdown from "./Dropdown";
-import {toggleAddRouteModal} from "../redux/reducers/ui/action";
+import {mapReload, toggleAddRouteModal} from "../redux/reducers/ui/action";
 import {getSalespersonByAgent, getUnassignedRoutes, createNewRoute, getDistrictId} from "../Utils";
 import {toast, ToastContainer} from "react-toastify";
 
@@ -71,6 +71,7 @@ class AddRoute extends React.Component {
     console.log(res,'NEW ROUTE')
     if(res.data.success){
       toast.success(` New employee added successfully `);
+      this.props.mapReload();
     }else{
       toast.error(` Route adding Failed,}`, {
         position: "bottom-left",
@@ -164,7 +165,8 @@ const mapStateToProps = (state) => ({
 });
 
 const bindAction = (dispatch) => ({
-  toggle: () => dispatch(toggleAddRouteModal())
+  toggle: () => dispatch(toggleAddRouteModal()),
+  mapReload: () => dispatch(mapReload()),
 });
 
 export default connect(
