@@ -40,6 +40,7 @@ class StockAddNewProduct extends React.Component {
     visible: false,
     processing:true,
     msg:null,
+    exists: false,
 
     productID: '',
     productName: '',
@@ -52,26 +53,33 @@ class StockAddNewProduct extends React.Component {
   onSubmit = async (e) => {
     e.preventDefault();
     if(this.validator.allValid()){
-      this.setState({
-        visible:true
-      });
-      let productData = {};
-      for(let i=0; i<5;i++){
-        const attri = e.target[i].id;
-        productData[attri] = e.target[i].value
-      }
-      const res = await Executive.addNewProduct(productData);
-      if(res.success){
-        toast.success(` New product added successfully!`,);
-      }else {
-        toast.error(` Adding failed. Something went wrong`,{
-          autoClose:false,
-          position:"bottom-left"
+      if(!this.state.exists){
+        this.setState({
+          visible:true
+        });
+        let productData = {};
+        for(let i=0; i<5;i++){
+          const attri = e.target[i].id;
+          productData[attri] = e.target[i].value
+        }
+        const res = await Executive.addNewProduct(productData);
+        if(res.success){
+          toast.success(` New product added successfully!`,);
+        }else {
+          toast.error(` Adding failed. Something went wrong`,{
+            autoClose:false,
+            position:"bottom-left"
+          });
+        }
+        this.setState({
+          visible:false
+        })
+      }else{
+        toast.error(` ProductID is already in use `, {
+          position: "bottom-left",
+          autoClose: false
         });
       }
-      this.setState({
-        visible:false
-      })
     }else{
       toast.error(` Check the form data`, {
         position: "bottom-left",
@@ -80,6 +88,21 @@ class StockAddNewProduct extends React.Component {
       this.validator.showMessages();
       this.forceUpdate();
     }
+  };
+
+  onBlur = async () => {
+    if((/^([P][R])\d{4}$/).test(this.state.productID)){
+      const res = await Executive.checkProductIdAvailablity(this.state.productID);
+      if(res.success){
+        if(res.data[0]['exists']){
+          this.setState({
+            exists: true
+          });
+
+        }
+      }
+    }
+
   };
 
   onChangeInput = (e) => {
@@ -91,10 +114,6 @@ class StockAddNewProduct extends React.Component {
     })
   };
 
-  onBlur = () => {
-    
-    console.log('blue')
-  };
   render() {
     return (
       <>
@@ -164,7 +183,7 @@ class StockAddNewProduct extends React.Component {
                             onChange = {this.onChangeInput}
                           />
                           <div className="text-warning mb-4 ml-2">
-                            <small>{this.validator.message('product id', this.state.productName, 'alpha')}</small>
+                            <small>{this.validator.message('product name', this.state.productName, 'alpha')}</small>
                           </div>
                         </FormGroup>
                       </Col>
@@ -186,7 +205,7 @@ class StockAddNewProduct extends React.Component {
                             onChange = {this.onChangeInput}
                           />
                           <div className="text-warning mb-4 ml-2">
-                            <small>{this.validator.message('product id', this.state.productCost, 'currency')}</small>
+                            <small>{this.validator.message('product cost', this.state.productCost, 'currency')}</small>
                           </div>
                         </FormGroup>
                       </Col>
@@ -206,7 +225,7 @@ class StockAddNewProduct extends React.Component {
                             onChange = {this.onChangeInput}
                           />
                           <div className="text-warning mb-4 ml-2">
-                            <small>{this.validator.message('product id', this.state.sellingPrice, 'currency')}</small>
+                            <small>{this.validator.message('selling price', this.state.sellingPrice, 'currency')}</small>
                           </div>
                         </FormGroup>
                       </Col>
@@ -228,7 +247,7 @@ class StockAddNewProduct extends React.Component {
                             onChange = {this.onChangeInput}
                           />
                           <div className="text-warning mb-4 ml-2">
-                            <small>{this.validator.message('product id', this.state.quantity, 'integer')}</small>
+                            <small>{this.validator.message('quantity', this.state.quantity, 'integer')}</small>
                           </div>
                         </FormGroup>
                       </Col>

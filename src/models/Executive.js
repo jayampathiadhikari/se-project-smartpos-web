@@ -281,6 +281,14 @@ class Executive{
     return res.data;
   };
 
+  checkProductIdAvailablity = async (product_id) => {
+    const res =  await axios.get('https://se-smartpos-backend.herokuapp.com/api/v1/product/availability',{
+      params: {
+        product_id
+      }
+    });
+    return res.data;
+  };
 
 }
 
