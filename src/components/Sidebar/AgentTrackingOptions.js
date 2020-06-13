@@ -1,108 +1,58 @@
 import React from 'react';
 import {
-  Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText,Button
+  Form, FormGroup,Button
 } from 'reactstrap'
-import {setSignInStatus} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
-import {setSimulation} from "../../redux/reducers/ui/action";
-import {getAgentsByRegion} from "../../Utils";
+import {setSimulation, setTrackingUser} from "../../redux/reducers/ui/action";
+import CustomDropdown from "../Dropdown";
+import {getSalespersonByAgent} from "../../Utils";
 
 
-class AgentTrackingOptions extends React.Component{
+class TrackingOptions extends React.Component{
   state = {
-    region:false,
-    agent:false,
     salesperson: false,
-    track:false
+    track:false,
+    salespersonData:[]
   };
 
-  onChange = (e) => {
-    const target = e.target;
-    const value = target.name;
-    console.log(value);
+  componentDidMount = async () => {
+    const salesperson = await getSalespersonByAgent(this.props.user.uid);
     this.setState({
-      [target.name]:true
-    })
-  };
-  onSelectRegion = async (region) => {
-    const agents = await getAgentsByRegion(region.name);
-    this.setState({
-      region: region.name,
-      agents:agents
+      salesperson:true,
+      salespersonData:salesperson
     });
+    console.log(salesperson);
   };
+
   onSubmit = (e) => {
     e.preventDefault();
     console.log(e.target[0].value)
   };
 
-  renderRegion(){
-    return(
-      <FormGroup>
-        <span className="navbar-heading text-muted">Region</span>
-        <InputGroup className="input-group-alternative">
-          <Input type="select" name="agent" disabled={!this.state.region} onChange={this.onChange}>
-            <option></option>
-            <option>Cambridge</option>
-            <option>London</option>
-            <option>Oxford</option>
-          </Input>
-        </InputGroup>
-      </FormGroup>
-    )
+
+  onSelectSalesperson = async(sp) => {
+    console.log(sp.id);
+    this.setState({
+      salespersonID: sp.id,
+      track:true
+    })
   };
 
-  renderAgent(){
-    return(
-      <FormGroup>
-        <span className="navbar-heading text-muted">Agent</span>
-        <InputGroup className="input-group-alternative">
-          <Input type="select" name="salesperson" disabled={!this.state.agent} onChange={this.onChange}>
-            <option></option>
-            <option>#001 Agent1</option>
-            <option>#002 Agent2</option>
-            <option>#003 Agent3</option>
-          </Input>
-        </InputGroup>
-      </FormGroup>
-    )
-  }
-
-  renderSalesperson(){
-    return(
-      <FormGroup>
-        <span className="navbar-heading text-muted">Salesperson</span>
-        <InputGroup className="input-group-alternative">
-          <Input type="select" name="track" disabled={!this.state.salesperson} onChange={this.onChange}>
-            <option></option>
-            <option>#001 Salesperson1</option>
-            <option>#002 Salesperson2</option>
-            <option>#003 Salesperson3</option>
-          </Input>
-        </InputGroup>
-      </FormGroup>
-    )
-  }
+  onTrack = () => {
+    this.props.setTrackingUser(this.state.salespersonID);
+    this.props.setSimulation(true);
+  };
 
   render(){
     return(
       <div style={{padding:'5px',borderWidth:'0.5px'}}>
         <Form role="form" onSubmit={this.onSubmit}>
           <FormGroup>
-            <span className="navbar-heading text-muted">Type</span>
-            <InputGroup className="input-group-alternative">
-              <Input type="select" name="region" onChange={this.onChange}>
-                <option></option>
-                <option>Salesperson</option>
-                <option>Vehicle</option>
-              </Input>
-            </InputGroup>
+            <div className="navbar-heading text-muted">Salesperson</div>
+            <CustomDropdown data={this.state.salespersonData} id="salesperson" initial="salesperson" onSelect={this.onSelectSalesperson} disabled={!this.state.salesperson}/>
           </FormGroup>
-          {this.renderRegion()}
-          {this.renderAgent()}
-          {this.renderSalesperson()}
           <div className="text-center">
-            <Button className="my-4" color="primary" type={"submit"} disabled={!this.state.track} onClick={()=>{this.props.setSimulation(true)}}>
+            <Button className="my-4" color="primary" type={"submit"} disabled={!this.state.track} onClick={this.onTrack}>
               Track
             </Button>
           </div>
@@ -115,15 +65,15 @@ class AgentTrackingOptions extends React.Component{
 
 
 const mapStateToProps = (state) => ({
-  loggedIn: state.AuthenticationReducer.signedIn,
+  user: state.AuthenticationReducer.user,
 });
 
 const bindAction = (dispatch) => ({
-  setLogin: (status) => dispatch(setSignInStatus(status)),
   setSimulation: (status) => dispatch(setSimulation(status)),
+  setTrackingUser: (userID) => dispatch(setTrackingUser(userID)),
 });
 
 export default connect(
   mapStateToProps,
   bindAction
-)(AgentTrackingOptions);
+)(TrackingOptions);

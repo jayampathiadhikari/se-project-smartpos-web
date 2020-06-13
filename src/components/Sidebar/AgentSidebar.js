@@ -46,7 +46,7 @@ import {
 } from "reactstrap";
 import {setSignInStatus} from "../../redux/reducers/authentication/action";
 import {connect} from "react-redux";
-import TrackingOptions from "./TrackingOptions";
+import AgentTrackingOptions from "./AgentTrackingOptions";
 
 var ps;
 
@@ -81,7 +81,7 @@ class AgentSidebar extends React.Component {
         <div>
           <h6 className="navbar-heading text-muted">Tracking Options</h6>
           {/* Navigation */}
-          <TrackingOptions/>
+          <AgentTrackingOptions/>
         </div>
       )
     }else{
