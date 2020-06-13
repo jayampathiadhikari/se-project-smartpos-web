@@ -115,8 +115,6 @@ class AddEmployeeEx extends React.Component {
       this.validator.showMessages();
       this.forceUpdate();
     }
-
-
   };
 
   onSelectRegion = async (region) => {
@@ -132,6 +130,7 @@ class AddEmployeeEx extends React.Component {
       agent: agent.id,
     })
   };
+
   onChange = () => {
     this.setState({
       agentSelected:!this.state.agentSelected

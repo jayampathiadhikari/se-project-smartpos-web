@@ -82,6 +82,29 @@ class AgentSidebar extends React.Component {
           <h6 className="navbar-heading text-muted">Tracking Options</h6>
           {/* Navigation */}
           <AgentTrackingOptions/>
+          <h6 className="navbar-heading text-muted">Map Legend</h6>
+          <div>
+            <div style={{color:'#2e48f4', fontSize:12}}>
+              <b>shops with a route</b>
+            </div>
+            <img
+              alt="..."
+              src={require("assets/img/icons/blueshop.png")}
+              style={{width:130, height:40}}
+            />
+
+          </div>
+          <br></br>
+          <div>
+            <div style={{color:'#f40005', fontSize:12}}>
+              <b>shops with no route</b>
+            </div>
+            <img
+              alt="..."
+              src={require("assets/img/icons/redshop.png")}
+              style={{width:130, height:40}}
+            />
+          </div>
         </div>
       )
     }else{

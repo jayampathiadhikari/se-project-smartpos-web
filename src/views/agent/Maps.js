@@ -21,6 +21,7 @@ import {
   getShopsWithRouteByDistrict
 } from "../../Utils";
 import AddRoute from "../../components/AddRoute";
+import {toast, ToastContainer} from "react-toastify";
 
 
 const Map = ReactMapboxGl({
@@ -67,6 +68,13 @@ class AgentMap extends React.Component {
   componentDidMount = async () => {
     this.mounted = true;
     await this.getMapData();
+    toast.info(` Create a new route by selecting shops with no route and pressing Add New Route button`, {
+      toastId:'testid',
+      autoClose:false
+    });
+    toast.info(` You can select shops by LineString tool on top left `, {
+      autoClose:false
+    });
   };
 
   getMapData = async () => {
@@ -86,7 +94,7 @@ class AgentMap extends React.Component {
     this.setState({
       shopsWithRouteGeoJson: shopsWithRouteGeoJson,
       shopsWithNoRouteGeoJson: shopsWithNoRouteGeoJson
-    }, this.forceUpdate)
+    })
   };
 
    componentDidUpdate = async (prevProps, prevState, snapshot) =>{
@@ -109,7 +117,6 @@ class AgentMap extends React.Component {
     if(prevProps.mapReload !== this.props.mapReload){
       await this.getMapData()
     }
-    
   };
 
 
@@ -360,7 +367,6 @@ class AgentMap extends React.Component {
               <button style={{minWidth:100}} disabled={this.state.newRoute} onClick={this.onAddNewRoute}>Add New Route</button>
             </div>
           </div>
-
         </Map>
       </div>
 

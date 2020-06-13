@@ -8,7 +8,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader, Input
+  ModalHeader, Input, Spinner, Alert
 } from "reactstrap";
 import {connect} from "react-redux";
 
@@ -25,7 +25,9 @@ class AddRoute extends React.Component {
     salespersonData: [],
     salesperson: false,
     day: false,
-    dayData: []
+    dayData: [],
+
+    visible: false
   };
 
   componentDidMount = async () => {
@@ -61,6 +63,9 @@ class AddRoute extends React.Component {
 
   onSubmit = async (e) => {
     e.preventDefault();
+    this.setState({
+      visible:true
+    });
     const userData = {};
     userData["route_name"] = this.state.route_name;
     userData["salesperson_id"] = this.state.salespersonID;
@@ -69,11 +74,14 @@ class AddRoute extends React.Component {
     console.log(userData,this.props.selectedShops);
     const res = await createNewRoute(this.props.selectedShops, userData);
     console.log(res,'NEW ROUTE')
+    this.setState({
+      visible:false
+    });
     if(res.data.success){
-      toast.success(` New employee added successfully `);
+      toast.success(` New route added successfully `);
       this.props.mapReload();
     }else{
-      toast.error(` Route adding Failed,}`, {
+      toast.error(` Route adding failed`, {
         position: "bottom-left",
         autoClose: false
       });
@@ -94,7 +102,7 @@ class AddRoute extends React.Component {
       <div>
         <ToastContainer
           position="top-right"
-          autoClose={3000}
+          autoClose={5000}
           hideProgressBar={true}
           newestOnTop={false}
           closeOnClick
@@ -102,6 +110,10 @@ class AddRoute extends React.Component {
           pauseOnFocusLoss
           draggable
           pauseOnHover/>
+        <Alert color={'info'} isOpen={this.state.visible}
+               style={{position: 'fixed', left: '50%', top: '50%', zIndex: 999}}>
+          { <Spinner style={{width: '3rem', height: '3rem'}}/>}
+        </Alert>
         <Modal isOpen={this.props.modal} toggle={this.toggle}>
           <Form onSubmit={this.onSubmit}>
             <ModalHeader toggle={this.toggle} style={{marginBottom: 0}}>
