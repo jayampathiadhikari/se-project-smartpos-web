@@ -67,8 +67,8 @@ class AgentMap extends React.Component {
   componentDidMount = async () => {
     this.mounted = true;
     const district_id = getDistrictId(this.props.user.region);
-    const res = await getShopsWithRouteByDistrict(6);
-    const result = await getShopsWithNoRouteByDistrict(6);
+    const res = await getShopsWithRouteByDistrict(district_id);
+    const result = await getShopsWithNoRouteByDistrict(district_id);
     let shopsWithRouteGeoJson = null;
     let shopsWithNoRouteGeoJson = null;
     if (res.success) {

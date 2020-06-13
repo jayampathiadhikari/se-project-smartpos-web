@@ -15,6 +15,7 @@ import {connect} from "react-redux";
 import CustomDropdown from "./Dropdown";
 import {toggleAddRouteModal} from "../redux/reducers/ui/action";
 import {getSalespersonByAgent, getUnassignedRoutes, createNewRoute, getDistrictId} from "../Utils";
+import {toast, ToastContainer} from "react-toastify";
 
 // core components
 
@@ -42,7 +43,7 @@ class AddRoute extends React.Component {
     //must call api to get remianing days
     console.log(sp.id);
     const res = await getUnassignedRoutes(sp.id);
-    console.log(res, 'RESULT');
+    console.log(res, 'UNSASSIGENED DATES');
     this.setState({
       salespersonID: sp.id,
       day: true,
@@ -65,9 +66,17 @@ class AddRoute extends React.Component {
     userData["salesperson_id"] = this.state.salespersonID;
     userData["day_id"] = this.state.selectedDay;
     userData["district_id"] = getDistrictId(this.props.user.region);
-    console.log(userData,this.props.selectedShops)
-    const res = await createNewRoute(this.props.selectedShops, userData)
+    console.log(userData,this.props.selectedShops);
+    const res = await createNewRoute(this.props.selectedShops, userData);
     console.log(res,'NEW ROUTE')
+    if(res.data.success){
+      toast.success(` New employee added successfully `);
+    }else{
+      toast.error(` Route adding Failed,}`, {
+        position: "bottom-left",
+        autoClose: false
+      });
+    }
     //should re render the data source
   };
 
@@ -82,6 +91,16 @@ class AddRoute extends React.Component {
   render() {
     return (
       <div>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover/>
         <Modal isOpen={this.props.modal} toggle={this.toggle}>
           <Form onSubmit={this.onSubmit}>
             <ModalHeader toggle={this.toggle} style={{marginBottom: 0}}>
