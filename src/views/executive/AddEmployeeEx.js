@@ -90,27 +90,28 @@ class AddEmployeeEx extends React.Component {
       }
       const res = await createUserWithEmail(userData);
       if(res.success){
-        this.setState({
-          alert:'success',
-          processing:false,
-          msg: 'SUCCESS !'
-        })
-      }else{
-        this.setState({
-          alert:'danger',
-          processing:false,
-          msg: 'FAILED ! \n'.concat(res.error)
-        })
-      }
-      window.setTimeout(()=>{
+        toast.success(` New employee added successfully `);
         this.setState({
           alert:'info',
           visible: false,
           disabled: false
         })
-      },1500);
-      console.log(res);
+      }else{
+        toast.error(` Employee adding Failed, \n ${res.error}`, {
+          position: "bottom-left",
+          autoClose: false
+        });
+        this.setState({
+          alert:'info',
+          visible: false,
+          disabled: false
+        })
+      }
     }else{
+      toast.error(` Check the form data`, {
+        position: "bottom-left",
+        autoClose: false
+      });
       this.validator.showMessages();
       this.forceUpdate();
     }
@@ -149,8 +150,18 @@ class AddEmployeeEx extends React.Component {
   render() {
     return (
       <>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover/>
         <Alert color={this.state.alert} isOpen={this.state.visible} style={{position:'fixed',left:'43%',top:'43%',zIndex:999}}>
-          {this.state.processing ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : this.state.msg}
+          {<Spinner style={{ width: '3rem', height: '3rem' }} />}
         </Alert>
         <UserHeader />
         {/* Page content */}
