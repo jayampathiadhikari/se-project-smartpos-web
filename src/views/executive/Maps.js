@@ -13,6 +13,7 @@ import {setSimulation, toggleAddRouteModal} from "../../redux/reducers/ui/action
 import {connect} from "react-redux";
 import FIREBASE from "../../firebase";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import {toast, ToastContainer} from "react-toastify";
 
 
 const Map = ReactMapboxGl({
@@ -74,28 +75,35 @@ class ExecMap extends React.Component {
       .onSnapshot({
         error: (e) => console.error(e),
         next: (querySnapshot) => {
-          const routeData = this.state.routeData;
-          querySnapshot.docChanges().forEach(change => {
-            if (change.type === 'added') {
-              const coord = change.doc.data().location;
-              routeData.push([coord.longitude, coord.latitude]);
-              console.log("data: ", change.doc.data())
-            }
-          });
-          if (this.state.firstFetch) {
-            this.setState({
-              routeData: routeData,
-              currentPos: routeData[querySnapshot.size - 1],
-              center: routeData[querySnapshot.size - 1],
-              firstFetch: false
+          if(!querySnapshot.empty){
+            const routeData = this.state.routeData;
+            querySnapshot.docChanges().forEach(change => {
+              if (change.type === 'added') {
+                const coord = change.doc.data().location;
+                routeData.push([coord.longitude, coord.latitude]);
+                console.log("data: ", change.doc.data())
+              }
             });
-          } else {
-            this.setState({
-              routeData: routeData,
-              currentPos: routeData[querySnapshot.size - 1],
+            if (this.state.firstFetch) {
+              this.setState({
+                routeData: routeData,
+                currentPos: routeData[querySnapshot.size - 1],
+                center: routeData[querySnapshot.size - 1],
+                firstFetch: false
+              });
+            } else {
+              this.setState({
+                routeData: routeData,
+                currentPos: routeData[querySnapshot.size - 1],
+              });
+            }
+            console.log(querySnapshot.size, 'FIREBASE QUERY', routeData)
+          }else{
+            toast.warn(` User tracking data not available `, {
+              autoClose:false
             });
           }
-          console.log(querySnapshot.size, 'FIREBASE QUERY', routeData)
+
         },
       });
   };
@@ -122,6 +130,16 @@ class ExecMap extends React.Component {
   render() {
     return (
       <div>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover/>
         <Map
           style={"mapbox://styles/mapbox/streets-v11"}
           // tslint:disable-next-line:jsx-no-lambda
