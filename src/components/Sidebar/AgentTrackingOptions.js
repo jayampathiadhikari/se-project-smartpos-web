@@ -39,8 +39,9 @@ class TrackingOptions extends React.Component{
   };
 
   onTrack = () => {
+    // this.props.setTrackingUser(this.state.salespersonID);
+    // this.props.setSimulation(true);
     this.props.setTrackingUser(this.state.salespersonID);
-    this.props.setSimulation(true);
   };
 
   render(){
@@ -65,6 +66,7 @@ class TrackingOptions extends React.Component{
 
 
 const mapStateToProps = (state) => ({
+  loggedIn: state.AuthenticationReducer.signedIn,
   user: state.AuthenticationReducer.user,
 });
 

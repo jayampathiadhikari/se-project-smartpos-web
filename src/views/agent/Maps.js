@@ -117,10 +117,23 @@ class AgentMap extends React.Component {
     if(prevProps.mapReload !== this.props.mapReload){
       await this.getMapData()
     }
+     if(prevProps.trackUserId != this.props.trackUserId){
+       console.log('NEW SALESPERSON SELECTED');
+       if(typeof (this.unsubscribe) === 'function'){
+         this.unsubscribe()
+       }
+       this.setState({
+         firstFetch: true,
+         routeData: [],
+         currentPos: [],
+       });
+       this.watchFirestore();
+     }
   };
 
 
   watchFirestore() {
+    console.log('Watch fuirestore')
     const date = new Date();
     const dateString = date.toISOString().split('T')[0];
     const uid = this.props.trackUserId;
@@ -129,28 +142,35 @@ class AgentMap extends React.Component {
       .onSnapshot({
         error: (e) => console.error(e),
         next: (querySnapshot) => {
-          const routeData = this.state.routeData;
-          querySnapshot.docChanges().forEach(change => {
-            if (change.type === 'added') {
-              const coord = change.doc.data().location;
-              routeData.push([coord.longitude, coord.latitude]);
-              console.log("data: ", change.doc.data())
-            }
-          });
-          if (this.state.firstFetch) {
-            this.setState({
-              routeData: routeData,
-              currentPos: routeData[querySnapshot.size - 1],
-              center: routeData[querySnapshot.size - 1],
-              firstFetch: false
+          if(!querySnapshot.empty){
+            const routeData = this.state.routeData;
+            querySnapshot.docChanges().forEach(change => {
+              if (change.type === 'added') {
+                const coord = change.doc.data().location;
+                routeData.push([coord.longitude, coord.latitude]);
+                console.log("data: ", change.doc.data())
+              }
             });
-          } else {
-            this.setState({
-              routeData: routeData,
-              currentPos: routeData[querySnapshot.size - 1],
+            if (this.state.firstFetch) {
+              this.setState({
+                routeData: routeData,
+                currentPos: routeData[querySnapshot.size - 1],
+                center: routeData[querySnapshot.size - 1],
+                firstFetch: false
+              });
+            } else {
+              this.setState({
+                routeData: routeData,
+                currentPos: routeData[querySnapshot.size - 1],
+              });
+            }
+            console.log(querySnapshot.size, 'FIREBASE QUERY', routeData)
+          }else{
+            toast.warn(` User tracking data not available `, {
+              autoClose:false
             });
           }
-          console.log(querySnapshot.size, 'FIREBASE QUERY', routeData)
+
         },
       });
   };

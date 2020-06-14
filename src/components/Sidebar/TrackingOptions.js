@@ -71,7 +71,7 @@ class TrackingOptions extends React.Component{
 
   onTrack = () => {
     this.props.setTrackingUser(this.state.salespersonID);
-    this.props.setSimulation(true);
+    // this.props.setSimulation();
   };
 
   render(){

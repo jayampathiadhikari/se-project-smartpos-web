@@ -61,12 +61,22 @@ class ExecMap extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if ((prevProps.simulation != this.props.simulation) && this.props.simulation) {
-      console.log("state changed", this.props.trackUserId);
+    if(prevProps.trackUserId != this.props.trackUserId){
+      console.log('NEW SALESPERSON SELECTED');
+      if(typeof (this.unsubscribe) === 'function'){
+        this.unsubscribe()
+      }
+      this.setState({
+        firstFetch: true,
+        routeData: [],
+        currentPos: [],
+      });
       this.watchFirestore();
     }
-  }
+  };
+
   watchFirestore() {
+    console.log('Watch fuirestore')
     const date = new Date();
     const dateString = date.toISOString().split('T')[0];
     const uid = this.props.trackUserId;
@@ -184,7 +194,7 @@ const mapStateToProps = (state) => ({
 });
 
 const bindAction = (dispatch) => ({
-  setSimulation: (status) => dispatch(setSimulation(status)),
+  // setSimulation: (status) => dispatch(setSimulation(status)),
   toggle: () => dispatch(toggleAddRouteModal())
 });
 

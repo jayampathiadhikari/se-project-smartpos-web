@@ -1,10 +1,10 @@
 import {MAP_RELOAD, SET_SIMULATION, SET_TRACKING_USER, TOGGLE_MODAL} from "../../actionTypes";
 
-export function setSimulation(status) {
+export function setSimulation() {
   return (dispatch) => {
     dispatch({
       type: SET_SIMULATION,
-      payload: status
+      payload: null
     });
   };
 };

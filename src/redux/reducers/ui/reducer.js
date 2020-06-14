@@ -12,12 +12,13 @@ export function uiReducer(state = uiReducerDefaultState, action) {
     case SET_SIMULATION:
       return {
         ...state,
-        simulation: action.payload
+        simulation: !state.simulation
       };
     case SET_TRACKING_USER:
       return {
         ...state,
-        trackingUser: action.payload
+        trackingUser: action.payload,
+        simulation: true
       };
     case TOGGLE_MODAL:
       return {
